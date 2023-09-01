@@ -1,0 +1,2 @@
+# sc2ai
+newbi
