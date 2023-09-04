@@ -91,6 +91,6 @@ class IncrediBot(BotAI):
 run_game(
     maps.get("2000AtmospheresAIE"),
     [Bot(Race.Protoss, IncrediBot()),
-    Computer(Race.Protoss, Difficulty.Hard)],
+    Computer(Race.Protoss, Difficulty.Easy)],
     realtime=False,
 )
