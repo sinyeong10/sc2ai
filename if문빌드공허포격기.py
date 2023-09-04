@@ -33,7 +33,7 @@ class IncrediBot(BotAI):
             supply_remaining = self.supply_cap - self. supply_used #공급한도-공급량
             if nexus.is_idle and self.can_afford(UnitTypeId.PROBE) and supply_remaining > 2 and self.units(UnitTypeId.PROBE).amount < 3*(self.structures(UnitTypeId.ASSIMILATOR).amount)+2*len(self.mineral_field.closer_than(10, self.townhalls.first)):
                 await self.chat_send(f"{supply_remaining}, {self.units(UnitTypeId.PROBE).amount}, {3*(self.structures(UnitTypeId.ASSIMILATOR).amount)+2*len(self.mineral_field.closer_than(10, self.townhalls.first))}")
-                await self.chat_send(self.time_formatted)
+                # await self.chat_send(self.time_formatted)
                 nexus.train(UnitTypeId.PROBE)  # train a probe
 
             # if we dont have *any* pylons, we'll build one close to the nexus.
