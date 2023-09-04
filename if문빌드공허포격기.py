@@ -8,6 +8,8 @@ import random
 
 class IncrediBot(BotAI):
     async def on_step(self, iteration: int):
+        if iteration == 0:
+            self.check = True
         # print(f"This is my bot in iteration {iteration}, workers: {self.workers}, idle workers: {self.workers.idle}, supply: {self.supply_used}/{self.supply_cap}")
         print(f"{iteration}, n_workers: {self.workers.amount}, n_idle_workers: {self.workers.idle.amount},", \
             f"minerals: {self.minerals}, gas: {self.vespene}, cannons: {self.structures(UnitTypeId.PHOTONCANNON).amount},", \
@@ -29,7 +31,9 @@ class IncrediBot(BotAI):
 
             #4이상 여유로울 때 프로브 생산
             supply_remaining = self.supply_cap - self. supply_used #공급한도-공급량
-            if nexus.is_idle and self.can_afford(UnitTypeId.PROBE) and supply_remaining > 4:
+            if nexus.is_idle and self.can_afford(UnitTypeId.PROBE) and supply_remaining > 2 and self.units(UnitTypeId.PROBE).amount < 3*(self.structures(UnitTypeId.ASSIMILATOR).amount)+2*len(self.mineral_field.closer_than(10, self.townhalls.first)):
+                await self.chat_send(f"{supply_remaining}, {self.units(UnitTypeId.PROBE).amount}, {3*(self.structures(UnitTypeId.ASSIMILATOR).amount)+2*len(self.mineral_field.closer_than(10, self.townhalls.first))}")
+                await self.chat_send(self.time_formatted)
                 nexus.train(UnitTypeId.PROBE)  # train a probe
 
             # if we dont have *any* pylons, we'll build one close to the nexus.
@@ -38,7 +42,7 @@ class IncrediBot(BotAI):
                     await self.build(UnitTypeId.PYLON, near=nexus)
 
             #파일런 최대 5개 생산
-            elif self.structures(UnitTypeId.PYLON).amount < 5:
+            elif self.structures(UnitTypeId.PYLON).amount < 2:
                 if self.can_afford(UnitTypeId.PYLON):
                     # build from the closest pylon towards the enemy
                     target_pylon = self.structures(UnitTypeId.PYLON).closest_to(self.enemy_start_locations[0])
@@ -80,7 +84,10 @@ class IncrediBot(BotAI):
                 await self.expand_now()  # build one!
 
         #공격커맨드
-        if self.units(UnitTypeId.VOIDRAY).amount >= 3:
+        if self.units(UnitTypeId.VOIDRAY).amount >= 2:
+            if self.check:
+                await self.chat_send(f"{self.time_formatted}, {iteration}")
+                self.check = False
             if self.enemy_units:
                 for vr in self.units(UnitTypeId.VOIDRAY).idle:
                     vr.attack(random.choice(self.enemy_units))
