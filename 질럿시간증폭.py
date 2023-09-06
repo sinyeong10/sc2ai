@@ -17,11 +17,11 @@ class IncrediBot(BotAI):
             self.command = [0]*12
             self.sent_time_message = False
         # print(f"This is my bot in iteration {iteration}, workers: {self.workers}, idle workers: {self.workers.idle}, supply: {self.supply_used}/{self.supply_cap}")
-        print(f"{iteration}, n_workers: {self.workers.amount}, n_idle_workers: {self.workers.idle.amount},", \
-            f"minerals: {self.minerals}, gas: {self.vespene}, cannons: {self.structures(UnitTypeId.PHOTONCANNON).amount},", \
-            f"pylons: {self.structures(UnitTypeId.PYLON).amount}, nexus: {self.structures(UnitTypeId.NEXUS).amount}", \
-            f"gateways: {self.structures(UnitTypeId.GATEWAY).amount}, cybernetics cores: {self.structures(UnitTypeId.CYBERNETICSCORE).amount}", \
-            f"stargates: {self.structures(UnitTypeId.STARGATE).amount}, voidrays: {self.units(UnitTypeId.VOIDRAY).amount}, supply: {self.supply_used}/{self.supply_cap}")
+        # print(f"{iteration}, n_workers: {self.workers.amount}, n_idle_workers: {self.workers.idle.amount},", \
+            # f"minerals: {self.minerals}, gas: {self.vespene}, cannons: {self.structures(UnitTypeId.PHOTONCANNON).amount},", \
+            # f"pylons: {self.structures(UnitTypeId.PYLON).amount}, nexus: {self.structures(UnitTypeId.NEXUS).amount}", \
+            # f"gateways: {self.structures(UnitTypeId.GATEWAY).amount}, cybernetics cores: {self.structures(UnitTypeId.CYBERNETICSCORE).amount}", \
+            # f"stargates: {self.structures(UnitTypeId.STARGATE).amount}, voidrays: {self.units(UnitTypeId.VOIDRAY).amount}, supply: {self.supply_used}/{self.supply_cap}")
 
         await self.distribute_workers()
 
@@ -33,7 +33,15 @@ class IncrediBot(BotAI):
             if self.structures(UnitTypeId.ZEALOT).amount < 10 and self.can_afford(UnitTypeId.ZEALOT):
                 for sg in self.structures(UnitTypeId.GATEWAY).ready.idle:
                     sg.train(UnitTypeId.ZEALOT)
-                    await self.do_chrono_boost()
+                
+                #현재 생산 중인 곳에 가속 걸기
+            startfast = self.structures(UnitTypeId.GATEWAY).filter(lambda gateway: gateway.is_ready)#train_progress > 0)
+            if self.state.game_loop % (60 * 22.4) == 0:
+                print(startfast)
+            for elem in startfast:
+                self.command[-1]+=1
+                await self.do_chrono_boost(elem)
+
 
 
             #4이상 여유로울 때 프로브 생산
@@ -61,7 +69,7 @@ class IncrediBot(BotAI):
             buildings = [UnitTypeId.GATEWAY]
 
             for building in buildings:
-                if not self.structures(building) and self.already_pending(building) == 0:
+                if self.structures(building).amount + self.already_pending(building) < 3:
                     if self.can_afford(building):
                         await self.build(building, near=self.structures(UnitTypeId.PYLON).closest_to(nexus))
                     break
@@ -71,15 +79,13 @@ class IncrediBot(BotAI):
             self.sent_time_message = True
 
     
-    async def do_chrono_boost(self):
+    async def do_chrono_boost(self, target_structure):
         # Find a Nexus
         nexus = self.townhalls.ready.random #다 지어진 것
-        self.command[0]+=1
-        if nexus and self.structures(UnitTypeId.GATEWAY).amount > 0:
-            self.command[1]+=1
+        if nexus:
             # Use Chrono Boost on a target structure (e.g., a Gateway)
-            target_structure = self.structures(UnitTypeId.GATEWAY).ready.random
-            if target_structure:        
+            # target_structure = self.structures(UnitTypeId.GATEWAY).ready.random
+            if target_structure:
                 self.command[2]+=1
                 abilities = await self.get_available_abilities(nexus)
                 if AbilityId.EFFECT_CHRONOBOOSTENERGYCOST in abilities:
