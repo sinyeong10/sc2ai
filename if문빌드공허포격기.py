@@ -7,6 +7,9 @@ from sc2.ids.unit_typeid import UnitTypeId
 import random
 import sys
 
+from sc2.ids.ability_id import AbilityId
+
+
 class IncrediBot(BotAI):
     async def on_step(self, iteration: int):
         if iteration == 0:
@@ -28,6 +31,8 @@ class IncrediBot(BotAI):
             if self.structures(UnitTypeId.VOIDRAY).amount < 10 and self.can_afford(UnitTypeId.VOIDRAY):
                 for sg in self.structures(UnitTypeId.STARGATE).ready.idle:
                     sg.train(UnitTypeId.VOIDRAY)
+                    await self.do_chrono_boost(sg)
+
 
 
             #4이상 여유로울 때 프로브 생산
@@ -100,6 +105,18 @@ class IncrediBot(BotAI):
             else:
                 for vr in self.units(UnitTypeId.VOIDRAY).idle:
                     vr.attack(self.enemy_start_locations[0])
+        
+    async def do_chrono_boost(self, target_structure):
+        # Find a Nexus
+        nexus = self.townhalls.ready.random #다 지어진 것
+        if nexus:
+            # Use Chrono Boost on a target structure (e.g., a Gateway)
+            # target_structure = self.structures(UnitTypeId.GATEWAY).ready.random
+            if target_structure:
+                abilities = await self.get_available_abilities(nexus)
+                if AbilityId.EFFECT_CHRONOBOOSTENERGYCOST in abilities:
+                    self.do(nexus(AbilityId.EFFECT_CHRONOBOOSTENERGYCOST, target_structure))
+
 
 run_game(
     maps.get("Simple64"), #2000AtmospheresAIE"),

@@ -33,14 +33,15 @@ class IncrediBot(BotAI):
             if self.structures(UnitTypeId.ZEALOT).amount < 10 and self.can_afford(UnitTypeId.ZEALOT):
                 for sg in self.structures(UnitTypeId.GATEWAY).ready.idle:
                     sg.train(UnitTypeId.ZEALOT)
+                    await self.do_chrono_boost(sg)
                 
-                #현재 생산 중인 곳에 가속 걸기
-            startfast = self.structures(UnitTypeId.GATEWAY).filter(lambda gateway: gateway.is_ready)#train_progress > 0)
-            if self.state.game_loop % (60 * 22.4) == 0:
-                print(startfast)
-            for elem in startfast:
-                self.command[-1]+=1
-                await self.do_chrono_boost(elem)
+            # #현재 생산 중인 곳에 가속 걸기
+            # startfast = self.structures(UnitTypeId.GATEWAY).filter(lambda gateway: gateway.is_ready)#train_progress > 0)
+            # if self.state.game_loop % (60 * 22.4) == 0:
+            #     print(startfast)
+            # for elem in startfast:
+            #     self.command[-1]+=1
+            #     await self.do_chrono_boost(elem)
 
 
 
