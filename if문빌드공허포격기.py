@@ -5,17 +5,18 @@ from sc2.player import Bot, Computer
 from sc2 import maps
 from sc2.ids.unit_typeid import UnitTypeId
 import random
+import sys
 
 class IncrediBot(BotAI):
     async def on_step(self, iteration: int):
         if iteration == 0:
             self.check = True
         # print(f"This is my bot in iteration {iteration}, workers: {self.workers}, idle workers: {self.workers.idle}, supply: {self.supply_used}/{self.supply_cap}")
-        print(f"{iteration}, n_workers: {self.workers.amount}, n_idle_workers: {self.workers.idle.amount},", \
-            f"minerals: {self.minerals}, gas: {self.vespene}, cannons: {self.structures(UnitTypeId.PHOTONCANNON).amount},", \
-            f"pylons: {self.structures(UnitTypeId.PYLON).amount}, nexus: {self.structures(UnitTypeId.NEXUS).amount}", \
-            f"gateways: {self.structures(UnitTypeId.GATEWAY).amount}, cybernetics cores: {self.structures(UnitTypeId.CYBERNETICSCORE).amount}", \
-            f"stargates: {self.structures(UnitTypeId.STARGATE).amount}, voidrays: {self.units(UnitTypeId.VOIDRAY).amount}, supply: {self.supply_used}/{self.supply_cap}")
+        # print(f"{iteration}, n_workers: {self.workers.amount}, n_idle_workers: {self.workers.idle.amount},", \
+        #     f"minerals: {self.minerals}, gas: {self.vespene}, cannons: {self.structures(UnitTypeId.PHOTONCANNON).amount},", \
+        #     f"pylons: {self.structures(UnitTypeId.PYLON).amount}, nexus: {self.structures(UnitTypeId.NEXUS).amount}", \
+        #     f"gateways: {self.structures(UnitTypeId.GATEWAY).amount}, cybernetics cores: {self.structures(UnitTypeId.CYBERNETICSCORE).amount}", \
+        #     f"stargates: {self.structures(UnitTypeId.STARGATE).amount}, voidrays: {self.units(UnitTypeId.VOIDRAY).amount}, supply: {self.supply_used}/{self.supply_cap}")
 
         await self.distribute_workers()
 
@@ -84,7 +85,7 @@ class IncrediBot(BotAI):
                 await self.expand_now()  # build one!
 
         #공격커맨드
-        if self.units(UnitTypeId.VOIDRAY).amount >= 2:
+        if self.units(UnitTypeId.VOIDRAY).amount >= 5:
             if self.check:
                 await self.chat_send(f"{self.time_formatted}, {iteration}")
                 self.check = False
@@ -99,7 +100,6 @@ class IncrediBot(BotAI):
             else:
                 for vr in self.units(UnitTypeId.VOIDRAY).idle:
                     vr.attack(self.enemy_start_locations[0])
-
 
 run_game(
     maps.get("Simple64"), #2000AtmospheresAIE"),
