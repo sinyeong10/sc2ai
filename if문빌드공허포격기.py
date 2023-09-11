@@ -47,14 +47,14 @@ class IncrediBot(BotAI):
                 if self.can_afford(UnitTypeId.PYLON):
                     await self.build(UnitTypeId.PYLON, near=nexus)
 
-            #파일런 최대 5개 생산
-            elif self.structures(UnitTypeId.PYLON).amount < 2:
-                if self.can_afford(UnitTypeId.PYLON):
-                    # build from the closest pylon towards the enemy
-                    target_pylon = self.structures(UnitTypeId.PYLON).closest_to(self.enemy_start_locations[0])
-                    # build as far away from target_pylon as possible:
-                    pos = target_pylon.position.towards(self.enemy_start_locations[0], random.randrange(8, 15))
-                    await self.build(UnitTypeId.PYLON, near=nexus)
+            # #파일런 최대 5개 생산
+            # elif self.structures(UnitTypeId.PYLON).amount < 2:
+            #     if self.can_afford(UnitTypeId.PYLON):
+            #         # build from the closest pylon towards the enemy
+            #         target_pylon = self.structures(UnitTypeId.PYLON).closest_to(self.enemy_start_locations[0])
+            #         # build as far away from target_pylon as possible:
+            #         pos = target_pylon.position.towards(self.enemy_start_locations[0], random.randrange(8, 15))
+            #         await self.build(UnitTypeId.PYLON, near=nexus)
 
             elif self.structures(UnitTypeId.ASSIMILATOR).amount <= 1:
                 for nexus in self.structures(UnitTypeId.NEXUS):
@@ -81,6 +81,7 @@ class IncrediBot(BotAI):
                         await self.build(building, near=self.structures(UnitTypeId.PYLON).closest_to(nexus))
                     break
             
+            #인구수 막히면 파일런
             supply_remaining = self.supply_cap - self. supply_used #공급한도-공급량
             if supply_remaining < 4 and not self.already_pending(UnitTypeId.PYLON):
                 await self.build(UnitTypeId.PYLON, near=nexus)
