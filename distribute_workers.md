@@ -11,6 +11,7 @@ async def distribute_workers(self, resource_ratio: float = 2):
 '''
 
 
+
     if not self.mineral_field or not self.workers or not self.townhalls.ready:
         return
     worker_pool = self.workers.idle 
