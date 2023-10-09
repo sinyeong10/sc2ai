@@ -9,7 +9,7 @@ async def distribute_workers(self, resource_ratio: float = 2):
         are not being handled.
         - WARNING: This is quite slow when there are lots of workers or multiple bases
 '''
-
+---
 
 
     if not self.mineral_field or not self.workers or not self.townhalls.ready:
