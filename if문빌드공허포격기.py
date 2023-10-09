@@ -27,7 +27,7 @@ class IncrediBot(BotAI):
             nexus = self.townhalls.random  # select one (will just be one for now)
 
             # if we have less than 10 voidrays, build one:
-            if self.structures(UnitTypeId.VOIDRAY).amount < 10 and self.can_afford(UnitTypeId.VOIDRAY):
+            if self.can_afford(UnitTypeId.VOIDRAY):
                 for sg in self.structures(UnitTypeId.STARGATE).ready.idle:
                     sg.train(UnitTypeId.VOIDRAY)
                     await self.do_chrono_boost(sg)
@@ -36,7 +36,11 @@ class IncrediBot(BotAI):
 
             #4이상 여유로울 때 프로브 생산
             supply_remaining = self.supply_cap - self. supply_used #공급한도-공급량
-            if nexus.is_idle and self.can_afford(UnitTypeId.PROBE) and supply_remaining > 2 and self.units(UnitTypeId.PROBE).amount < 3*(self.structures(UnitTypeId.ASSIMILATOR).amount)+2*len(self.mineral_field.closer_than(10, self.townhalls.first)):
+            # and supply_remaining > 2 제한이 있어서 계속 뽑아도 될 듯?
+            #self.structures(UnitTypeId.ASSIMILATOR).amount의 갯수만큼 인식된 일꾼 수에 더해줌, 가스통안에 들어간 거 갯수 인식 못함
+            if nexus.is_idle and self.can_afford(UnitTypeId.PROBE) and self.units(UnitTypeId.PROBE).amount\
+                +self.structures(UnitTypeId.ASSIMILATOR).amount < 3*(self.structures(UnitTypeId.ASSIMILATOR).amount)\
+                    +2*len(self.mineral_field.closer_than(10, self.townhalls.first)):
                 await self.chat_send(f"{supply_remaining}, {self.units(UnitTypeId.PROBE).amount}, {3*(self.structures(UnitTypeId.ASSIMILATOR).amount)+2*len(self.mineral_field.closer_than(10, self.townhalls.first))}")
                 # await self.chat_send(self.time_formatted)
                 nexus.train(UnitTypeId.PROBE)  # train a probe
