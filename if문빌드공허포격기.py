@@ -9,8 +9,11 @@ import sys
 
 from sc2.ids.ability_id import AbilityId
 
+import asyncio
+
 class IncrediBot(BotAI):
     async def on_step(self, iteration: int):
+        await asyncio.sleep(0.01)
         if iteration == 0:
             self.check = True
         # print(f"This is my bot in iteration {iteration}, workers: {self.workers}, idle workers: {self.workers.idle}, supply: {self.supply_used}/{self.supply_cap}")
