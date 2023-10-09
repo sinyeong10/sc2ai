@@ -4,10 +4,6 @@ async def distribute_workers(self, resource_ratio: float = 2):
 - 점령된 모든 기지에 일꾼들을 분배 → 결과적으로 함수는 게임 내의 일꾼들을 자원 수집에 최적화하여 재배치하려고 시도
 - resource_ratio 매개변수
     - 미네랄 대 가스의 현재 비율 > resource_ratio → 가스 건물을 채우려고 시도, 그렇지 않으면 미네랄 캐기를 선호
-    - 이 함수는 최적화되지 않았으며, 사용자는 더 정교한 제어를 원하면 자체 배포 함수를 작성해야 합니다.
-        - For example long distance mining control and moving workers if a base was killed
-        are not being handled.
-        - WARNING: This is quite slow when there are lots of workers or multiple bases
 ---
 
     if not self.mineral_field or not self.workers or not self.townhalls.ready:
