@@ -9,7 +9,6 @@ import sys
 
 from sc2.ids.ability_id import AbilityId
 
-
 class IncrediBot(BotAI):
     async def on_step(self, iteration: int):
         if iteration == 0:
@@ -43,9 +42,11 @@ class IncrediBot(BotAI):
                 nexus.train(UnitTypeId.PROBE)  # train a probe
 
             # if we dont have *any* pylons, we'll build one close to the nexus.
+            #첫 파일런은 적기지 방향으로 지음
             elif not self.structures(UnitTypeId.PYLON) and self.already_pending(UnitTypeId.PYLON) == 0:
                 if self.can_afford(UnitTypeId.PYLON):
-                    await self.build(UnitTypeId.PYLON, near=nexus)
+                    pos = nexus.position.towards(self.enemy_start_locations[0], 3)
+                    await self.build(UnitTypeId.PYLON, near=pos)
 
             # #파일런 최대 5개 생산
             # elif self.structures(UnitTypeId.PYLON).amount < 2:
@@ -84,7 +85,9 @@ class IncrediBot(BotAI):
             #인구수 막히면 파일런
             supply_remaining = self.supply_cap - self. supply_used #공급한도-공급량
             if supply_remaining < 4 and not self.already_pending(UnitTypeId.PYLON):
-                await self.build(UnitTypeId.PYLON, near=nexus)
+                if self.can_afford(UnitTypeId.PYLON):
+                    pos = nexus.position.towards(self.enemy_start_locations[0], random.randrange(3, 5))
+                    await self.build(UnitTypeId.PYLON, near=pos)
 
         else:
             if self.can_afford(UnitTypeId.NEXUS):  # can we afford one?
