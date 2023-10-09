@@ -13,6 +13,7 @@ async def distribute_workers(self, resource_ratio: float = 2):
     gas_buildings = self.gas_buildings.ready
 
     deficit_mining_places = []
+
 ---
 - 초기 체크
     - `if not self.mineral_field or not self.workers or not self.townhalls.ready:    return`
@@ -53,6 +54,7 @@ async def distribute_workers(self, resource_ratio: float = 2):
                 lambda unit: unit.order_target in local_minerals_tags or
                              (unit.is_carrying_minerals and unit.order_target == mining_place.tag)
             )
+
 ---
 - `for mining_place in bases | gas_buildings:`
     - `bases | gas_buildings`는 기지(`bases`)와 가스 건물(`gas_buildings`)을 합친 총 목록
@@ -81,6 +83,7 @@ async def distribute_workers(self, resource_ratio: float = 2):
         # add mining place to deficit bases for every missing worker
         else:
             deficit_mining_places += [mining_place for _ in range(-difference)]
+
 ---
 - `difference > 0` → 해당 채광 장소에 배치된 일꾼의 수 > 이상적인 수
 - 초과하는 일꾼들을 게임 내에서 재배치하기 위해 `worker_pool`에 추가
@@ -98,6 +101,7 @@ async def distribute_workers(self, resource_ratio: float = 2):
             mineral for mineral in self.mineral_field
             if any(mineral.distance_to(base) <= 8 for base in self.townhalls.ready)
         ]
+
 ---
 - 이 조건은 `worker_pool`에 있는 일꾼의 수 > `deficit_mining_places`의 채광 장소 수 → 참
 - 즉, 일꾼들을 재배치할 장소보다 더 많은 일꾼이 대기 중일 때 참입니다.
@@ -106,6 +110,7 @@ async def distribute_workers(self, resource_ratio: float = 2):
 
 ⇒ 요약하면, 이 코드 부분은 일꾼들이 더 많이 대기 중일 때, 그 일꾼들을 어디로 보낼지 결정하기 위해 모든 기지 주변의 미네랄 필드 목록을 준비합니다. 이 목록은 후속 코드에서 대기 중인 일꾼들을 적절한 미네랄로 보내기 위해 사용될 것입니다.
 ---
+
     # distribute every worker in the pool
     for worker in worker_pool:
         # as long as have workers and mining places
@@ -145,6 +150,7 @@ async def distribute_workers(self, resource_ratio: float = 2):
             # there are no deficit mining places and worker is not idle
             # so dont move him
             pass
+            
 ---
 distribute_workers 함수 -> 일꾼들을 자원 수집에 최적화하여 재배치
 - 먼저 아무 것도 하지 않는 일꾼 목록(worker_pool)과 게임 내의 건물 및 가스 건물 정보를 초기화
@@ -152,3 +158,4 @@ distribute_workers 함수 -> 일꾼들을 자원 수집에 최적화하여 재�
 - 만약 대기 중인 일꾼이 더 많으면, 그들을 가장 가까운 미네랄로 보내기 위해 모든 기지 주변의 미네랄 필드 목록을 준비
 - 이후 모든 대기 중인 일꾼을 순회하며, 미네랄 대 가스의 현재 비율을 고려하여 일꾼들을 미네랄 필드 또는 가스 필드로 할당
 - 일꾼이 할당되어야 할 채광 장소가 없고 일꾼이 한가하다면, 가장 가까운 미네랄로 보내고 그렇지 않으면, 일꾼은 움직이지 않음
+---
