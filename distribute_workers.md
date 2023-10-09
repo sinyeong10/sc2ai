@@ -1,6 +1,6 @@
 async def distribute_workers(self, resource_ratio: float = 2):
 
-'''
+---
 - 점령된 모든 기지에 일꾼들을 분배 → 결과적으로 함수는 게임 내의 일꾼들을 자원 수집에 최적화하여 재배치하려고 시도
 - resource_ratio 매개변수
     - 미네랄 대 가스의 현재 비율 > resource_ratio → 가스 건물을 채우려고 시도, 그렇지 않으면 미네랄 캐기를 선호
@@ -8,10 +8,7 @@ async def distribute_workers(self, resource_ratio: float = 2):
         - For example long distance mining control and moving workers if a base was killed
         are not being handled.
         - WARNING: This is quite slow when there are lots of workers or multiple bases
-'''
 ---
-
-
     if not self.mineral_field or not self.workers or not self.townhalls.ready:
         return
     worker_pool = self.workers.idle 
@@ -20,7 +17,7 @@ async def distribute_workers(self, resource_ratio: float = 2):
 
     deficit_mining_places = []
 
-'''
+---
 - 초기 체크
     - `if not self.mineral_field or not self.workers or not self.townhalls.ready:    return`
         - 미네랄 필드, 일꾼, 또는 준비된 타운홀이 없으면 함수는 아무 일도 수행하지 않고 종료
@@ -33,7 +30,7 @@ async def distribute_workers(self, resource_ratio: float = 2):
         - 채광 장소 초기화 → 나중에 일꾼들이 부족한 채광 장소를 식별하는 데 사용
 
 ⇒ 일꾼 배치를 시작하기 전에 초기 조건을 체크하고, 필요한 데이터와 목록을 준비
-'''
+---
 
     for mining_place in bases | gas_buildings:
         difference = mining_place.surplus_harvesters
