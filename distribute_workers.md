@@ -9,6 +9,7 @@ async def distribute_workers(self, resource_ratio: float = 2):
         are not being handled.
         - WARNING: This is quite slow when there are lots of workers or multiple bases
 ---
+
     if not self.mineral_field or not self.workers or not self.townhalls.ready:
         return
     worker_pool = self.workers.idle 
@@ -16,7 +17,6 @@ async def distribute_workers(self, resource_ratio: float = 2):
     gas_buildings = self.gas_buildings.ready
 
     deficit_mining_places = []
-
 ---
 - 초기 체크
     - `if not self.mineral_field or not self.workers or not self.townhalls.ready:    return`
@@ -57,7 +57,7 @@ async def distribute_workers(self, resource_ratio: float = 2):
                 lambda unit: unit.order_target in local_minerals_tags or
                              (unit.is_carrying_minerals and unit.order_target == mining_place.tag)
             )
-    """
+---
 - `for mining_place in bases | gas_buildings:`
     - `bases | gas_buildings`는 기지(`bases`)와 가스 건물(`gas_buildings`)을 합친 총 목록
     - 이 반복문은 총 목록의 각 채광 장소에 대해 실행
@@ -76,7 +76,7 @@ async def distribute_workers(self, resource_ratio: float = 2):
         - 먼저 해당 채광 장소 주변의 미네랄 필드의 태그 목록을 생성
         - 그 후, 해당 미네랄 필드에서 일하고 있는 일꾼들의 목록을 가져옴.
 ⇒ 요약하면, 이 코드 부분은 각 채광 장소(가스 건물 또는 미네랄 필드)를 순회하며 해당 장소에 배치된 일꾼의 수를 확인하고, 그 장소에서 일하고 있는 일꾼들의 목록을 가져옴
-    """
+---
 
         if difference > 0:
             for worker in local_workers[:difference]:
@@ -85,7 +85,7 @@ async def distribute_workers(self, resource_ratio: float = 2):
         # add mining place to deficit bases for every missing worker
         else:
             deficit_mining_places += [mining_place for _ in range(-difference)]
-    """
+---
 - `difference > 0` → 해당 채광 장소에 배치된 일꾼의 수 > 이상적인 수
 - 초과하는 일꾼들을 게임 내에서 재배치하기 위해 `worker_pool`에 추가
 - 이 때 `local_workers[:difference]`는 초과하는 일꾼 수만큼의 일꾼 리스트를 가져옴
@@ -93,7 +93,7 @@ async def distribute_workers(self, resource_ratio: float = 2):
 - `deficit_mining_places` 리스트에는 일꾼이 부족한 채광 장소를 여러 번 추가 → 부족한 일꾼 수만큼 동일한 채광 장소를 추가하는 것은, 나중에 일꾼을 재배치할 때 이 채광 장소를 우선적으로 고려하기 위함
 
 ⇒ 요약하면, 이 코드 부분은 채광 장소에 할당된 일꾼의 수가 너무 많거나 적은 경우 그에 따라 일꾼들을 재배치하기 위한 준비를 합니다. 너무 많은 일꾼들은 **`worker_pool`**에 추가되고, 부족한 채광 장소는 `deficit_mining_places` 목록에 반복적으로 추가됩니다
-   """
+---
 
     # prepare all minerals near a base if we have too many workers
     # and need to send them to the closest patch
@@ -102,7 +102,7 @@ async def distribute_workers(self, resource_ratio: float = 2):
             mineral for mineral in self.mineral_field
             if any(mineral.distance_to(base) <= 8 for base in self.townhalls.ready)
         ]
-   """
+---
 - 이 조건은 `worker_pool`에 있는 일꾼의 수 > `deficit_mining_places`의 채광 장소 수 → 참
 - 즉, 일꾼들을 재배치할 장소보다 더 많은 일꾼이 대기 중일 때 참입니다.
 - 현재 게임 내의 모든 미네랄 필드(`self.mineral_field`) 중에서 각 기지(`self.townhalls.ready`)로부터 거리가 8 이하인 미네랄만 선택하여 목록을 생성
