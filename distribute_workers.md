@@ -29,7 +29,7 @@ async def distribute_workers(self, resource_ratio: float = 2):
     - `deficit_mining_places = []`
         - 채광 장소 초기화 → 나중에 일꾼들이 부족한 채광 장소를 식별하는 데 사용
 
-⇒ 일꾼 배치를 시작하기 전에 초기 조건을 체크하고, 필요한 데이터와 목록을 준비
+--> 일꾼 배치를 시작하기 전에 초기 조건을 체크하고, 필요한 데이터와 목록을 준비
 ---
 
     for mining_place in bases | gas_buildings:
