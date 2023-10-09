@@ -25,8 +25,7 @@ async def distribute_workers(self, resource_ratio: float = 2):
         - 건물, 가스 건물 정보 가져오기
     - `deficit_mining_places = []`
         - 채광 장소 초기화 → 나중에 일꾼들이 부족한 채광 장소를 식별하는 데 사용
-
---> 일꾼 배치를 시작하기 전에 초기 조건을 체크하고, 필요한 데이터와 목록을 준비
+    - 즉, 일꾼 배치를 시작하기 전에 초기 조건을 체크하고, 필요한 데이터와 목록을 준비
 ---
 
     for mining_place in bases | gas_buildings:
@@ -73,7 +72,7 @@ async def distribute_workers(self, resource_ratio: float = 2):
         - `mining_place.has_vespene`가 거짓이면 해당 장소는 미네랄 채광 장소
         - 먼저 해당 채광 장소 주변의 미네랄 필드의 태그 목록을 생성
         - 그 후, 해당 미네랄 필드에서 일하고 있는 일꾼들의 목록을 가져옴.
-⇒ 요약하면, 이 코드 부분은 각 채광 장소(가스 건물 또는 미네랄 필드)를 순회하며 해당 장소에 배치된 일꾼의 수를 확인하고, 그 장소에서 일하고 있는 일꾼들의 목록을 가져옴
+    - 즉 요약하면, 이 코드 부분은 각 채광 장소(가스 건물 또는 미네랄 필드)를 순회하며 해당 장소에 배치된 일꾼의 수를 확인하고, 그 장소에서 일하고 있는 일꾼들의 목록을 가져옴
 ---
 
         if difference > 0:
@@ -91,7 +90,7 @@ async def distribute_workers(self, resource_ratio: float = 2):
 - `difference`가 음수인 경우, 해당 채광 장소에 필요한 일꾼이 부족하다는 것을 의미
 - `deficit_mining_places` 리스트에는 일꾼이 부족한 채광 장소를 여러 번 추가 → 부족한 일꾼 수만큼 동일한 채광 장소를 추가하는 것은, 나중에 일꾼을 재배치할 때 이 채광 장소를 우선적으로 고려하기 위함
 
-⇒ 요약하면, 이 코드 부분은 채광 장소에 할당된 일꾼의 수가 너무 많거나 적은 경우 그에 따라 일꾼들을 재배치하기 위한 준비를 합니다. 너무 많은 일꾼들은 **`worker_pool`**에 추가되고, 부족한 채광 장소는 `deficit_mining_places` 목록에 반복적으로 추가됩니다
+- 요약하면, 이 코드 부분은 채광 장소에 할당된 일꾼의 수가 너무 많거나 적은 경우 그에 따라 일꾼들을 재배치하기 위한 준비를 합니다. 너무 많은 일꾼들은 **`worker_pool`**에 추가되고, 부족한 채광 장소는 `deficit_mining_places` 목록에 반복적으로 추가됩니다
 ---
 
     # prepare all minerals near a base if we have too many workers
@@ -108,7 +107,7 @@ async def distribute_workers(self, resource_ratio: float = 2):
 - 현재 게임 내의 모든 미네랄 필드(`self.mineral_field`) 중에서 각 기지(`self.townhalls.ready`)로부터 거리가 8 이하인 미네랄만 선택하여 목록을 생성
 - 이렇게 생성된 목록(`all_minerals_near_base`)은 나중에 대기 중인 일꾼들을 가장 가까운 미네랄로 보내기 위해 사용
 
-⇒ 요약하면, 이 코드 부분은 일꾼들이 더 많이 대기 중일 때, 그 일꾼들을 어디로 보낼지 결정하기 위해 모든 기지 주변의 미네랄 필드 목록을 준비합니다. 이 목록은 후속 코드에서 대기 중인 일꾼들을 적절한 미네랄로 보내기 위해 사용될 것입니다.
+- 요약하면, 이 코드 부분은 일꾼들이 더 많이 대기 중일 때, 그 일꾼들을 어디로 보낼지 결정하기 위해 모든 기지 주변의 미네랄 필드 목록을 준비합니다. 이 목록은 후속 코드에서 대기 중인 일꾼들을 적절한 미네랄로 보내기 위해 사용될 것입니다.
 ---
 
     # distribute every worker in the pool
