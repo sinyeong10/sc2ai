@@ -50,7 +50,8 @@ class IncrediBot(BotAI):
                     sg.train(UnitTypeId.VOIDRAY)
                     await self.do_chrono_boost(sg)
 
-
+            # await self.chat_send(f"{iteration}, {self.already_pending(UnitTypeId.ASSIMILATOR)}, {self.structures(UnitTypeId.ASSIMILATOR).amount}")
+            
             #4이상 여유로울 때 프로브 생산
             supply_remaining = self.supply_cap - self. supply_used #공급한도-공급량
             # and supply_remaining > 2 제한이 있어서 계속 뽑아도 될 듯?
@@ -77,61 +78,27 @@ class IncrediBot(BotAI):
             #         # build as far away from target_pylon as possible:
             #         pos = target_pylon.position.towards(self.enemy_start_locations[0], random.randrange(8, 15))
             #         await self.build(UnitTypeId.PYLON, near=nexus)
-
-            elif self.structures(UnitTypeId.ASSIMILATOR).amount <= 1:
-                #이 ㅈ같은 for문을 처리해야 한번만 실행가능할 듯
-                async with self.gas_lock:
-                    for nexus in self.structures(UnitTypeId.NEXUS):
-                        vespenes = self.vespene_geyser.closer_than(15, nexus)
-                        for vespene in vespenes:
-                            if self.can_afford(UnitTypeId.ASSIMILATOR) and not self.already_pending(UnitTypeId.ASSIMILATOR): #and self.gas_build_flag:
-                                self.gas_build_flag = False
-                                await self.build(UnitTypeId.ASSIMILATOR, vespene)
-
-                                self.closest_worker = None
-                                closest_distance = float('inf')  # 초기 거리를 무한대로 설정
-
-                                # 모든 일꾼에 대해 거리를 계산하여 가장 가까운 일꾼 선택
-                                for worker in self.workers:
-                                    distance = worker.distance_to(vespene)
-                                    if distance < closest_distance:
-                                        self.closest_worker = worker
-                                        closest_distance = distance
-
-                                # if closest_worker:
-                                #     build_action = UnitCommand(AbilityId.PROTOSSBUILD_ASSIMILATOR, closest_worker, vespene)
-                                #     move_action = UnitCommand(AbilityId.MOVE, closest_worker, self.enemy_start_locations[0])
-                                #     # 두 개의 동작을 함께 실행
-                                #     await self._do_actions([build_action, move_action])
-
-
-                                    # 가장 가까운 일꾼에게 건물 건설 명령 내림
-                                    print(self.Flag_count, self.closest_worker, type(self.closest_worker))
-                                    print(self.closest_worker.orders)
-                                    self.do(self.closest_worker.build(UnitTypeId.ASSIMILATOR, vespene))
-                                    print(f"{self.time_formatted}, {iteration}")
-                                    print(self.Flag_count, self.closest_worker, type(self.closest_worker))
-                                    print(self.closest_worker.orders)
-                                    self.gas_flag = iteration
-                # self.gas_build_flag = True
-
-            if self.already_pending(UnitTypeId.ASSIMILATOR) and self.gas_flag < iteration - 5:
-                print(f"락 전 {self.time_formatted}, {iteration}")
-                print(f"락 후 {self.time_formatted}, {iteration}")
-                target_position = Point2((self.closest_worker.position.x + 100, self.closest_worker.position.y+100))
-                print("건설 후 이제 이동", self.Flag_count, self.closest_worker, type(self.closest_worker))
-                print(self.closest_worker.orders, "\n\n")
-                self.do(self.closest_worker.move(self.enemy_start_locations[0])) #target_position))
-                # await asyncio.sleep(1) #게임 프레임은 멈춘 상태에서 작동
-                self.gas_flag = float("inf")
             
-            # # #인위적 가스 할당
-            # elif len(self.gas_buildings.ready) == 1 and self.Flag_count == 0:
-            #     await self.move_gas(2)
-            #     self.Flag_count = 1
-            # elif len(self.gas_buildings.ready) == 2 and self.Flag_count == 1:
-            #     await self.move_gas(2)
-            #     self.Flag_count = 2
+            elif self.structures(UnitTypeId.ASSIMILATOR).amount <= 1 and self.can_afford(UnitTypeId.ASSIMILATOR) and not self.already_pending(UnitTypeId.ASSIMILATOR):
+                #락 취득을 시도하여 한번 접근 중이면 접근 x
+                if await self.gas_lock.acquire():
+                    try: #락 취득 한 번만 돌 코드
+                        await self.gas_build(iteration)
+                    finally:
+                    # 락 해제
+                        self.gas_lock.release()
+                else:
+                    print("락이 이미 있는데 조건 만족")
+
+            #인위적 가스 할당
+            elif len(self.gas_buildings.ready) == 1 and self.Flag_count == 0:
+                # print(self.Flag_count, iteration)
+                await self.move_gas(3)
+                self.Flag_count = 1
+            elif len(self.gas_buildings.ready) == 2 and self.Flag_count == 1:
+                # print(self.Flag_count, iteration)
+                await self.move_gas(5)
+                self.Flag_count = 2
 
             buildings = [UnitTypeId.GATEWAY, UnitTypeId.CYBERNETICSCORE, UnitTypeId.STARGATE]
 
@@ -214,17 +181,61 @@ class IncrediBot(BotAI):
                 (unit.is_carrying_minerals and unit.order_target == mining_place.tag)
             )
 
-        for _ in range(move_worker): #이 만큼 미네랄에서 가스로 보냄
+        move_worker_count = 0 #현재 이동한 일꾼 수
+        while move_worker_count <= move_worker:
             for target_place in target_location: #가스 기준 가장 가까운 일꾼을 일시킴
-                print(target_place, type(target_place))
+                if move_worker_count > move_worker: #이 만큼 미네랄에서 가스로 보냄
+                    continue
                 worker = min(local_workers, key=lambda w: target_place.distance_to(w))
                 worker.gather(target_place)
                 local_workers.remove(worker)
+                move_worker_count += 1
+                print(move_worker_count, worker, target_place, type(target_place))
 
+    async def gas_build(self, iteration): #가스 한번 건설
+        for nexus in self.structures(UnitTypeId.NEXUS):
+            vespenes = self.vespene_geyser.closer_than(15, nexus)
+            for vespene in vespenes:
+                if True: #self.can_afford(UnitTypeId.ASSIMILATOR) and not self.already_pending(UnitTypeId.ASSIMILATOR): #and self.gas_build_flag:
+                    # self.gas_build_flag = False
+                    # await self.build(UnitTypeId.ASSIMILATOR, vespene)
+                    
+                    self.closest_worker = None #명령 후 이동해야 함!
+                    closest_distance = float('inf')  # 초기 거리를 무한대로 설정
+
+                    # 모든 일꾼에 대해 거리를 계산하여 가장 가까운 일꾼 선택
+                    for worker in self.workers:
+                        distance = worker.distance_to(vespene)
+                        if distance < closest_distance:
+                            self.closest_worker = worker
+                            closest_distance = distance
+                        # print(self.closest_worker)
+
+
+                    # 가장 가까운 일꾼에게 건물 건설 명령 내림
+                    print(self.Flag_count, self.closest_worker, type(self.closest_worker))
+                    print(self.closest_worker.orders)
+                    self.do(self.closest_worker.build(UnitTypeId.ASSIMILATOR, vespene))
+                    print(f"{self.time_formatted}, {iteration}")
+                    print(self.Flag_count, self.closest_worker, type(self.closest_worker))
+                    print(self.closest_worker.orders)
+                    self.gas_flag = iteration
+
+                    # count = 1
+                    # # while안에서 코드가 멈춰버림, 명령이 수행되지 않으니 결과도 안바낌
+                    # while self.already_pending(UnitTypeId.ASSIMILATOR) == 0: #건설 중이면 다음 코드로 감
+                    #     print(count, self.already_pending(UnitTypeId.ASSIMILATOR))
+                    #     count+=1
+                    #     pass
+                    # target_position = Point2((self.closest_worker.position.x + 100, self.closest_worker.position.y+100))
+                    # self.do(self.closest_worker.move(self.enemy_start_locations[0])) #target_position))
+                    self.closest_worker.stop(queue=True)
+                    
+                    return self.closest_worker
 
 run_game(
     maps.get("Simple64"), #2000AtmospheresAIE"),
     [Bot(Race.Protoss, IncrediBot()),
     Computer(Race.Protoss, Difficulty.Easy)],
-    realtime=False,
+    realtime=True,
 )
