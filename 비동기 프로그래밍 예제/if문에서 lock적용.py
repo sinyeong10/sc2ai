@@ -1,72 +1,71 @@
-#한번만 실행
+#1. threading.Lock()를 통해서 한번만 실행
 import asyncio
+import threading
 
-async def callback():
-    print("start")
-    await asyncio.sleep(5)
-    print("end")
+async def end_display():
+    print("이동을 완료했습니다.")
+
+class GasStation:
+    def __init__(self):
+        self.gas_lock = threading.Lock()# asyncio.Lock()
+
+    async def refuel(self, car, callback):
+        # 락을 획득하려고 시도
+        if self.gas_lock.acquire(blocking=False): #blocking=False로 락 취득 실패시 대기하지 않음
+            # 락을 획득한 자동차만 주유 진행
+            print(f"{car}에 탑승했습니다...")
+            await asyncio.sleep(2)
+            print(f"{car}로 이동했습니다.")
+            await callback()
+            # 락 해제
+            self.gas_lock.release()
+        else:
+            print(f"이미 사용자는 탑승하여 {car}에 탑승하지 않습니다.")
+
+
+async def main():
+    station = GasStation()
+    tasks = [station.refuel(f"자동차 {i}", end_display) for i in range(10)]
+    await asyncio.gather(*tasks)
+
+asyncio.run(main())
+
+#2. asyncio.Lock()를 통해서 한번만 실행
+#await self.gas_lock.acquire():는 락을 취득할 때까지 대기함
+import asyncio
 
 class GasStation:
     def __init__(self):
         self.gas_lock = asyncio.Lock()
+        self.Flag = True #critical section
 
-    async def refuel(self, car, should_refuel):
-        if should_refuel:
-            # 락을 획득하려고 시도
-            if await self.gas_lock.acquire():
-                try:
-                    # 락을 획득한 자동차만 주유 진행
-                    print(f"{car}가 주유 중입니다...")
-                    await asyncio.sleep(2)
-                    print(f"{car}가 주유를 완료했습니다.")
-                    if callback:
-                        await callback()
-                finally:
-                    # 락 해제
-                    self.gas_lock.release()
-            else:
-                print(f"{car}는 이미 다른 자동차가 주유 중입니다.")
-        else:
-            print(f"{car}는 주유를 하지 않습니다.")
+    async def refuel(self, car, callback):
+        # 락을 획득하려고 시도
+        if not self.Flag: #read는 문제 안됨
+            print(f"이미 사용자는 탑승하여 {car}에 탑승하지 않습니다.")
+            return
+        await self.gas_lock.acquire() #락 취득은 한개만! #여기서 if문을 이미 봐서 에러 가능성이 존재할까요?
+        self.Flag = False #write는 문제 되서 락 취득하고 진행
+        # 락을 획득한 자동차만 주유 진행
+        print(f"{car}에 탑승했습니다...")
+        await asyncio.sleep(2)
+        print(f"{car}로 이동했습니다.")
+        await callback() #일이 끝나면 다시 시작할 수 있게 함
+        #락안에서 처리하도록 await로 결과 나오고 다음 코드로 감
+        # 락 해제
+        self.gas_lock.release()
+
+    async def end_display(self): #callback에서 다시 작동할 수 있게 설정
+        self.Flag = False
+        print("이동을 완료했습니다.")
 
 async def main():
     station = GasStation()
-    tasks = [station.refuel(f"자동차 {i}", i == 0) for i in range(20)]
+    tasks = [station.refuel(f"자동차 {i}", station.end_display) for i in range(10)]
     await asyncio.gather(*tasks)
 
-if __name__ == "__main__":
-    asyncio.run(main())
+asyncio.run(main())
 
-
-# import asyncio
-
-# class TaskQueue:
-#     def __init__(self):
-#         self.lock = asyncio.Lock()
-    
-#     async def add_task(self, task, callback):
-#         async with self.lock:
-#             # 작업 큐에 작업 추가
-#             print(f"Adding task: {task}")
-#             await asyncio.sleep(1)  # 실제로는 어떤 작업을 수행하고 있는 상상
-#             print(f"Task completed: {task}")
-
-#             # 작업이 완료된 후 콜백 함수 호출
-#             if callback:
-#                 await callback()
-
-# async def main():
-#     queue = TaskQueue()
-
-#     async def on_task_complete():
-#         print("Task completed callback called")
-
-#     # 여러 개의 작업을 큐에 추가
-#     await asyncio.gather(
-#         queue.add_task("Task 1", on_task_complete),
-#         queue.add_task("Task 2", on_task_complete),
-#         queue.add_task("Task 3", on_task_complete),
-#     )
-
-# if __name__ == "__main__":
-#     asyncio.run(main())
+#나중에 명령 다시 실행할 때도 한번만 실행!
+asyncio.run(main())
+asyncio.run(main())
