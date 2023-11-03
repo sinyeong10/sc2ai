@@ -8,6 +8,8 @@ import random
 
 class IncrediBot(BotAI):
     async def on_step(self, iteration: int):
+        if iteration == 0:
+            self.check = True
         # print(f"This is my bot in iteration {iteration}, workers: {self.workers}, idle workers: {self.workers.idle}, supply: {self.supply_used}/{self.supply_cap}")
         print(f"{iteration}, n_workers: {self.workers.amount}, n_idle_workers: {self.workers.idle.amount},", \
             f"minerals: {self.minerals}, gas: {self.vespene}, cannons: {self.structures(UnitTypeId.PHOTONCANNON).amount},", \
@@ -36,7 +38,7 @@ class IncrediBot(BotAI):
                 if self.can_afford(UnitTypeId.PYLON):
                     await self.build(UnitTypeId.PYLON, near=nexus)
 
-            elif self.structures(UnitTypeId.PYLON).amount < 5:
+            elif self.structures(UnitTypeId.PYLON).amount < 6:
                 if self.can_afford(UnitTypeId.PYLON):
                     # build from the closest pylon towards the enemy
                     target_pylon = self.structures(UnitTypeId.PYLON).closest_to(self.enemy_start_locations[0])
@@ -74,7 +76,10 @@ class IncrediBot(BotAI):
                 await self.expand_now()  # build one!
 
 
-        if self.units(UnitTypeId.VOIDRAY).amount >= 3:
+        if self.units(UnitTypeId.VOIDRAY).amount >= 5:
+            if self.check:
+                await self.chat_send(f"{self.time_formatted}, {iteration}")
+                self.check = False
             if self.enemy_units:
                 for vr in self.units(UnitTypeId.VOIDRAY).idle:
                     vr.attack(random.choice(self.enemy_units))
