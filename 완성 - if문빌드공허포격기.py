@@ -230,6 +230,7 @@ class IncrediBot(BotAI):
                     # target_position = Point2((self.closest_worker.position.x + 100, self.closest_worker.position.y+100))
                     # self.do(self.closest_worker.move(self.enemy_start_locations[0])) #target_position))
                     self.closest_worker.stop(queue=True)
+                    # self.closest_worker.move(self.enemy_start_locations[0], queue=True) #한번 실행 체크용!
                     
                     return self.closest_worker
 
@@ -237,5 +238,5 @@ run_game(
     maps.get("Simple64"), #2000AtmospheresAIE"),
     [Bot(Race.Protoss, IncrediBot()),
     Computer(Race.Protoss, Difficulty.Easy)],
-    realtime=False,
+    realtime=True,
 )
