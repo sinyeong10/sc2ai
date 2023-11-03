@@ -17,7 +17,7 @@ from sc2.unit_command import UnitCommand
 
 class IncrediBot(BotAI):
     async def on_step(self, iteration: int):
-        await asyncio.sleep(0.05)
+        # await asyncio.sleep(0.05)
         #5초에 한번씩 코드 실행
         # if iteration % (5.7*5) != 0:
         #     return
@@ -30,7 +30,7 @@ class IncrediBot(BotAI):
             self.gas_flag = 1
             self.gas_lock = asyncio.Lock()
             self.closest_worker = None
-            self.gas_build_flag = True
+            # self.gas_build_flag = True
         # print(f"This is my bot in iteration {iteration}, workers: {self.workers}, idle workers: {self.workers.idle}, supply: {self.supply_used}/{self.supply_cap}")
         # print(f"{iteration}, n_workers: {self.workers.amount}, n_idle_workers: {self.workers.idle.amount},", \
         #     f"minerals: {self.minerals}, gas: {self.vespene}, cannons: {self.structures(UnitTypeId.PHOTONCANNON).amount},", \
@@ -237,5 +237,5 @@ run_game(
     maps.get("Simple64"), #2000AtmospheresAIE"),
     [Bot(Race.Protoss, IncrediBot()),
     Computer(Race.Protoss, Difficulty.Easy)],
-    realtime=True,
+    realtime=False,
 )
