@@ -100,7 +100,7 @@ class IncrediBot(BotAI):
                 await self.move_gas(5)
                 self.Flag_count = 2
 
-            buildings = [UnitTypeId.GATEWAY, UnitTypeId.CYBERNETICSCORE, UnitTypeId.STARGATE]
+            buildings = [UnitTypeId.GATEWAY, UnitTypeId.CYBERNETICSCORE]
 
             for building in buildings:
                 if not self.structures(building) and self.already_pending(building) == 0:
