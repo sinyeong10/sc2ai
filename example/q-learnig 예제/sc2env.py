@@ -83,7 +83,6 @@ class Sc2Env(gym.Env):
 		data = {"state": map, "reward": 0, "action": None, "done": False}  # empty action waiting for the next one!
 		with open('state_rwd_action.pkl', 'wb') as f:
 			pickle.dump(data, f)
-
 		# run incredibot-sct.py non-blocking:
-		subprocess.Popen(['python3', 'incredibot-sct.py'])
+		subprocess.Popen(['python3', 'example/q-learnig 예제/incredibot-sct.py'])
 		return observation  # reward, done, info can't be included

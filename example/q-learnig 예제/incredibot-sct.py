@@ -26,7 +26,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         no_action = True
         while no_action:
             try:
-                with open(r'C:\Users\User\Documents\GitHub\SC2RL\base=state_rwd_action.pkl', 'rb') as f:
+                with open('state_rwd_action.pkl', 'rb') as f:
                     state_rwd_action = pickle.load(f)
                 
 
