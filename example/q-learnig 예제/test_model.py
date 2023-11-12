@@ -2,7 +2,7 @@ from stable_baselines3 import PPO
 from sc2env import Sc2Env
 
 
-LOAD_MODEL = r"C:\Users\User\Documents\GitHub\models\1647915989\2880000.zip"
+LOAD_MODEL = "models/1647915989/2880000.zip"
 # Environment:
 env = Sc2Env()
 
