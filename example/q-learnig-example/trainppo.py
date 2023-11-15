@@ -20,7 +20,7 @@ conf_dict = {"Model": "v19",
 
 run = wandb.init(
     project=f'SC2RLv6',
-    entity="ericoh5050", #"sentdex",
+    entity="cbrnt1210",#"ericoh5050", #"sentdex",
     config=conf_dict,
     sync_tensorboard=True,  # auto-upload sb3's tensorboard metrics
     save_code=True,  # optional
@@ -37,7 +37,7 @@ env = Sc2Env()
 
 model = PPO('MlpPolicy', env, verbose=1, tensorboard_log=logdir)
 
-TIMESTEPS = 10000
+TIMESTEPS = 10#000
 iters = 0
 while True:
     print("On iteration: ", iters)

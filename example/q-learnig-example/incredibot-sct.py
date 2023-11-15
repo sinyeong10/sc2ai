@@ -43,6 +43,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         await self.distribute_workers() # put idle workers back to work
 
         action = state_rwd_action['action']
+        print(iteration, action)
         '''
         0: expand (ie: move to next spot, or build to 16 (minerals)+3 assemblers+3)
         1: build stargate (or up to one) (evenly)
@@ -134,27 +135,28 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                 print(e)
 
         #3: send scout
-        elif action == 3:
-            # are there any idle probes:
-            try:
-                self.last_sent
-            except:
-                self.last_sent = 0
+        # elif action == 3:
+        #     # are there any idle probes:
+        #     try:
+        #         self.last_sent
+        #     except:
+        #         self.last_sent = 0
 
             # if self.last_sent doesnt exist yet:
-            if (iteration - self.last_sent) > 200:
-                try:
-                    if self.units(UnitTypeId.PROBE).idle.exists:
-                        # pick one of these randomly:
-                        probe = random.choice(self.units(UnitTypeId.PROBE).idle)
-                    else:
-                        probe = random.choice(self.units(UnitTypeId.PROBE))
-                    # send probe towards enemy base:
-                    probe.attack(self.enemy_start_locations[0])
-                    self.last_sent = iteration
+            #정찰 코드
+            # if (iteration - self.last_sent) > 200:
+            #     try:
+            #         if self.units(UnitTypeId.PROBE).idle.exists:
+            #             # pick one of these randomly:
+            #             probe = random.choice(self.units(UnitTypeId.PROBE).idle)
+            #         else:
+            #             probe = random.choice(self.units(UnitTypeId.PROBE))
+            #         # send probe towards enemy base:
+            #         probe.attack(self.enemy_start_locations[0])
+            #         self.last_sent = iteration
 
-                except Exception as e:
-                    pass
+                # except Exception as e:
+                #     pass
 
 
         #4: attack (known buildings, units, then enemy base, just go in logical order.)
@@ -187,11 +189,11 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                 print(e)
             
 
-        #5: voidray flee (back to base)
-        elif action == 5:
-            if self.units(UnitTypeId.VOIDRAY).amount > 0:
-                for vr in self.units(UnitTypeId.VOIDRAY):
-                    vr.attack(self.start_location)
+        # #5: voidray flee (back to base)
+        # elif action == 5:
+        #     if self.units(UnitTypeId.VOIDRAY).amount > 0:
+        #         for vr in self.units(UnitTypeId.VOIDRAY):
+        #             vr.attack(self.start_location)
 
 
         map = np.zeros((self.game_info.map_size[0], self.game_info.map_size[1], 3), dtype=np.uint8)
@@ -342,7 +344,7 @@ with open("results.txt","a") as f:
     f.write(f"{result}\n")
 
 
-map = np.zeros((224, 224, 3), dtype=np.uint8)
+map = np.zeros((88, 96, 3), dtype=np.uint8)  #(224, 224였음)
 observation = map
 data = {"state": map, "reward": rwd, "action": None, "done": True}  # empty action waiting for the next one!
 with open('state_rwd_action.pkl', 'wb') as f:

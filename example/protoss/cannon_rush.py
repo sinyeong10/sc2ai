@@ -63,7 +63,7 @@ class CannonRushBot(BotAI):
 
 def main():
     run_game(
-        maps.get("(2)CatalystLE"),
+        maps.get("Simple64"), #2000AtmospheresAIE"),#maps.get("(2)CatalystLE"),
         [Bot(Race.Protoss, CannonRushBot(), name="CheeseCannon"),
          Computer(Race.Protoss, Difficulty.Medium)],
         realtime=False,
