@@ -22,8 +22,10 @@ class IncrediBot(BotAI):
         # if iteration % (5.7*5) != 0:
         #     return
 
-        # print(f"{self.time_formatted}, {iteration}")
-
+        if iteration % 100 == 0:
+            print(f"{self.time_formatted}, {iteration}")
+        if iteration > 4000:
+            await self.client.leave() # 게임 종료
         if iteration == 0:
             self.check = True
             self.Flag_count = 0
@@ -118,8 +120,11 @@ class IncrediBot(BotAI):
             supply_remaining = self.supply_cap - self. supply_used #공급한도-공급량
             if supply_remaining < 4 and not self.already_pending(UnitTypeId.PYLON):
                 if self.can_afford(UnitTypeId.PYLON):
-                    pos = nexus.position.towards(self.enemy_start_locations[0], random.randrange(3, 5))
+                    pos = nexus.position.towards(self.enemy_start_locations[0], random.randrange(5, 7))
                     await self.build(UnitTypeId.PYLON, near=pos)
+            if supply_remaining < 8 and self.structures(UnitTypeId.CYBERNETICSCORE).amount > 0 and self.can_afford(UnitTypeId.PYLON) and self.already_pending(UnitTypeId.PYLON) <= 2:
+                pos = nexus.position.towards(self.enemy_start_locations[0], random.randrange(5, 7))
+                await self.build(UnitTypeId.PYLON, near=pos)
 
         else:
             if self.can_afford(UnitTypeId.NEXUS):  # can we afford one?
@@ -170,8 +175,10 @@ class IncrediBot(BotAI):
                 )
             if len(local_workers) < 3:
                 print(len(local_workers))
-                target_location.append(mining_place)
+                #부족한 만큼 채움
+                target_location.extend([mining_place]*(3 - len(local_workers)))
 
+        local_workers = self.units([]) #초기화
         #옮길 미네랄 일꾼 체크
         for mining_place in bases:
             # get tags of minerals around expansion
@@ -182,21 +189,20 @@ class IncrediBot(BotAI):
             # get all target tags a worker can have
             # tags of the minerals he could mine at that base
             # get workers that work at that gather site
-            local_workers = self.workers.filter(
+            local_workers += self.workers.filter(
                 lambda unit: unit.order_target in local_minerals_tags or
                 (unit.is_carrying_minerals and unit.order_target == mining_place.tag)
             )
 
         move_worker_count = 0 #현재 이동한 일꾼 수
-        while move_worker_count <= move_worker:
-            for target_place in target_location: #가스 기준 가장 가까운 일꾼을 일시킴
-                if move_worker_count > move_worker: #이 만큼 미네랄에서 가스로 보냄
-                    continue
-                worker = min(local_workers, key=lambda w: target_place.distance_to(w))
-                worker.gather(target_place)
-                local_workers.remove(worker)
-                move_worker_count += 1
-                print(move_worker_count, worker, target_place, type(target_place))
+        for target_place in target_location: #가스 기준 가장 가까운 일꾼을 일시킴
+            if move_worker_count > move_worker: #이 만큼 미네랄에서 가스로 보냄
+                continue
+            worker = min(local_workers, key=lambda w: target_place.distance_to(w))
+            worker.gather(target_place)
+            local_workers.remove(worker)
+            move_worker_count += 1
+            print(move_worker_count, worker, target_place, type(target_place))
 
     async def gas_build(self, iteration): #가스 한번 건설
         for nexus in self.structures(UnitTypeId.NEXUS):

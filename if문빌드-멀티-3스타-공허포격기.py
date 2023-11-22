@@ -37,7 +37,9 @@ class IncrediBot(BotAI):
         #     f"pylons: {self.structures(UnitTypeId.PYLON).amount}, nexus: {self.structures(UnitTypeId.NEXUS).amount}", \
         #     f"gateways: {self.structures(UnitTypeId.GATEWAY).amount}, cybernetics cores: {self.structures(UnitTypeId.CYBERNETICSCORE).amount}", \
         #     f"stargates: {self.structures(UnitTypeId.STARGATE).amount}, voidrays: {self.units(UnitTypeId.VOIDRAY).amount}, supply: {self.supply_used}/{self.supply_cap}")
-
+        if iteration > 2500:
+            await self.client.leave() # 게임 종료
+        
         await self.distribute_workers()
 
         # begin logic:
@@ -45,8 +47,10 @@ class IncrediBot(BotAI):
             if self.structures(UnitTypeId.NEXUS).amount == 1 or self.already_pending(UnitTypeId.NEXUS):
                 nexus = self.townhalls[0]
             else:
-                print(2)
-                nexus = self.townhalls.random
+                if iteration % 2 == 0: #번갈아가면서 일처리
+                    nexus = self.townhalls[0] #본진
+                else:
+                    nexus = self.townhalls[1] #앞마당
 
             # if we have less than 10 voidrays, build one:
             if self.can_afford(UnitTypeId.VOIDRAY):
@@ -100,18 +104,18 @@ class IncrediBot(BotAI):
                     print("락이 이미 있는데 조건 만족")
 
             #인위적 가스 할당
-            elif len(self.gas_buildings.ready) == 1 and self.Flag_count == 0:
+            elif len(self.gas_buildings.ready) == 1 and self.Flag_count == 0 and iteration % 2 == 0:
                 # print(self.Flag_count, iteration)
-                await self.move_gas(3)
+                await self.move_gas(5)
                 self.Flag_count = 1
-            elif len(self.gas_buildings.ready) == 2 and self.Flag_count == 1:
+            elif len(self.gas_buildings.ready) == 2 and self.Flag_count == 1 and iteration % 2 == 0:
                 # print(self.Flag_count, iteration)
                 await self.move_gas(5)
                 self.Flag_count = 2
-            # elif len(self.gas_buildings.ready) == 3 and self.Flag_count == 2:
-            #     # print(self.Flag_count, iteration)
-            #     await self.move_gas(5)
-            #     self.Flag_count = 3
+            elif len(self.gas_buildings.ready) == 3 and self.Flag_count == 2:
+                # print(self.Flag_count, iteration)
+                await self.move_gas(5)
+                self.Flag_count = 3
             # elif len(self.gas_buildings.ready) == 4 and self.Flag_count == 3:
             #     # print(self.Flag_count, iteration)
             #     await self.move_gas(5)
@@ -137,9 +141,9 @@ class IncrediBot(BotAI):
                 if self.can_afford(UnitTypeId.PYLON):
                     pos = nexus.position.towards(self.enemy_start_locations[0], random.randrange(3, 5))
                     await self.build(UnitTypeId.PYLON, near=pos)
-                if self.structures(UnitTypeId.STARGATE).amount > 2 and self.can_afford(UnitTypeId.PYLON):
-                    pos = nexus.position.towards(self.enemy_start_locations[0], random.randrange(3, 5))
-                    await self.build(UnitTypeId.PYLON, near=pos)
+            if supply_remaining < 6 and self.structures(UnitTypeId.STARGATE).amount > 1 and self.can_afford(UnitTypeId.PYLON) and self.already_pending(UnitTypeId.PYLON) <= 2:
+                pos = nexus.position.towards(self.enemy_start_locations[0], random.randrange(5, 7))
+                await self.build(UnitTypeId.PYLON, near=pos)
 
         else:
             if self.can_afford(UnitTypeId.NEXUS):  # can we afford one?
@@ -190,8 +194,10 @@ class IncrediBot(BotAI):
                 )
             if len(local_workers) < 3:
                 print(len(local_workers))
-                target_location.append(mining_place)
+                #부족한 만큼 채움
+                target_location.extend([mining_place]*(3 - len(local_workers)))
 
+        local_workers = self.units([]) #초기화
         #옮길 미네랄 일꾼 체크
         for mining_place in bases:
             # get tags of minerals around expansion
@@ -202,21 +208,20 @@ class IncrediBot(BotAI):
             # get all target tags a worker can have
             # tags of the minerals he could mine at that base
             # get workers that work at that gather site
-            local_workers = self.workers.filter(
+            local_workers += self.workers.filter(
                 lambda unit: unit.order_target in local_minerals_tags or
                 (unit.is_carrying_minerals and unit.order_target == mining_place.tag)
             )
 
         move_worker_count = 0 #현재 이동한 일꾼 수
-        while move_worker_count <= move_worker:
-            for target_place in target_location: #가스 기준 가장 가까운 일꾼을 일시킴
-                if move_worker_count > move_worker: #이 만큼 미네랄에서 가스로 보냄
-                    continue
-                worker = min(local_workers, key=lambda w: target_place.distance_to(w))
-                worker.gather(target_place)
-                local_workers.remove(worker)
-                move_worker_count += 1
-                print(move_worker_count, worker, target_place, type(target_place))
+        for target_place in target_location: #가스 기준 가장 가까운 일꾼을 일시킴
+            if move_worker_count > move_worker: #이 만큼 미네랄에서 가스로 보냄
+                continue
+            worker = min(local_workers, key=lambda w: target_place.distance_to(w))
+            worker.gather(target_place)
+            local_workers.remove(worker)
+            move_worker_count += 1
+            print(move_worker_count, worker, target_place, type(target_place))
 
     async def gas_build(self, iteration): #가스 한번 건설
         for nexus in self.structures(UnitTypeId.NEXUS):
@@ -264,5 +269,5 @@ run_game(
     maps.get("Simple64"), #2000AtmospheresAIE"),
     [Bot(Race.Protoss, IncrediBot()),
     Computer(Race.Protoss, Difficulty.Easy)],
-    realtime=True,
+    realtime=False,
 )
