@@ -24,9 +24,13 @@ steps_for_pun = np.linspace(0, 1, total_steps)
 step_punishment = ((np.exp(steps_for_pun**3)/10) - 0.1)*10
 
 
+early_stop = 0
+reward = 0
 
 class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
     async def on_step(self, iteration: int): # on_step is a method that is called every step of the game.
+        global early_stop
+        global reward
         if iteration == 0:
             self.check = True
             self.Flag_count = 0
@@ -35,6 +39,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
             self.closest_worker = None
         if iteration > 4000:
             await self.client.leave() # 게임 종료
+            early_stop = 0
         no_action = True
         while no_action:
             try:
@@ -54,9 +59,9 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
 
 
         await self.distribute_workers() # put idle workers back to work
-
+        reward = 50
         action = state_rwd_action['action']
-        print(iteration, action)
+        # print(iteration, action)
     
         '''
         0:일꾼
@@ -68,7 +73,6 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         6:가스에 일꾼 이동
         7:아무것도 하지 않음
         '''
-        reward = 100
 
         nexus = self.townhalls.random
         if action == 0:
@@ -83,8 +87,8 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                 # await self.chat_send(self.time_formatted)
                 nexus.train(UnitTypeId.PROBE)  # train a probe
                 reward += 50
-            else:
-                reward -= 10
+            # else:
+            #     reward -= 10
             
         elif action == 1:
             if not self.structures(UnitTypeId.PYLON) and self.already_pending(UnitTypeId.PYLON) == 0:
@@ -97,8 +101,8 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                     pos = nexus.position.towards(self.enemy_start_locations[0], random.randrange(5, 7))
                     await self.build(UnitTypeId.PYLON, near=pos)
                     reward += 50
-            else:
-                reward -= 10
+            # else:
+            #     reward -= 10
 
         elif action == 2:
             buildings = [UnitTypeId.GATEWAY, UnitTypeId.CYBERNETICSCORE]
@@ -111,14 +115,14 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                     break
             
             if self.structures(UnitTypeId.STARGATE).amount <= 1 and self.can_afford(UnitTypeId.STARGATE) and self.already_pending(UnitTypeId.STARGATE) <= 1:
-                print(self.structures(UnitTypeId.STARGATE).amount, self.can_afford(UnitTypeId.STARGATE), self.already_pending(UnitTypeId.STARGATE))
+                # print(self.structures(UnitTypeId.STARGATE).amount, self.can_afford(UnitTypeId.STARGATE), self.already_pending(UnitTypeId.STARGATE))
                 if self.structures(UnitTypeId.PYLON):
                     await self.build(UnitTypeId.STARGATE, near=self.structures(UnitTypeId.PYLON).closest_to(nexus))
-                    reward += 200 - self.structures(UnitTypeId.STARGATE).amount * 50
-                else:
-                    reward -= 10
-            else:
-                reward -= 10
+                    reward += 300 - self.structures(UnitTypeId.STARGATE).amount * 50
+            #     else:
+            #         reward -= 10
+            # else:
+            #     reward -= 10
 
             
         elif action == 3:
@@ -126,20 +130,19 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                 for sg in self.structures(UnitTypeId.STARGATE).ready.idle:
                     sg.train(UnitTypeId.VOIDRAY)
                     await self.do_chrono_boost(sg)
-                    reward += 100
-            else:
-                reward -= 10
+                    reward += (4000-iteration)//10
+            # else:
+            #     reward -= 10
 
         elif action == 4:
-            if self.Flag_count == 0:
-                if self.can_afford(UnitTypeId.NEXUS):  # can we afford one?
-                    await self.expand_now()  # build one!
-                    self.Flag_count = 1
-                    reward += 50
-                else:
-                    reward -= 10
-            else:
-                reward -= 10
+            if self.Flag_count == 0 and self.can_afford(UnitTypeId.NEXUS):  # can we afford one?
+                await self.expand_now()  # build one!
+                self.Flag_count = 1
+                reward += 50
+            #     else:
+            #         reward -= 10
+            # else:
+            #     reward -= 10
         
         elif action == 5:
             if self.structures(UnitTypeId.ASSIMILATOR).amount <= 1 and self.can_afford(UnitTypeId.ASSIMILATOR) and not self.already_pending(UnitTypeId.ASSIMILATOR):
@@ -151,20 +154,40 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                     finally:
                     # 락 해제
                         self.gas_lock.release()
-                else:
-                    reward -= 10
-            else:
-                reward -= 10
+            #     else:
+            #         reward -= 10
+            # else:
+            #     reward -= 10
         
         elif action == 6:
-            if len(self.gas_buildings.ready) >= 1:
+            if len(self.gas_buildings.ready) >= 1 and self.gas_flag <= 6:
                 await self.move_gas(3)
+                self.gas_flag += 1
                 reward += 50
-            else:
-                reward -= 10
+            # else:
+            #     reward -= 10
         
         elif action == 7:
-            pass
+            reward += 10
+        
+        #공격커맨드
+        if self.units(UnitTypeId.VOIDRAY).amount >= 5:
+            if self.check:
+                await self.chat_send(f"{self.time_formatted}, {iteration}")
+                self.check = False
+                early_stop = 4000-iteration
+                await self.client.leave() # 게임 종료
+            if self.enemy_units:
+                for vr in self.units(UnitTypeId.VOIDRAY).idle:
+                    vr.attack(random.choice(self.enemy_units))
+
+            elif self.enemy_structures:
+                for vr in self.units(UnitTypeId.VOIDRAY).idle:
+                    vr.attack(random.choice(self.enemy_structures))
+
+            else:
+                for vr in self.units(UnitTypeId.VOIDRAY).idle:
+                    vr.attack(self.enemy_start_locations[0])
         
         #[minerals, gas / population, max_population / number_of_workers /
         # number_of_nexuses, tech_level, iteration]
@@ -172,21 +195,21 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         map[0], map[1] = self.minerals, self.vespene
         map[2], map[3] = self.supply_used, self.supply_cap
         map[4] = self.workers.amount
-        map[5] = self.structures(UnitTypeId.NEXUS).amount-1
-        Tech_level = [UnitTypeId.PYLON, UnitTypeId.GATEWAY, UnitTypeId.STARGATE]
-        map[6]+=sum(1 for tech_build in Tech_level if self.structures(tech_build))
+        map[5] = self.structures(UnitTypeId.NEXUS).amount
+        Tech_level = [UnitTypeId.PYLON, UnitTypeId.GATEWAY, UnitTypeId.CYBERNETICSCORE]
+        map[6] += sum(1 for tech_build in Tech_level if self.structures(tech_build))
         map[7] = iteration
 
-        try:
-            reward += self.units(UnitTypeId.VOIDRAY).amount * 10
-
-        except Exception as e:
-            print("reward",e)
-            reward = 0
-
+        if any(value < 0 for value in map):
+            # Print the entire map
+            print(f"Map with negative values: {map}, {iteration}, {action}")
+            for i in range(len(map)):
+                if map[i] < 0:
+                    map[i] = 0
+            print(f"Map with negative values change: {map}, {iteration}, {action}")
         
         if iteration % 100 == 0:
-            print(f"Iter: {iteration}. RWD: {reward}. VR: {self.units(UnitTypeId.VOIDRAY).amount}")
+            print(f"{map}, {action}\nIter: {iteration}. RWD: {reward}. VR: {self.units(UnitTypeId.VOIDRAY).amount}")
 
         # write the file: 
         # observation(minimap), reward for this step, Action(None if waiting for action, otherwise 0,1,2,3,4,5), Is the game over
@@ -220,7 +243,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                     (unit.is_carrying_vespene and unit.order_target == bases.closest_to(mining_place).tag)
                 )
             if len(local_workers) < 3:
-                print(len(local_workers))
+                # print(len(local_workers))
                 #부족한 만큼 채움
                 target_location.extend([mining_place]*(3 - len(local_workers)))
 
@@ -244,11 +267,14 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         for target_place in target_location: #가스 기준 가장 가까운 일꾼을 일시킴
             if move_worker_count > move_worker: #이 만큼 미네랄에서 가스로 보냄
                 continue
+            if local_workers.empty:
+                print("해당 일꾼이 없음")
+                return
             worker = min(local_workers, key=lambda w: target_place.distance_to(w))
             worker.gather(target_place)
             local_workers.remove(worker)
             move_worker_count += 1
-            print(move_worker_count, worker, target_place, type(target_place))
+            # print(move_worker_count, worker, target_place, type(target_place))
 
     async def gas_build(self, iteration): #가스 한번 건설
         for nexus in self.structures(UnitTypeId.NEXUS):
@@ -277,7 +303,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                     # print(f"{self.time_formatted}, {iteration}")
                     # print(self.Flag_count, self.closest_worker, type(self.closest_worker))
                     # print(self.closest_worker.orders)
-                    self.gas_flag = iteration
+                    # self.gas_flag = iteration
 
                     # count = 1
                     # # while안에서 코드가 멈춰버림, 명령이 수행되지 않으니 결과도 안바낌
@@ -292,8 +318,6 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                     
                     return self.closest_worker
 
-
-
 result = run_game(  # run_game is a function that runs the game.
     maps.get("Simple64"), # the map we are playing on
     [Bot(Race.Protoss, IncrediBot()), # runs our coded bot, protoss race, and we pass our bot object 
@@ -301,19 +325,15 @@ result = run_game(  # run_game is a function that runs the game.
     realtime=False, # When set to True, the agent is limited in how long each step can take to process.
 )
 
-
-if str(result) == "Result.Victory":
-    rwd = 500
-else:
-    rwd = -500
-
 with open("results.txt","a") as f:
     f.write(f"{result}\n")
 
+reward = int(early_stop)
 
 map = [0,0,0,0,0,0,0,0] #np.zeros((88, 96, 3), dtype=np.uint8)  #(224, 224였음)
+print("end game", map, reward)
 observation = map
-data = {"state": map, "reward": rwd, "action": None, "done": True}  # empty action waiting for the next one!
+data = {"state": map, "reward": reward, "action": None, "done": True}  # empty action waiting for the next one!
 with open('state_rwd_action.pkl', 'wb') as f:
     pickle.dump(data, f)
 
