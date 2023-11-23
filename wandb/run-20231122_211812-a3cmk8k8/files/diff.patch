@@ -1,0 +1,11 @@
+diff --git a/order-action/sc2env.py b/order-action/sc2env.py
+index 88ea696..52ed36b 100644
+--- a/order-action/sc2env.py
++++ b/order-action/sc2env.py
+@@ -87,5 +87,5 @@ class Sc2Env(gym.Env):
+ 		with open('state_rwd_action.pkl', 'wb') as f:
+ 			pickle.dump(data, f)
+ 		# run incredibot-sct.py non-blocking:
+-		subprocess.Popen(['python3', 'order-action/incredibot-sct.py'])
++		subprocess.Popen(['python', 'order-action/incredibot-sct.py'])
+ 		return observation  # reward, done, info can't be included

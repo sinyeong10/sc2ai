@@ -1,0 +1,17 @@
+C:\Users\User\Miniconda3\lib\site-packages\stable_baselines3\common\vec_env\patch_gym.py:49: UserWarning: You provided an OpenAI Gym environment. We strongly recommend transitioning to Gymnasium environments. Stable-Baselines3 is automatically wrapping your environments in a compatibility layer, which could potentially cause issues.
+  warnings.warn(
+Using cpu device
+Wrapping the env with a `Monitor` wrapper
+Wrapping the env in a DummyVecEnv.
+On iteration:  0
+RESETTING ENVIRONMENT!!!!!!!!!!!!!
+Logging to logs/1700657775/PPO_0
+RESETTING ENVIRONMENT!!!!!!!!!!!!!
+RESETTING ENVIRONMENT!!!!!!!!!!!!!
+RESETTING ENVIRONMENT!!!!!!!!!!!!!
+RESETTING ENVIRONMENT!!!!!!!!!!!!!
+RESETTING ENVIRONMENT!!!!!!!!!!!!!
+RESETTING ENVIRONMENT!!!!!!!!!!!!!
+RESETTING ENVIRONMENT!!!!!!!!!!!!!
+RESETTING ENVIRONMENT!!!!!!!!!!!!!
+RESETTING ENVIRONMENT!!!!!!!!!!!!!

@@ -1,0 +1,63 @@
+Using cpu device
+Wrapping the env with a `Monitor` wrapper
+Wrapping the env in a DummyVecEnv.
+On iteration:  0
+RESETTING ENVIRONMENT!!!!!!!!!!!!!
+Logging to logs/1700703036/PPO_0
+C:\Users\User\Miniconda3\lib\site-packages\stable_baselines3\common\vec_env\patch_gym.py:49: UserWarning: You provided an OpenAI Gym environment. We strongly recommend transitioning to Gymnasium environments. Stable-Baselines3 is automatically wrapping your environments in a compatibility layer, which could potentially cause issues.
+  warnings.warn(
+RESETTING ENVIRONMENT!!!!!!!!!!!!!
+---------------------------------
+| rollout/           |          |
+|    ep_len_mean     | 2e+03    |
+|    ep_rew_mean     | 1.15e+05 |
+| time/              |          |
+|    fps             | 17       |
+|    iterations      | 1        |
+|    time_elapsed    | 114      |
+|    total_timesteps | 2048     |
+---------------------------------
+RESETTING ENVIRONMENT!!!!!!!!!!!!!
+-------------------------------------------
+| rollout/                |               |
+|    ep_len_mean          | 2.04e+03      |
+|    ep_rew_mean          | 1.15e+05      |
+| time/                   |               |
+|    fps                  | 18            |
+|    iterations           | 2             |
+|    time_elapsed         | 219           |
+|    total_timesteps      | 4096          |
+| train/                  |               |
+|    approx_kl            | 1.7057435e-05 |
+|    clip_fraction        | 0             |
+|    clip_range           | 0.2           |
+|    entropy_loss         | -2.08         |
+|    explained_variance   | 5.59e-05      |
+|    learning_rate        | 0.0003        |
+|    loss                 | 4.9e+05       |
+|    n_updates            | 10            |
+|    policy_gradient_loss | -0.000299     |
+|    value_loss           | 9.33e+05      |
+-------------------------------------------
+RESETTING ENVIRONMENT!!!!!!!!!!!!!
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 2e+03        |
+|    ep_rew_mean          | 1.13e+05     |
+| time/                   |              |
+|    fps                  | 18           |
+|    iterations           | 3            |
+|    time_elapsed         | 324          |
+|    total_timesteps      | 6144         |
+| train/                  |              |
+|    approx_kl            | 7.378985e-06 |
+|    clip_fraction        | 0            |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -2.08        |
+|    explained_variance   | -0.000493    |
+|    learning_rate        | 0.0003       |
+|    loss                 | 4.45e+05     |
+|    n_updates            | 20           |
+|    policy_gradient_loss | -0.000143    |
+|    value_loss           | 8.61e+05     |
+------------------------------------------

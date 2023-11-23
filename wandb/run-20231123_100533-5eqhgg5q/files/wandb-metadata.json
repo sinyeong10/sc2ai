@@ -1,0 +1,45 @@
+{
+    "os": "Windows-10-10.0.19045-SP0",
+    "python": "3.10.10",
+    "heartbeatAt": "2023-11-23T01:05:35.010066",
+    "startedAt": "2023-11-23T01:05:33.544687",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "c:\\Users\\User\\Documents\\GitHub\\sc2ai\\order-action\\trainppo.py",
+    "codePathLocal": "order-action\\trainppo.py",
+    "codePath": "order-action\\trainppo.py",
+    "git": {
+        "remote": "https://github.com/sinyeong10/sc2ai.git",
+        "commit": "08ccf4db0474a6e096ee6c41b6e085968800ab9d"
+    },
+    "email": "129771634+oh5050@users.noreply.github.com",
+    "root": "C:/Users/User/Documents/GitHub/sc2ai",
+    "host": "DESKTOP-8T4DMB3",
+    "username": "User",
+    "executable": "C:\\Users\\User\\Miniconda3\\python.exe",
+    "cpu_count": 4,
+    "cpu_count_logical": 8,
+    "cpu_freq": {
+        "current": 1600.0,
+        "min": 0.0,
+        "max": 1800.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 1600.0,
+            "min": 0.0,
+            "max": 1800.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 237.4410171508789,
+            "used": 209.44875717163086
+        }
+    },
+    "memory": {
+        "total": 7.654090881347656
+    }
+}

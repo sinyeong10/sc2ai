@@ -1,0 +1,81 @@
+2023-11-22 22:36:46,137 INFO    StreamThr :21084 [internal.py:wandb_internal():86] W&B internal server running at pid: 21084, started at: 2023-11-22 22:36:46.135400
+2023-11-22 22:36:46,140 DEBUG   HandlerThread:21084 [handler.py:handle_request():146] handle_request: status
+2023-11-22 22:36:46,207 INFO    WriterThread:21084 [datastore.py:open_for_write():85] open: C:\Users\User\Documents\GitHub\sc2ai\wandb\run-20231122_223646-mbf5bxbc\run-mbf5bxbc.wandb
+2023-11-22 22:36:46,209 DEBUG   SenderThread:21084 [sender.py:send():380] send: header
+2023-11-22 22:36:46,387 DEBUG   SenderThread:21084 [sender.py:send():380] send: run
+2023-11-22 22:36:47,177 INFO    SenderThread:21084 [dir_watcher.py:__init__():211] watching files in: C:\Users\User\Documents\GitHub\sc2ai\wandb\run-20231122_223646-mbf5bxbc\files
+2023-11-22 22:36:47,180 INFO    SenderThread:21084 [sender.py:_start_run_threads():1124] run started: mbf5bxbc with start time 1700660206.140399
+2023-11-22 22:36:47,234 DEBUG   HandlerThread:21084 [handler.py:handle_request():146] handle_request: check_version
+2023-11-22 22:36:47,236 DEBUG   SenderThread:21084 [sender.py:send_request():407] send_request: check_version
+2023-11-22 22:36:47,503 DEBUG   HandlerThread:21084 [handler.py:handle_request():146] handle_request: run_start
+2023-11-22 22:36:47,729 DEBUG   HandlerThread:21084 [system_info.py:__init__():32] System info init
+2023-11-22 22:36:47,730 DEBUG   HandlerThread:21084 [system_info.py:__init__():47] System info init done
+2023-11-22 22:36:47,730 INFO    HandlerThread:21084 [system_monitor.py:start():194] Starting system monitor
+2023-11-22 22:36:47,732 INFO    SystemMonitor:21084 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2023-11-22 22:36:47,732 INFO    HandlerThread:21084 [system_monitor.py:probe():214] Collecting system info
+2023-11-22 22:36:47,740 INFO    SystemMonitor:21084 [interfaces.py:start():190] Started cpu monitoring
+2023-11-22 22:36:47,754 DEBUG   HandlerThread:21084 [system_info.py:probe():196] Probing system
+2023-11-22 22:36:47,755 INFO    SystemMonitor:21084 [interfaces.py:start():190] Started disk monitoring
+2023-11-22 22:36:47,779 INFO    SystemMonitor:21084 [interfaces.py:start():190] Started memory monitoring
+2023-11-22 22:36:47,868 INFO    SystemMonitor:21084 [interfaces.py:start():190] Started network monitoring
+2023-11-22 22:36:47,958 DEBUG   HandlerThread:21084 [system_info.py:_probe_git():181] Probing git
+2023-11-22 22:36:48,368 DEBUG   HandlerThread:21084 [system_info.py:_probe_git():189] Probing git done
+2023-11-22 22:36:48,368 DEBUG   HandlerThread:21084 [system_info.py:probe():244] Probing system done
+2023-11-22 22:36:48,369 DEBUG   HandlerThread:21084 [system_monitor.py:probe():223] {'os': 'Windows-10-10.0.19045-SP0', 'python': '3.10.10', 'heartbeatAt': '2023-11-22T13:36:47.755349', 'startedAt': '2023-11-22T13:36:46.072404', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': 'c:\\Users\\User\\Documents\\GitHub\\sc2ai\\order-action\\trainppo.py', 'codePathLocal': 'order-action\\trainppo.py', 'codePath': 'order-action\\trainppo.py', 'git': {'remote': 'https://github.com/sinyeong10/sc2ai.git', 'commit': '08ccf4db0474a6e096ee6c41b6e085968800ab9d'}, 'email': '129771634+oh5050@users.noreply.github.com', 'root': 'C:/Users/User/Documents/GitHub/sc2ai', 'host': 'DESKTOP-8T4DMB3', 'username': 'User', 'executable': 'C:\\Users\\User\\Miniconda3\\python.exe', 'cpu_count': 4, 'cpu_count_logical': 8, 'cpu_freq': {'current': 1600.0, 'min': 0.0, 'max': 1800.0}, 'cpu_freq_per_core': [{'current': 1600.0, 'min': 0.0, 'max': 1800.0}], 'disk': {'/': {'total': 237.4410171508789, 'used': 209.18154907226562}}, 'memory': {'total': 7.654090881347656}}
+2023-11-22 22:36:48,369 INFO    HandlerThread:21084 [system_monitor.py:probe():224] Finished collecting system info
+2023-11-22 22:36:48,369 INFO    HandlerThread:21084 [system_monitor.py:probe():227] Publishing system info
+2023-11-22 22:36:48,369 DEBUG   HandlerThread:21084 [system_info.py:_save_pip():52] Saving list of pip packages installed into the current environment
+2023-11-22 22:36:48,372 DEBUG   HandlerThread:21084 [system_info.py:_save_pip():68] Saving pip packages done
+2023-11-22 22:36:48,373 DEBUG   HandlerThread:21084 [system_info.py:_save_conda():75] Saving list of conda packages installed into the current environment
+2023-11-22 22:36:49,194 INFO    Thread-16 :21084 [dir_watcher.py:_on_file_created():271] file/dir created: C:\Users\User\Documents\GitHub\sc2ai\wandb\run-20231122_223646-mbf5bxbc\files\requirements.txt
+2023-11-22 22:36:49,195 INFO    Thread-16 :21084 [dir_watcher.py:_on_file_created():271] file/dir created: C:\Users\User\Documents\GitHub\sc2ai\wandb\run-20231122_223646-mbf5bxbc\files\conda-environment.yaml
+2023-11-22 22:36:58,982 DEBUG   HandlerThread:21084 [system_info.py:_save_conda():87] Saving conda packages done
+2023-11-22 22:36:58,982 DEBUG   HandlerThread:21084 [system_info.py:_save_code():90] Saving code
+2023-11-22 22:36:59,142 DEBUG   HandlerThread:21084 [system_info.py:_save_code():111] Saving code done
+2023-11-22 22:36:59,143 DEBUG   HandlerThread:21084 [system_info.py:_save_patches():128] Saving git patches
+2023-11-22 22:36:59,615 INFO    Thread-16 :21084 [dir_watcher.py:_on_file_modified():288] file/dir modified: C:\Users\User\Documents\GitHub\sc2ai\wandb\run-20231122_223646-mbf5bxbc\files\conda-environment.yaml
+2023-11-22 22:36:59,616 INFO    Thread-16 :21084 [dir_watcher.py:_on_file_created():271] file/dir created: C:\Users\User\Documents\GitHub\sc2ai\wandb\run-20231122_223646-mbf5bxbc\files\code\order-action\trainppo.py
+2023-11-22 22:36:59,617 INFO    Thread-16 :21084 [dir_watcher.py:_on_file_created():271] file/dir created: C:\Users\User\Documents\GitHub\sc2ai\wandb\run-20231122_223646-mbf5bxbc\files\code\order-action
+2023-11-22 22:36:59,618 INFO    Thread-16 :21084 [dir_watcher.py:_on_file_created():271] file/dir created: C:\Users\User\Documents\GitHub\sc2ai\wandb\run-20231122_223646-mbf5bxbc\files\code
+2023-11-22 22:36:59,850 DEBUG   HandlerThread:21084 [system_info.py:_save_patches():170] Saving git patches done
+2023-11-22 22:36:59,853 INFO    HandlerThread:21084 [system_monitor.py:probe():229] Finished publishing system info
+2023-11-22 22:36:59,896 DEBUG   HandlerThread:21084 [handler.py:handle_request():146] handle_request: status_report
+2023-11-22 22:36:59,897 DEBUG   HandlerThread:21084 [handler.py:handle_request():146] handle_request: keepalive
+2023-11-22 22:36:59,897 DEBUG   HandlerThread:21084 [handler.py:handle_request():146] handle_request: status_report
+2023-11-22 22:36:59,898 DEBUG   HandlerThread:21084 [handler.py:handle_request():146] handle_request: keepalive
+2023-11-22 22:36:59,899 DEBUG   SenderThread:21084 [sender.py:send():380] send: files
+2023-11-22 22:36:59,899 INFO    SenderThread:21084 [sender.py:_save_file():1380] saving file wandb-metadata.json with policy now
+2023-11-22 22:36:59,902 INFO    SenderThread:21084 [sender.py:_save_file():1380] saving file code\order-action\trainppo.py with policy now
+2023-11-22 22:37:00,069 DEBUG   HandlerThread:21084 [handler.py:handle_request():146] handle_request: stop_status
+2023-11-22 22:37:00,070 DEBUG   HandlerThread:21084 [handler.py:handle_request():146] handle_request: internal_messages
+2023-11-22 22:37:00,078 DEBUG   SenderThread:21084 [sender.py:send_request():407] send_request: stop_status
+2023-11-22 22:37:00,593 DEBUG   SenderThread:21084 [sender.py:send():380] send: telemetry
+2023-11-22 22:37:00,843 INFO    Thread-16 :21084 [dir_watcher.py:_on_file_created():271] file/dir created: C:\Users\User\Documents\GitHub\sc2ai\wandb\run-20231122_223646-mbf5bxbc\files\output.log
+2023-11-22 22:37:00,845 INFO    Thread-16 :21084 [dir_watcher.py:_on_file_created():271] file/dir created: C:\Users\User\Documents\GitHub\sc2ai\wandb\run-20231122_223646-mbf5bxbc\files\wandb-metadata.json
+2023-11-22 22:37:01,127 INFO    wandb-upload_0:21084 [upload_job.py:push():131] Uploaded file C:\Users\User\AppData\Local\Temp\tmpx8oq7qn2wandb\y9i2o2bl-wandb-metadata.json
+2023-11-22 22:37:01,428 INFO    wandb-upload_1:21084 [upload_job.py:push():131] Uploaded file C:\Users\User\AppData\Local\Temp\tmpx8oq7qn2wandb\c6rqt94h-code/order-action/trainppo.py
+2023-11-22 22:37:01,621 DEBUG   HandlerThread:21084 [handler.py:handle_request():146] handle_request: status_report
+2023-11-22 22:37:02,760 INFO    HandlerThread:21084 [handler.py:handle_tbrecord():764] handling tbrecord: tbrecord {
+  log_dir: "logs/1700660198/PPO_0"
+  save: true
+}
+control {
+  relay_id: "60cfab0d3aaa48ddb764f02999433ea4"
+}
+_info {
+  stream_id: "mbf5bxbc"
+}
+
+2023-11-22 22:37:02,763 DEBUG   HandlerThread:21084 [config_util.py:dict_from_config_file():101] no default config file found in config-defaults.yaml
+2023-11-22 22:37:03,095 INFO    Thread-16 :21084 [dir_watcher.py:_on_file_modified():288] file/dir modified: C:\Users\User\Documents\GitHub\sc2ai\wandb\run-20231122_223646-mbf5bxbc\files\output.log
+2023-11-22 22:37:03,916 DEBUG   SenderThread:21084 [sender.py:send():380] send: tbrecord
+2023-11-22 22:37:03,933 DEBUG   SenderThread:21084 [sender.py:send():380] send: files
+2023-11-22 22:37:03,934 INFO    SenderThread:21084 [sender.py:_save_file():1380] saving file events.out.tfevents.1700660222.DESKTOP-8T4DMB3.20336.0 with policy live
+2023-11-22 22:37:04,107 INFO    Thread-16 :21084 [dir_watcher.py:_on_file_created():271] file/dir created: C:\Users\User\Documents\GitHub\sc2ai\wandb\run-20231122_223646-mbf5bxbc\files\events.out.tfevents.1700660222.DESKTOP-8T4DMB3.20336.0
+2023-11-22 22:37:05,022 INFO    wandb-upload_0:21084 [upload_job.py:push():131] Uploaded file C:\Users\User\AppData\Local\Temp\tmpx8oq7qn2wandb\eugs5c5i-events.out.tfevents.1700660222.DESKTOP-8T4DMB3.20336.0
+2023-11-22 22:37:05,279 INFO    Thread-16 :21084 [dir_watcher.py:_on_file_modified():288] file/dir modified: C:\Users\User\Documents\GitHub\sc2ai\wandb\run-20231122_223646-mbf5bxbc\files\output.log
+2023-11-22 22:37:06,974 DEBUG   HandlerThread:21084 [handler.py:handle_request():146] handle_request: status_report
+2023-11-22 22:37:12,144 DEBUG   HandlerThread:21084 [handler.py:handle_request():146] handle_request: status_report
+2023-11-22 22:37:15,039 DEBUG   HandlerThread:21084 [handler.py:handle_request():146] handle_request: stop_status
+2023-11-22 22:37:15,042 DEBUG   SenderThread:21084 [sender.py:send_request():407] send_request: stop_status
+2023-11-22 22:37:15,047 DEBUG   HandlerThread:21084 [handler.py:handle_request():146] handle_request: internal_messages
