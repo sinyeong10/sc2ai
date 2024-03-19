@@ -78,7 +78,6 @@ class Sc2Env(gym.Env):
 		observation = state
 		return observation, reward, done, info
 
-
 	def reset(self):
 		print("RESETTING ENVIRONMENT!!!!!!!!!!!!!")
 		map = [0,0,0,0,0,0,0,0] #np.zeros((88, 96, 3), dtype=np.uint8) #(224, 224였음)
@@ -87,5 +86,5 @@ class Sc2Env(gym.Env):
 		with open('state_rwd_action.pkl', 'wb') as f:
 			pickle.dump(data, f)
 		# run incredibot-sct.py non-blocking:
-		subprocess.Popen(['python', 'order-action/incredibot-sct.py'])
+		subprocess.Popen(['python3', 'order-action/incredibot-sct.py'])
 		return observation  # reward, done, info can't be included

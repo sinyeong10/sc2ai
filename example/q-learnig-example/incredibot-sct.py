@@ -43,7 +43,6 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         await self.distribute_workers() # put idle workers back to work
 
         action = state_rwd_action['action']
-        print(iteration, action)
         '''
         0: expand (ie: move to next spot, or build to 16 (minerals)+3 assemblers+3)
         1: build stargate (or up to one) (evenly)
