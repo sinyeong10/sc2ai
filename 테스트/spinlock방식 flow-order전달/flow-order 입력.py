@@ -48,3 +48,10 @@ while True:
         break
     finish_action = True
 print("end")
+
+
+with open('flow_action.pkl', 'rb') as f:
+    data = pickle.load(f)
+    print(data)
+
+print("finish")

@@ -32,7 +32,7 @@ def backtrack(idx, num_worker, num_pylon, num_gateway, num_jealot):
         backtrack(idx+1, num_worker, num_pylon+1, num_gateway, num_jealot)
         tmp.pop()
 
-    if num_pylon >= 1 and num_gateway<3: #기지 기반자원 수급량으로 최대 5개까지 가능
+    if num_pylon >= 1 and num_gateway<2: #기지 기반자원 수급량으로 최대 5개까지 가능
         tmp.append(2)
         backtrack(idx+1, num_worker, num_pylon, num_gateway+1, num_jealot)
         tmp.pop()

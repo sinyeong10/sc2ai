@@ -29,4 +29,4 @@ for i in range(len(loaded_order)):
     ans[i].append(order)
     ans[i].append(check(order))
     
-print(ans)
+# print(ans)
