@@ -104,7 +104,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
             supply_remaining = self.supply_cap - self. supply_used #공급한도-공급량
             # and supply_remaining > 2 제한이 있어서 계속 뽑아도 될 듯?
             #self.structures(UnitTypeId.ASSIMILATOR).amount의 갯수만큼 인식된 일꾼 수에 더해줌, 가스통안에 들어간 거 갯수 인식 못함
-            if nexus.is_idle and self.can_afford(UnitTypeId.PROBE):
+            if nexus and self.can_afford(UnitTypeId.PROBE): #최대 일꾼수가 3인 상황이라 .is_idle 제한 해제
                 await self.chat_send(f"{supply_remaining}, {self.units(UnitTypeId.PROBE).amount}, {3*(self.structures(UnitTypeId.ASSIMILATOR).amount)+2*len(self.mineral_field.closer_than(10, self.townhalls.first))}")
                 # await self.chat_send(self.time_formatted)
                 nexus.train(UnitTypeId.PROBE)  # train a probe
@@ -123,13 +123,14 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                     finish_action = True
 
         elif action == 2:
-            if not self.structures(UnitTypeId.GATEWAY) and self.already_pending(UnitTypeId.GATEWAY) == 0:
+            if not self.structures(UnitTypeId.GATEWAY): #동시 건설 제한 해제 and self.already_pending(UnitTypeId.GATEWAY) == 0:
                 if self.can_afford(UnitTypeId.GATEWAY) and self.structures(UnitTypeId.PYLON):
                     await self.build(UnitTypeId.GATEWAY, near=self.structures(UnitTypeId.PYLON).closest_to(nexus))
                     finish_action = True
 
             #한 유닛이 명령을 받은 후 완료 전에 다른 명령을 받으면 앞의 명령이 무시되는 문제 발생 가능..
-            if self.structures(UnitTypeId.GATEWAY).amount <= 2 and self.can_afford(UnitTypeId.GATEWAY) and self.already_pending(UnitTypeId.GATEWAY) <= 2:
+            #하지만 이 시점에서는 미네랄 수급량이 명령이 동시성을 유발할만큼 충족되지 않음
+            if self.can_afford(UnitTypeId.GATEWAY): #갯수제한 해제 and self.structures(UnitTypeId.GATEWAY).amount <= 2 and self.already_pending(UnitTypeId.GATEWAY) <= 2:
                 # print(self.structures(UnitTypeId.STARGATE).amount, self.can_afford(UnitTypeId.STARGATE), self.already_pending(UnitTypeId.STARGATE))
                 if self.structures(UnitTypeId.PYLON):
                     await self.build(UnitTypeId.GATEWAY, near=self.structures(UnitTypeId.PYLON).closest_to(nexus))
@@ -137,15 +138,25 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
 
         elif action == 3:
             if self.can_afford(UnitTypeId.ZEALOT):
-                sg = self.structures(UnitTypeId.GATEWAY).ready.idle
+                sg = self.structures(UnitTypeId.GATEWAY).ready #생산 중복 가능하게 함 .idle
                 if sg:
                     sg[0].train(UnitTypeId.ZEALOT)
                     finish_action = True
                     await self.do_chrono_boost(sg[0])
         
+        #현재 2개 이상 생산 중인 건물이 있고 새로 건물이 지어졌다면 생산명령을 분배함
+        if self.structures(UnitTypeId.GATEWAY).ready.idle:
+            count = len(self.structures(UnitTypeId.GATEWAY).ready.idle) #생산 가능한 건물
+            for gw in self.structures(UnitTypeId.GATEWAY).ready: #지금 생산중인 건물
+                while len(gw.orders) > 1 and count > 0: #2개이상의 생산이며 현재 생산 가능한 건물이 있다면
+                    await self.do(gw.orders[-1].unit.tag('cancel')) #취소함
+                    count -= 1
+                    self.structures(UnitTypeId.GATEWAY).ready.idle.random.train(UnitTypeId.ZEALOT)
+
+        
         #9의 경우는 걸리지 않음, end조건 확인하고 끝
 
-        #공격커맨드
+        #종료 커맨드
         if self.units(UnitTypeId.ZEALOT).amount >= 2:
             if self.check:
                 await self.chat_send(f"{self.time_formatted}, {iteration}")
