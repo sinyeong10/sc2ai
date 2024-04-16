@@ -12,7 +12,7 @@ mineral_field = 8
 order = []
 tmp = []
 def backtrack(idx, num_worker, num_pylon, num_gateway, num_jealot):
-    if num_jealot == 2: #2마리 달성 목표!
+    if num_jealot == 3: #2마리 달성 목표!
         order.append(tmp[:]+[9])
         return
     

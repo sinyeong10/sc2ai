@@ -177,7 +177,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         #9의 경우는 걸리지 않음, end조건 확인하고 끝
 
         #종료 커맨드
-        if self.units(UnitTypeId.ZEALOT).amount >= 2 or not self.townhalls:
+        if self.units(UnitTypeId.ZEALOT).amount >= 3 or not self.townhalls:
             if self.check:
                 await self.chat_send(f"{self.time_formatted}, {iteration}")
                 print(f"{self.time_formatted}, {iteration}")
