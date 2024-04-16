@@ -16,17 +16,11 @@ def iterate_nested_list(nested_list):
 # 제너레이터 생성
 nested_list_iterator = iterate_nested_list(loaded_order)
 
-#최종 결과 기록
-ans = [[] for _ in range(len(loaded_order))]
-
-def check(order): #시뮬레이션 후 경과 시간을 반환하는 함수
-    return 10
+import subprocess
 
 # yield를 사용하여 요소 하나씩 추출
 for i in range(len(loaded_order)):
     order = next(nested_list_iterator)
     print(order)
-    ans[i].append(order)
-    ans[i].append(check(order))
-    
+    subprocess.run(["python", '질럿 최적화/flow-action/incredibot-sct.py', ' '.join(map(str, order))])
 # print(ans)

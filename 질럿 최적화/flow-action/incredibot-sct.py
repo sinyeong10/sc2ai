@@ -25,7 +25,13 @@ SAVE_REPLAY = True
 early_stop = 0
 reward = 0
 
-order = [0, 0, 0, 1, 0, 2, 2, 3, 1, 3, 9]
+try:
+    order = list(map(int, sys.argv[1].split()))
+except:
+    print("order이 전달되지 않음!")
+    order = [1,2,3,3,9]
+    sys.exit()
+file_path = "game_log.txt"
 
 
 class tmpIncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
@@ -61,7 +67,10 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         global finish_action #해당 명령을 지금 프레임에서 수행하였는지 여부!
         if iteration == 0:
             self.check = True
+            await self.chat_send(f"order : {order}")
         if iteration > 4000: #4000이 넘어가면 불가능한 경우이므로 종료
+            with open(file_path, "a") as file:
+                file.write(f"{order} : {self.time_formatted}, {iteration}\n")
             await self.client.leave() # 게임 종료
             early_stop = 0
         no_action = True
@@ -123,16 +132,17 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                     finish_action = True
 
         elif action == 2:
-            if not self.structures(UnitTypeId.GATEWAY): #동시 건설 제한 해제 and self.already_pending(UnitTypeId.GATEWAY) == 0:
-                if self.can_afford(UnitTypeId.GATEWAY) and self.structures(UnitTypeId.PYLON):
-                    await self.build(UnitTypeId.GATEWAY, near=self.structures(UnitTypeId.PYLON).closest_to(nexus))
-                    finish_action = True
+            # print(self.structures(UnitTypeId.PYLON), self.structures(UnitTypeId.PYLON).ready, self.structures(UnitTypeId.PYLON).idle)
+            # if not self.structures(UnitTypeId.GATEWAY): #동시 건설 제한 해제 and self.already_pending(UnitTypeId.GATEWAY) == 0:
+            #     if self.can_afford(UnitTypeId.GATEWAY) and self.structures(UnitTypeId.PYLON).ready: #건설가능한 미네랄과 파일런 완성이 되어있는 경우
+            #         await self.build(UnitTypeId.GATEWAY, near=self.structures(UnitTypeId.PYLON).closest_to(nexus))
+            #         finish_action = True
 
             #한 유닛이 명령을 받은 후 완료 전에 다른 명령을 받으면 앞의 명령이 무시되는 문제 발생 가능..
             #하지만 이 시점에서는 미네랄 수급량이 명령이 동시성을 유발할만큼 충족되지 않음
             if self.can_afford(UnitTypeId.GATEWAY): #갯수제한 해제 and self.structures(UnitTypeId.GATEWAY).amount <= 2 and self.already_pending(UnitTypeId.GATEWAY) <= 2:
                 # print(self.structures(UnitTypeId.STARGATE).amount, self.can_afford(UnitTypeId.STARGATE), self.already_pending(UnitTypeId.STARGATE))
-                if self.structures(UnitTypeId.PYLON):
+                if self.structures(UnitTypeId.PYLON).ready:
                     await self.build(UnitTypeId.GATEWAY, near=self.structures(UnitTypeId.PYLON).closest_to(nexus))
                     finish_action = True
 
@@ -144,23 +154,35 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                     finish_action = True
                     await self.do_chrono_boost(sg[0])
         
+        # #현재 2개 이상 생산 중인 건물이 있고 새로 건물이 지어졌다면 생산명령을 분배함
+        # if self.structures(UnitTypeId.GATEWAY).ready.idle:
+        #     count = len(self.structures(UnitTypeId.GATEWAY).ready.idle) #생산 가능한 건물
+        #     for gw in self.structures(UnitTypeId.GATEWAY).ready: #지금 생산중인 건물
+        #         while len(gw.orders) > 1 and count > 0: #2개이상의 생산이며 현재 생산 가능한 건물이 있다면
+        #             await self.do(gw.orders[-1].unit.tag('cancel')) #취소함
+        #             count -= 1
+        #             self.structures(UnitTypeId.GATEWAY).ready.idle.random.train(UnitTypeId.ZEALOT)
+        
         #현재 2개 이상 생산 중인 건물이 있고 새로 건물이 지어졌다면 생산명령을 분배함
-        if self.structures(UnitTypeId.GATEWAY).ready.idle:
+        if self.structures(UnitTypeId.GATEWAY).ready.idle and len(self.structures(UnitTypeId.GATEWAY).ready[0].orders) > 1:
+            print("생산 재분배")
             count = len(self.structures(UnitTypeId.GATEWAY).ready.idle) #생산 가능한 건물
             for gw in self.structures(UnitTypeId.GATEWAY).ready: #지금 생산중인 건물
                 while len(gw.orders) > 1 and count > 0: #2개이상의 생산이며 현재 생산 가능한 건물이 있다면
-                    await self.do(gw.orders[-1].unit.tag('cancel')) #취소함
+                    # print(gw.orders, gw.orders[0], gw.orders[-1])
+                    self.do(gw(AbilityId.CANCEL_LAST)) #취소함
                     count -= 1
                     self.structures(UnitTypeId.GATEWAY).ready.idle.random.train(UnitTypeId.ZEALOT)
 
-        
         #9의 경우는 걸리지 않음, end조건 확인하고 끝
 
         #종료 커맨드
-        if self.units(UnitTypeId.ZEALOT).amount >= 2:
+        if self.units(UnitTypeId.ZEALOT).amount >= 2 or not self.townhalls:
             if self.check:
                 await self.chat_send(f"{self.time_formatted}, {iteration}")
                 print(f"{self.time_formatted}, {iteration}")
+                with open(file_path, "a") as file:
+                    file.write(f"{order} : {self.time_formatted}, {iteration}\n")
                 self.check = False
                 early_stop = 4000-iteration
                 await self.client.leave() # 게임 종료
@@ -172,10 +194,11 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         map[2], map[3] = self.supply_used, self.supply_cap
         map[4] = self.workers.amount
         map[5] = self.structures(UnitTypeId.NEXUS).amount
-        Tech_level = [UnitTypeId.PYLON, UnitTypeId.GATEWAY, UnitTypeId.CYBERNETICSCORE]
+        Tech_level = [UnitTypeId.PYLON, UnitTypeId.GATEWAY]#, UnitTypeId.CYBERNETICSCORE]
         map[6] += sum(1 for tech_build in Tech_level if self.structures(tech_build))
         map[7] = iteration
 
+        #유닛 생산시 -의 값으로 정보를 가져오는 경우가 있음!
         if any(value < 0 for value in map):
             # Print the entire map
             ## print(f"Map with negative values: {map}, {iteration}, {action}")
@@ -208,7 +231,7 @@ result = run_game(  # run_game is a function that runs the game.
     maps.get("Simple64"), # the map we are playing on
     [Bot(Race.Protoss, IncrediBot()), # runs our coded bot, protoss race, and we pass our bot object 
      Computer(Race.Terran, Difficulty.VeryEasy)], #Bot(Race.Zerg, tmpIncrediBot())], #기록이 중점이므로 아무것도 하지 않는 상대를 설정 #Computer(Race.Zerg, Difficulty.Hard)], # runs a pre-made computer agent, zerg race, with a hard difficulty.
-    realtime=True, # When set to True, the agent is limited in how long each step can take to process.
+    realtime=False, # When set to True, the agent is limited in how long each step can take to process.
 )
 
 with open("results.txt","a") as f:
