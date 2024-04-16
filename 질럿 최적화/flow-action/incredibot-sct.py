@@ -29,7 +29,7 @@ try:
     order = list(map(int, sys.argv[1].split()))
 except:
     print("order이 전달되지 않음!")
-    order = [1,2,3,3,9]
+    order = [1,2,2,3,3,3,9]
     sys.exit()
 file_path = "game_log.txt"
 
@@ -42,7 +42,7 @@ finish_action = False
 count = 0
 
 class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
-    def make(self):
+    def make(self): #이건 비동기 함수로 하면 안됨!
         global count
         global finish_action
         with open('flow_action.pkl', 'rb') as f:
@@ -65,6 +65,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         global early_stop
         global reward
         global finish_action #해당 명령을 지금 프레임에서 수행하였는지 여부!
+        global count
         if iteration == 0:
             self.check = True
             await self.chat_send(f"order : {order}")
@@ -156,22 +157,22 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         
         # #현재 2개 이상 생산 중인 건물이 있고 새로 건물이 지어졌다면 생산명령을 분배함
         # if self.structures(UnitTypeId.GATEWAY).ready.idle:
-        #     count = len(self.structures(UnitTypeId.GATEWAY).ready.idle) #생산 가능한 건물
+        #     build_count = len(self.structures(UnitTypeId.GATEWAY).ready.idle) #생산 가능한 건물
         #     for gw in self.structures(UnitTypeId.GATEWAY).ready: #지금 생산중인 건물
-        #         while len(gw.orders) > 1 and count > 0: #2개이상의 생산이며 현재 생산 가능한 건물이 있다면
+        #         while len(gw.orders) > 1 and build_count > 0: #2개이상의 생산이며 현재 생산 가능한 건물이 있다면
         #             await self.do(gw.orders[-1].unit.tag('cancel')) #취소함
-        #             count -= 1
+        #             build_count -= 1
         #             self.structures(UnitTypeId.GATEWAY).ready.idle.random.train(UnitTypeId.ZEALOT)
         
         #현재 2개 이상 생산 중인 건물이 있고 새로 건물이 지어졌다면 생산명령을 분배함
         if self.structures(UnitTypeId.GATEWAY).ready.idle and len(self.structures(UnitTypeId.GATEWAY).ready[0].orders) > 1:
             print("생산 재분배")
-            count = len(self.structures(UnitTypeId.GATEWAY).ready.idle) #생산 가능한 건물
+            build_count = len(self.structures(UnitTypeId.GATEWAY).ready.idle) #생산 가능한 건물
             for gw in self.structures(UnitTypeId.GATEWAY).ready: #지금 생산중인 건물
-                while len(gw.orders) > 1 and count > 0: #2개이상의 생산이며 현재 생산 가능한 건물이 있다면
+                while len(gw.orders) > 1 and build_count > 0: #2개이상의 생산이며 현재 생산 가능한 건물이 있다면
                     # print(gw.orders, gw.orders[0], gw.orders[-1])
                     self.do(gw(AbilityId.CANCEL_LAST)) #취소함
-                    count -= 1
+                    build_count -= 1
                     self.structures(UnitTypeId.GATEWAY).ready.idle.random.train(UnitTypeId.ZEALOT)
 
         #9의 경우는 걸리지 않음, end조건 확인하고 끝
@@ -216,6 +217,10 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         with open('flow_action.pkl', 'wb') as f:
             # Save this dictionary as a file(pickle)
             pickle.dump(data, f)
+                    
+        if finish_action:
+            await self.chat_send(f"명령 {order} 중 {count}번 째 명령인 {order[count]} 완료")
+            await self.chat_send(f"상태 {data['state']}에서 {count+1}번 째 명령인 {order[count+1]} 시도 중")
 
     async def do_chrono_boost(self, target_structure): #검증 x
         # Find a Nexus

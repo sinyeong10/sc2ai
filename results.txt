@@ -1,17 +1,3 @@
-[<Result.Defeat: 2>, <Result.Victory: 1>]
-[<Result.Defeat: 2>, <Result.Victory: 1>]
-Result.Defeat
-Result.Defeat
-Result.Defeat
-Result.Defeat
-Result.Defeat
-Result.Defeat
-Result.Defeat
-Result.Defeat
-Result.Defeat
-Result.Defeat
-Result.Defeat
-Result.Defeat
 Result.Defeat
 Result.Defeat
 Result.Defeat
