@@ -29,9 +29,15 @@ try:
     order = list(map(int, sys.argv[1].split()))
 except:
     print("order이 전달되지 않음!")
-    order = [1,2,2,3,3,3,9]
+    order = [0,0,1,2,2,3,3,3,9]
     sys.exit()
-file_path = "game_log.txt"
+
+import datetime
+now = datetime.datetime.now()
+date_string = now.strftime('%Y-%m-%d')
+
+file_path = f"game_log-{date_string}.txt"
+print(file_path)
 
 
 class tmpIncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
@@ -153,7 +159,8 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                 if sg:
                     sg[0].train(UnitTypeId.ZEALOT)
                     finish_action = True
-                    await self.do_chrono_boost(sg[0])
+                    if len(sg[0].orders) == 1:
+                        await self.do_chrono_boost(sg[0])
         
         # #현재 2개 이상 생산 중인 건물이 있고 새로 건물이 지어졌다면 생산명령을 분배함
         # if self.structures(UnitTypeId.GATEWAY).ready.idle:
@@ -173,12 +180,14 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                     # print(gw.orders, gw.orders[0], gw.orders[-1])
                     self.do(gw(AbilityId.CANCEL_LAST)) #취소함
                     build_count -= 1
-                    self.structures(UnitTypeId.GATEWAY).ready.idle.random.train(UnitTypeId.ZEALOT)
+                    accel = self.structures(UnitTypeId.GATEWAY).ready.idle.random
+                    accel.train(UnitTypeId.ZEALOT)
+                    await self.do_chrono_boost(accel)
 
         #9의 경우는 걸리지 않음, end조건 확인하고 끝
 
         #종료 커맨드
-        if self.units(UnitTypeId.ZEALOT).amount >= 3 or not self.townhalls:
+        if self.units(UnitTypeId.ZEALOT).amount >= 2 or not self.townhalls:
             if self.check:
                 await self.chat_send(f"{self.time_formatted}, {iteration}")
                 print(f"{self.time_formatted}, {iteration}")
