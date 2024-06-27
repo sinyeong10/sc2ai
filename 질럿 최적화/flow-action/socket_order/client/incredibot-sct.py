@@ -17,10 +17,22 @@ from sc2.position import Point2
 from sc2.unit_command import UnitCommand
 
 
-data = {"state": [0, 0, 0, 0, 0, 0, 0, 0], 'reward': 0, "action": None, "done": False}  # empty action waiting for the next one!
-with open('state_rwd_action.pkl', 'wb') as f:
-    # Save this dictionary as a file(pickle)
-    pickle.dump(data, f)
+def init_set():
+    print("값 초기화")
+    data = {"state": [0, 0, 0, 0, 0, 0, 0, 0], 'reward': 0, "action": None, "done": False}  # empty action waiting for the next one!
+    with open('state_rwd_action.pkl', 'wb') as f:
+        # Save this dictionary as a file(pickle)
+        pickle.dump(data, f)
+    print(data)
+
+    order = {"flag":0, "idx":0, "action":0}
+
+    with open("./order.pkl", "wb") as f:
+        pickle.dump(order, f)
+
+    print("first order :", order)
+
+init_set()
 
 def send_data():
     import socket
@@ -80,7 +92,6 @@ reward = 0
 #     print("order이 전달되지 않음!")
 #     order = [0,0,1,2,2,3,3,3,9]
 #     # sys.exit()
-order = 9
 
 import datetime
 now = datetime.datetime.now()
