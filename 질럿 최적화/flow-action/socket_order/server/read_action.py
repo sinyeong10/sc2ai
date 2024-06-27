@@ -13,10 +13,6 @@ def make_order(user_ans):
         pickle.dump(order, f)
 
 make_order(0)
-data = {"state": [0, 0, 0, 0, 0, 0, 0, 0], 'reward': 0, "action": None, "done": False}  # empty action waiting for the next one!
-with open('state_rwd_action.pkl', 'wb') as f:
-    # Save this dictionary as a file(pickle)
-    pickle.dump(data, f)
 
 import socket
 
@@ -51,6 +47,7 @@ while True:
     print("rev_state :", rev_state_rwd_action)
 
     if rev_state_rwd_action['done']:
+        print("마지막 명령 실행")
         user_ans = 9
     else:
         print('사용자 명령을 입력해주세요')

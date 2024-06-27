@@ -17,6 +17,11 @@ from sc2.position import Point2
 from sc2.unit_command import UnitCommand
 
 
+data = {"state": [0, 0, 0, 0, 0, 0, 0, 0], 'reward': 0, "action": None, "done": False}  # empty action waiting for the next one!
+with open('state_rwd_action.pkl', 'wb') as f:
+    # Save this dictionary as a file(pickle)
+    pickle.dump(data, f)
+
 def send_data():
     import socket
 
