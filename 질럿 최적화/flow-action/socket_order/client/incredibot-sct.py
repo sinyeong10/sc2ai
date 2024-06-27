@@ -16,6 +16,50 @@ import asyncio
 from sc2.position import Point2
 from sc2.unit_command import UnitCommand
 
+
+def send_data():
+    import socket
+
+    # 클라이언트 소켓 생성
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    # 서버 주소와 포트 설정 (서버의 IP 주소와 포트 번호)
+    server_address = ('172.30.1.45', 12345)  # 예시: 서버의 IP 주소와 포트 번호를 적절히 설정
+
+    try:
+        # 서버에 연결
+        client_socket.connect(server_address)
+        print("서버에 연결되었습니다.")
+
+    except Exception as e:
+        print(f"서버 연결 중 오류 발생: {e}")
+
+    try:
+        # state_rwd_action.pkl 파일 전송
+        with open("state_rwd_action.pkl", "rb") as f:
+            data = f.read()
+        client_socket.sendall(data)
+        print("state_rwd_action.pkl 파일을 서버에 성공적으로 전송하였습니다.")
+
+        # order.pkl 파일 수신
+        order_data = client_socket.recv(1024)
+        with open("order.pkl", "wb") as f:
+            f.write(order_data)
+        print("order.pkl 파일을 서버로부터 성공적으로 수신하였습니다.")
+
+        
+        with open("./order.pkl", "rb") as f:
+            order = pickle.load(f)
+        print("order :", order)
+
+    except Exception as e:
+        print(f"오류 발생: {e}")
+
+    finally:
+        # 클라이언트 소켓 닫기
+        client_socket.close()
+
+
 SAVE_REPLAY = True
 
 # total_steps = 10000 
@@ -25,12 +69,13 @@ SAVE_REPLAY = True
 early_stop = 0
 reward = 0
 
-try:
-    order = list(map(int, sys.argv[1].split()))
-except:
-    print("order이 전달되지 않음!")
-    order = [0,0,1,2,2,3,3,3,9]
-    # sys.exit()
+# try:
+#     order = list(map(int, sys.argv[1].split()))
+# except:
+#     print("order이 전달되지 않음!")
+#     order = [0,0,1,2,2,3,3,3,9]
+#     # sys.exit()
+order = 9
 
 import datetime
 now = datetime.datetime.now()
@@ -51,22 +96,18 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
     def make(self): #이건 비동기 함수로 하면 안됨!
         global count
         global finish_action
-        with open('flow_action.pkl', 'rb') as f:
+        with open('order.pkl', 'rb') as f:
             data = pickle.load(f)
-
-        # action 값을 변경합니다.
-        if finish_action:
-            print(f"{count}번 째 명령인 {order[count]} 완료")
-            count += 1
-            print(f"{data}에서 {count}번 째 명령인 {order[count]} 시도 중")
-        data['action'] = order[count]
-
-        # 변경된 데이터를 파일에 저장합니다.
-        with open('flow_action.pkl', 'wb') as f:
-            pickle.dump(data, f)
             
-        finish_action = False
+        if finish_action:
+            print(f"{count}번 째 명령인 {data['action']} 완료")
+            count += 1
 
+            #환경 송신 그리고 명령을 받음!!
+            send_data()
+
+        finish_action = False
+        
     async def on_step(self, iteration: int): # on_step is a method that is called every step of the game.
         global early_stop
         global reward
@@ -74,10 +115,9 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         global count
         if iteration == 0:
             self.check = True
-            await self.chat_send(f"order : {order}")
         if iteration > 4000: #4000이 넘어가면 불가능한 경우이므로 종료
             with open(file_path, "a") as file:
-                file.write(f"{order} : {self.time_formatted}, {iteration}\n")
+                file.write(f"{count}번째 명령 : {self.time_formatted}, {iteration}\n")
             await self.client.leave() # 게임 종료
             early_stop = 0
         no_action = True
@@ -86,14 +126,14 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         
         while no_action:
             try: #파일을 미리 생성
-                with open('flow_action.pkl', 'rb') as f:
-                    flow_action = pickle.load(f)
-                    if flow_action['action'] is None:
-                        print("No action yet")
+                with open('order.pkl', 'rb') as f:
+                    order = pickle.load(f)
+                    if order['flag'] != 0:
+                        #print("No action yet")
                         no_action = True
-                        # return #아직 없으면 해당 스텝 넘김
+                        # return #아직 없으면 해당 스텝 넘김 #기다리는 것 같은데..
                     else:
-                        print(iteration, "Action found")
+                        #print("Action found")
                         no_action = False
                         #다른 코드에서 해당 파일을 수정하였으므로 명령이 입력됨!
             except:
@@ -101,7 +141,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
 
         await self.distribute_workers() # put idle workers back to work
 
-        action = flow_action['action']
+        action = order['action']
         # print("현재 명령", action)
         # print(iteration, action)
 
@@ -192,7 +232,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                 await self.chat_send(f"{self.time_formatted}, {iteration}")
                 print(f"{self.time_formatted}, {iteration}")
                 with open(file_path, "a") as file:
-                    file.write(f"{order} : {self.time_formatted}, {iteration}\n")
+                    file.write(f"{action} : {self.time_formatted}, {iteration}\n")
                 self.check = False
                 early_stop = 4000-iteration
                 await self.client.leave() # 게임 종료
@@ -223,13 +263,12 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         # write the file: 
         # observation(minimap), reward for this step, Action(None if waiting for action, otherwise 0,1,2,3,4,5), Is the game over
         data = {"state": map, "reward": reward, "action": None, "done": False}  # empty action waiting for the next one!
-        with open('flow_action.pkl', 'wb') as f:
+        with open('state_rwd_action.pkl', 'wb') as f:
             # Save this dictionary as a file(pickle)
             pickle.dump(data, f)
                     
         if finish_action:
-            await self.chat_send(f"명령 {order} 중 {count}번 째 명령인 {order[count]} 완료")
-            await self.chat_send(f"상태 {data['state']}에서 {count+1}번 째 명령인 {order[count+1]} 시도 중")
+            await self.chat_send(f"{count}번 째 명령인 {action} 완료")
 
     async def do_chrono_boost(self, target_structure): #검증 x
         # Find a Nexus
@@ -245,7 +284,7 @@ result = run_game(  # run_game is a function that runs the game.
     maps.get("Simple64"), # the map we are playing on
     [Bot(Race.Protoss, IncrediBot()), # runs our coded bot, protoss race, and we pass our bot object 
      Computer(Race.Terran, Difficulty.VeryEasy)], #Bot(Race.Zerg, tmpIncrediBot())], #기록이 중점이므로 아무것도 하지 않는 상대를 설정 #Computer(Race.Zerg, Difficulty.Hard)], # runs a pre-made computer agent, zerg race, with a hard difficulty.
-    realtime=True, # When set to True, the agent is limited in how long each step can take to process.
+    realtime=False, # When set to True, the agent is limited in how long each step can take to process.
 )
 
 with open("results.txt","a") as f:
@@ -257,8 +296,9 @@ map = [0,0,0,0,0,0,0,0] #np.zeros((88, 96, 3), dtype=np.uint8)  #(224, 224였음
 print("end game", map, reward)
 observation = map
 data = {"state": map, "reward": reward, "action": None, "done": True}  # empty action waiting for the next one!
-with open('flow_action.pkl', 'wb') as f:
+with open('state_rwd_action.pkl', 'wb') as f:
     pickle.dump(data, f)
+send_data()
 
 cv2.destroyAllWindows()
 cv2.waitKey(1)
