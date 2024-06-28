@@ -184,7 +184,6 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                 file.write(f"{count}번째 명령 : {self.time_formatted}, {iteration}\n")
             self.map_make(iteration)
             await self.client.leave() # 게임 종료
-            early_stop = 0
         no_action = True
 
         self.make() #같은 클래스에서 명령 할당!
