@@ -10,16 +10,14 @@
 #파일 전송시키라는 flag, 명령의 번째, 명령
 import pickle
 
-# 파일 경로
-file_path = 'state_rwd_action.pkl'
-
-# 파일 읽기 모드로 열기
-with open(file_path, 'rb') as f:
-    # pickle 모듈을 사용하여 파일 내용 읽기
-    key = pickle.load(f)
+data = {"state": [0, 0, 0, 0, 0, 0, 0, 0], 'reward': 0, "action": None, "done": False}  # empty action waiting for the next one!
+with open('state_rwd_action.pkl', 'wb') as f:
+    # Save this dictionary as a file(pickle)
+    pickle.dump(data, f)
+print(data)
 
 # 읽은 데이터 확인
-print("state :", key)
+print("state :", data)
 
 def send_data():
     import socket

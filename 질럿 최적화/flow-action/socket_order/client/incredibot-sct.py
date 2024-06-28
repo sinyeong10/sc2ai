@@ -108,9 +108,12 @@ class tmpIncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
 finish_action = False
 count = 0
 map = [0,0,0,0,0,0,0,0,0,0]
+stop_flag = False
+Tech_level = [UnitTypeId.PYLON, UnitTypeId.GATEWAY]#, UnitTypeId.CYBERNETICSCORE]
 
 class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
     def map_make(self, iteration):
+        global Tech_level
         #[minerals, gas / population, max_population / number_of_workers /
         # number_of_nexuses, tech_level, iteration]
         # map = [0,0,0,0,0,0,0,0,0,0]
@@ -118,11 +121,21 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         map[2], map[3] = self.supply_used, self.supply_cap
         map[4] = self.workers.amount
         map[5] = self.structures(UnitTypeId.NEXUS).amount
-        Tech_level = [UnitTypeId.PYLON, UnitTypeId.GATEWAY]#, UnitTypeId.CYBERNETICSCORE]
+
         map[6] = sum(1 for tech_build in Tech_level if self.structures(tech_build))
         map[7] = self.structures(UnitTypeId.GATEWAY).amount
         map[8] = self.units(UnitTypeId.ZEALOT).amount
         map[9] = iteration
+
+        
+        #유닛 생산시 -의 값으로 정보를 가져오는 경우가 있음!
+        if any(value < 0 for value in map):
+            # Print the entire map
+            ## print(f"Map with negative values: {map}, {iteration}, {action}")
+            for i in range(len(map)):
+                if map[i] < 0:
+                    map[i] = 0
+            ## print(f"Map with negative values change: {map}, {iteration}, {action}")
 
     def make(self): #이건 비동기 함수로 하면 안됨!
         global count
@@ -145,9 +158,14 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         global finish_action #해당 명령을 지금 프레임에서 수행하였는지 여부!
         global count #명령의 순서 표기
         global map #환경 정보 저장용
+        global stop_flag #빨리 종료 시키기 위함
+        global Tech_level
         if iteration == 0:
             self.check = True
         if iteration > 4000: #4000이 넘어가면 불가능한 경우이므로 종료
+            stop_flag = True
+
+        if stop_flag:
             with open(file_path, "a") as file:
                 file.write(f"{count}번째 명령 : {self.time_formatted}, {iteration}\n")
             self.map_make(iteration)
@@ -186,6 +204,33 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         #4:멀티 #71
         #ex:코어 36, 차원관문 100 [11생산 20 대기], 가스 21
         '''
+
+        #조기 종료 처리 #명령 내리고 바로 다음 명령으로 간다는 것에 주의..
+        #여기말고 모델에서 처리하기로 함(이전 명령 정보가 여기 없음!)
+        # if action == 0:
+        #     if self.workers.amount > 8*3:
+        #         stop_flag = True
+        #         print("일꾼 수 과충족")
+        #     elif self.supply_cap - self. supply_used <= 0:
+        #         stop_flag = True
+        #         print("인구수 부족")
+
+        # elif action == 2:
+        #     if sum(1 for tech_build in Tech_level if self.structures(tech_build)) == 0:
+        #         stop_flag = True
+        #         print("필요 건물 부족")
+
+        # elif action == 3:
+        #     if sum(1 for tech_build in Tech_level if self.structures(tech_build)) <= 1:
+        #         stop_flag = True
+        #         print("필요 건물 부족")
+        #     elif self.supply_cap - self. supply_used <= 0:
+        #         stop_flag = True
+        #         print("인구수 부족")
+        
+        #예외 처리는 다 모델에서 처리함!
+        if action == -1:
+            stop_flag = True
 
         nexus = self.townhalls.random
         if action == 0:
@@ -268,18 +313,9 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                     file.write(f"{action} : {self.time_formatted}, {iteration}\n")
                 self.check = False
                 early_stop = 4000-iteration
-                await self.client.leave() # 게임 종료
+                stop_flag = True
         
         self.map_make(iteration)
-
-        #유닛 생산시 -의 값으로 정보를 가져오는 경우가 있음!
-        if any(value < 0 for value in map):
-            # Print the entire map
-            ## print(f"Map with negative values: {map}, {iteration}, {action}")
-            for i in range(len(map)):
-                if map[i] < 0:
-                    map[i] = 0
-            ## print(f"Map with negative values change: {map}, {iteration}, {action}")
         
         if iteration % 100 == 0:
             print(f"{map}, {action}\nIter: {iteration}. RWD: {reward}. VR: {self.units(UnitTypeId.ZEALOT).amount}")
