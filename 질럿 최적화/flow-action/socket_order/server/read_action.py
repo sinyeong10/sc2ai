@@ -27,6 +27,8 @@ server_socket.bind(server_address)
 server_socket.listen(1)
 print("서버가 시작되었습니다. 클라이언트 연결을 기다립니다...")
 
+end_flag = False
+
 while True:
     # 클라이언트 연결 대기
     client_socket, client_address = server_socket.accept()
@@ -55,11 +57,21 @@ while True:
 
     if 1 not in log and (user_ans == 2 or user_ans == 3):
         user_ans = -1
-        #필요건물 부족
+        print("필요건물 부족")
+        end_flag = True
+    elif log.count(0) >= 4+8:
+        user_ans = -1
+        print("일꾼 수 과충족")
+        end_flag = True
+    elif 12+log.count(0)+log.count(3)*2 >= 15+log.count(1)*8 and user_ans != 1:
+        print(12+log.count(0)+log.count(3)*2 , 15+log.count(1)*8)
+        user_ans = -1
+        print("인구수 부족")
+        end_flag = True
     elif log.count(3) == 2:
         user_ans = 9
-        #완료, 마지막 명령
-    
+        print("완료, 마지막 명령")
+        end_flag = True
     
     log.append(user_ans)
 
@@ -83,6 +95,8 @@ while True:
     print(f"연결 종료")#{client_address}와의 
     client_socket.close()
 
-    if rev_state_rwd_action['done']:
+    if rev_state_rwd_action['done'] or end_flag:
         server_socket.close()
         break
+
+print(log)
