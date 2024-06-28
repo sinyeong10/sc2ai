@@ -2,7 +2,7 @@
 from sys import stdin
 import pickle
 
-log = [[0], [{'state': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False}]]
+log = [[], [{'state': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False}]]
 
 def make_order(user_ans):
     #전송 flag, 명령의 순서, 명령
@@ -13,7 +13,11 @@ def make_order(user_ans):
     with open("./socket_order.pkl", "wb") as f:
         pickle.dump(order, f)
 
-make_order(0)
+data = {'state': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False}  # empty action waiting for the next one!
+with open('state_rwd_action.pkl', 'wb') as f:
+    # Save this dictionary as a file(pickle)
+    pickle.dump(data, f)
+print("초기화 : ", data)
 
 import socket
 
@@ -28,33 +32,15 @@ server_socket.bind(server_address)
 server_socket.listen(1)
 print("서버가 시작되었습니다. 클라이언트 연결을 기다립니다...")
 
+# 클라이언트 연결 대기
+client_socket, client_address = server_socket.accept()
+print(f"클라이언트가 연결되었습니다.") # {client_address}
+
 end_flag = False
 
 while True:
-    # 클라이언트 연결 대기
-    client_socket, client_address = server_socket.accept()
-    print(f"클라이언트가 연결되었습니다.") # {client_address}
-    
-    try:
-        # state_rwd_action.pkl 파일 수신
-        data = client_socket.recv(1024)
-        with open("rev_state_rwd_action.pkl", "wb") as f:
-            f.write(data)
-        print("rev_state_rwd_action.pkl 파일을 성공적으로 수신하였습니다.")
-    except Exception as e:
-        print(f"수신 오류 발생: {e}")
-
-
-    with open("./rev_state_rwd_action.pkl", "rb") as f:
-        rev_state_rwd_action = pickle.load(f)
-    print("rev_state :", rev_state_rwd_action)
-
-    if rev_state_rwd_action['done']:
-        print("마지막 명령 실행")
-        user_ans = 9
-    else:
-        print('사용자 명령을 입력해주세요')
-        user_ans = int(stdin.readline())
+    print('사용자 명령을 입력해주세요')
+    user_ans = int(stdin.readline())
 
     if 1 not in log[0] and (user_ans == 2 or user_ans == 3):
         user_ans = -1
@@ -73,14 +59,9 @@ while True:
         user_ans = 9
         print("완료, 마지막 명령")
         end_flag = True
-    
-    log[0].append(user_ans)
-    log[1].append(rev_state_rwd_action)
 
-    make_order(user_ans)
     print("do something")
-
-
+    make_order(user_ans)
 
     try:
         # order.pkl 파일 전송
@@ -91,13 +72,28 @@ while True:
     except Exception as e:
         print(f"전송 오류 발생: {e}")
 
-    
 
-    # 클라이언트 소켓 닫기
-    print(f"연결 종료")#{client_address}와의 
-    client_socket.close()
+    try:
+        # state_rwd_action.pkl 파일 수신
+        data = client_socket.recv(1024)
+        with open("rev_state_rwd_action.pkl", "wb") as f:
+            f.write(data)
+        print("rev_state_rwd_action.pkl 파일을 성공적으로 수신하였습니다.")
+    except Exception as e:
+        print(f"수신 오류 발생: {e}")
+
+    with open("./rev_state_rwd_action.pkl", "rb") as f:
+        rev_state_rwd_action = pickle.load(f)
+    print("rev_state :", rev_state_rwd_action)
+    
+    log[0].append(user_ans)
+    log[1].append(rev_state_rwd_action)
+
 
     if rev_state_rwd_action['done'] or end_flag:
+        # 클라이언트 소켓 닫기
+        print(f"연결 종료")#{client_address}와의 
+        client_socket.close()
         server_socket.close()
         break
 

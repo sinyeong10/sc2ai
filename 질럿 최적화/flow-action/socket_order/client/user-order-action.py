@@ -37,12 +37,6 @@ def send_data():
         print(f"서버 연결 중 오류 발생: {e}")
 
     try:
-        # state_rwd_action.pkl 파일 전송
-        with open("state_rwd_action.pkl", "rb") as f:
-            data = f.read()
-        client_socket.sendall(data)
-        print("state_rwd_action.pkl 파일을 서버에 성공적으로 전송하였습니다.")
-
         # order.pkl 파일 수신
         order_data = client_socket.recv(1024)
         with open("order.pkl", "wb") as f:
@@ -53,6 +47,14 @@ def send_data():
         with open("./order.pkl", "rb") as f:
             order = pickle.load(f)
         print("order :", order)
+
+        
+        # state_rwd_action.pkl 파일 전송
+        with open("state_rwd_action.pkl", "rb") as f:
+            data = f.read()
+        client_socket.sendall(data)
+        print("state_rwd_action.pkl 파일을 서버에 성공적으로 전송하였습니다.")
+
 
     except Exception as e:
         print(f"오류 발생: {e}")
