@@ -1,8 +1,8 @@
 #서버 강화학습 돌릴 컴퓨터
-
 from sys import stdin
 import pickle
 
+log = [0]
 def make_order(user_ans):
     #전송 flag, 명령의 순서, 명령
     order = {"flag":0, "idx":0, "action":user_ans}
@@ -52,6 +52,16 @@ while True:
     else:
         print('사용자 명령을 입력해주세요')
         user_ans = int(stdin.readline())
+
+    if 1 not in log and (user_ans == 2 or user_ans == 3):
+        user_ans = -1
+        #필요건물 부족
+    elif log.count(3) == 2:
+        user_ans = 9
+        #완료, 마지막 명령
+    
+    
+    log.append(user_ans)
 
     make_order(user_ans)
     print("do something")
