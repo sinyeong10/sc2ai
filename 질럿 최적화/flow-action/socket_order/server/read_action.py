@@ -46,7 +46,7 @@ while True:
         user_ans = -1
         print("필요건물 부족")
         end_flag = True
-    elif log[0].count(0) >= 4+8:
+    elif user_ans == 0 and log[0].count(0) >= 4:#+8:
         user_ans = -1
         print("일꾼 수 과충족")
         end_flag = True
