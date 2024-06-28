@@ -30,7 +30,7 @@ print("서버가 시작되었습니다. 클라이언트 연결을 기다립니�
 while True:
     # 클라이언트 연결 대기
     client_socket, client_address = server_socket.accept()
-    print(f"클라이언트 {client_address}가 연결되었습니다.")
+    print(f"클라이언트가 연결되었습니다.") # {client_address}
     
     try:
         # state_rwd_action.pkl 파일 수신
@@ -70,7 +70,7 @@ while True:
     
 
     # 클라이언트 소켓 닫기
-    print(f"{client_address}와의 연결 종료")
+    print(f"연결 종료")#{client_address}와의 
     client_socket.close()
 
     if rev_state_rwd_action['done']:
