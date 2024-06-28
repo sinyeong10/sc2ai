@@ -34,47 +34,38 @@ def init_set():
 
 init_set()
 
-def send_data():
-    import socket
+import socket
 
-    # 클라이언트 소켓 생성
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# 클라이언트 소켓 생성
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    # 서버 주소와 포트 설정 (서버의 IP 주소와 포트 번호)
-    server_address = ('172.30.1.45', 12345)  # 예시: 서버의 IP 주소와 포트 번호를 적절히 설정
+# 서버 주소와 포트 설정 (서버의 IP 주소와 포트 번호)
+server_address = ('172.30.1.45', 12345)  # 예시: 서버의 IP 주소와 포트 번호를 적절히 설정
 
-    try:
-        # 서버에 연결
-        client_socket.connect(server_address)
-        print("서버에 연결되었습니다.")
+try:
+    # 서버에 연결
+    client_socket.connect(server_address)
+    print("서버에 연결되었습니다.")
 
-    except Exception as e:
-        print(f"서버 연결 중 오류 발생: {e}")
+except Exception as e:
+    print(f"서버 연결 중 오류 발생: {e}")
 
-    try:
-        # state_rwd_action.pkl 파일 전송
-        with open("state_rwd_action.pkl", "rb") as f:
-            data = f.read()
-        client_socket.sendall(data)
-        print("state_rwd_action.pkl 파일을 서버에 성공적으로 전송하였습니다.")
+try:
+    # order.pkl 파일 수신
+    order_data = client_socket.recv(1024)
+    with open("order.pkl", "wb") as f:
+        f.write(order_data)
+    print("order.pkl 파일을 서버로부터 성공적으로 수신하였습니다.")
+    
+    with open("./order.pkl", "rb") as f:
+        order = pickle.load(f)
+    print("order :", order)
 
-        # order.pkl 파일 수신
-        order_data = client_socket.recv(1024)
-        with open("order.pkl", "wb") as f:
-            f.write(order_data)
-        print("order.pkl 파일을 서버로부터 성공적으로 수신하였습니다.")
+except Exception as e:
+    print(f"오류 발생: {e}")
 
-        
-        with open("./order.pkl", "rb") as f:
-            order = pickle.load(f)
-        print("order :", order)
 
-    except Exception as e:
-        print(f"오류 발생: {e}")
 
-    finally:
-        # 클라이언트 소켓 닫기
-        client_socket.close()
 
 
 SAVE_REPLAY = True
@@ -148,7 +139,30 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
             count += 1
 
             #환경 송신 그리고 명령을 받음!!
-            send_data()
+                        
+            try:
+                # state_rwd_action.pkl 파일 전송
+                with open("state_rwd_action.pkl", "rb") as f:
+                    data = f.read()
+                client_socket.sendall(data)
+                print("state_rwd_action.pkl 파일을 서버에 성공적으로 전송하였습니다.")
+            except Exception as e:
+                print(f"오류 발생: {e}")
+
+            
+            try:
+                # order.pkl 파일 수신
+                order_data = client_socket.recv(1024)
+                with open("order.pkl", "wb") as f:
+                    f.write(order_data)
+                print("order.pkl 파일을 서버로부터 성공적으로 수신하였습니다.")
+                
+                with open("./order.pkl", "rb") as f:
+                    order = pickle.load(f)
+                print("order :", order)
+
+            except Exception as e:
+                print(f"오류 발생: {e}")
 
         finish_action = False
         
@@ -358,7 +372,18 @@ observation = map
 data = {"state": map, "reward": reward, "action": None, "done": True}  # empty action waiting for the next one!
 with open('state_rwd_action.pkl', 'wb') as f:
     pickle.dump(data, f)
-send_data()
+    
+try:
+    # state_rwd_action.pkl 파일 전송
+    with open("state_rwd_action.pkl", "rb") as f:
+        data = f.read()
+    client_socket.sendall(data)
+    print("state_rwd_action.pkl 파일을 서버에 성공적으로 전송하였습니다.")
+except Exception as e:
+    print(f"오류 발생: {e}")
+finally:
+    # 클라이언트 소켓 닫기
+    client_socket.close()
 
 cv2.destroyAllWindows()
 cv2.waitKey(1)
