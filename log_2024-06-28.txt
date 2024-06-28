@@ -17,3 +17,14 @@
 (3, {'state': [255, 0, 14, 23, 12, 1, 2, 2, 0, 434], 'reward': 0, 'action': None, 'done': False})
 (9, {'state': [510, 0, 16, 23, 12, 1, 2, 2, 2, 568], 'reward': 3433, 'action': None, 'done': True})
 
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 14, 15, 13, 1, 0, 0, 0, 95], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 14, 15, 13, 1, 1, 0, 0, 122], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [50, 0, 15, 23, 15, 1, 1, 0, 0, 211], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 15, 23, 15, 1, 2, 1, 0, 254], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [480, 0, 15, 23, 15, 1, 2, 2, 0, 488], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [435, 0, 17, 23, 15, 1, 2, 2, 0, 489], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [335, 0, 18, 23, 15, 1, 2, 2, 0, 490], 'reward': 0, 'action': None, 'done': False})
+(9, {'state': [675, 0, 20, 23, 16, 1, 2, 2, 2, 627], 'reward': 3374, 'action': None, 'done': True})
+

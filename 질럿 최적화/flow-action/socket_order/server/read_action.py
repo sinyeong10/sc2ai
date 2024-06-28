@@ -42,7 +42,15 @@ while True:
     print('사용자 명령을 입력해주세요')
     user_ans = int(stdin.readline())
 
-    if 1 not in log[0] and (user_ans == 2 or user_ans == 3):
+    while user_ans not in [-1,0,1,2,3,4,5,6,7,8,9]:
+        print('사용자 명령을 다시 입력해주세요')
+        user_ans = int(stdin.readline())
+
+    if log[0].count(3) == 2:
+            user_ans = 9
+            print("완료, 마지막 명령")
+            end_flag = True
+    elif 1 not in log[0] and (user_ans == 2 or user_ans == 3):
         user_ans = -1
         print("필요건물 부족")
         end_flag = True
@@ -59,10 +67,7 @@ while True:
         user_ans = -1
         print("인구수 부족")
         end_flag = True
-    elif log[0].count(3) == 2:
-        user_ans = 9
-        print("완료, 마지막 명령")
-        end_flag = True
+    
 
     print("do something")
     make_order(user_ans)
