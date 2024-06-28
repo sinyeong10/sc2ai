@@ -1,0 +1,20 @@
+(0, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 15, 13, 1, 0, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [80, 0, 13, 23, 13, 1, 1, 0, 0, 184], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [585, 0, 13, 23, 13, 1, 2, 1, 0, 461], 'reward': 0, 'action': None, 'done': False})
+(9, {'state': [490, 0, 15, 23, 13, 1, 2, 1, 0, 462], 'reward': 0, 'action': None, 'done': False})
+
+(0, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(9, {'state': [1030, 0, 17, 23, 13, 1, 2, 1, 2, 710], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 15, 13, 1, 0, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [95, 0, 13, 23, 13, 1, 1, 0, 0, 189], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [605, 0, 13, 23, 13, 1, 2, 1, 0, 465], 'reward': 0, 'action': None, 'done': False})
+(9, {'state': [505, 0, 15, 23, 13, 1, 2, 1, 0, 466], 'reward': 0, 'action': None, 'done': False})
+
+(0, {'state': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(9, {'state': [1040, 0, 17, 23, 13, 1, 2, 1, 2, 714], 'reward': 0, 'action': None, 'done': True})
+

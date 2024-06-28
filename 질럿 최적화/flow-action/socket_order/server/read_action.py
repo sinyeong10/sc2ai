@@ -2,7 +2,8 @@
 from sys import stdin
 import pickle
 
-log = [0]
+log = [[0], [{'state': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False}]]
+
 def make_order(user_ans):
     #전송 flag, 명령의 순서, 명령
     order = {"flag":0, "idx":0, "action":user_ans}
@@ -55,25 +56,26 @@ while True:
         print('사용자 명령을 입력해주세요')
         user_ans = int(stdin.readline())
 
-    if 1 not in log and (user_ans == 2 or user_ans == 3):
+    if 1 not in log[0] and (user_ans == 2 or user_ans == 3):
         user_ans = -1
         print("필요건물 부족")
         end_flag = True
-    elif log.count(0) >= 4+8:
+    elif log[0].count(0) >= 4+8:
         user_ans = -1
         print("일꾼 수 과충족")
         end_flag = True
-    elif 12+log.count(0)+log.count(3)*2 >= 15+log.count(1)*8 and user_ans != 1:
-        print(12+log.count(0)+log.count(3)*2 , 15+log.count(1)*8)
+    elif 12+log[0].count(0)+log[0].count(3)*2 >= 15+log[0].count(1)*8 and user_ans != 1:
+        print(12+log[0].count(0)+log[0].count(3)*2 , 15+log[0].count(1)*8)
         user_ans = -1
         print("인구수 부족")
         end_flag = True
-    elif log.count(3) == 2:
+    elif log[0].count(3) == 2:
         user_ans = 9
         print("완료, 마지막 명령")
         end_flag = True
     
-    log.append(user_ans)
+    log[0].append(user_ans)
+    log[1].append(rev_state_rwd_action)
 
     make_order(user_ans)
     print("do something")
@@ -100,3 +102,16 @@ while True:
         break
 
 print(log)
+
+import datetime
+
+# 오늘 날짜를 기준으로 파일명 생성
+today = datetime.date.today()
+filename = f"log_{today}.txt"
+
+# 데이터를 파일에 저장
+with open(filename, 'a') as f:
+    for elem in zip(log[0], log[1]):
+        f.write(f"{elem}\n")
+    f.write(f"\n")
+print(f"데이터가 {filename} 파일에 성공적으로 저장되었습니다.")
