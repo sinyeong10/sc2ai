@@ -107,8 +107,23 @@ class tmpIncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
 
 finish_action = False
 count = 0
+map = [0,0,0,0,0,0,0,0,0,0]
 
 class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
+    def map_make(self, iteration):
+        #[minerals, gas / population, max_population / number_of_workers /
+        # number_of_nexuses, tech_level, iteration]
+        # map = [0,0,0,0,0,0,0,0,0,0]
+        map[0], map[1] = self.minerals, self.vespene
+        map[2], map[3] = self.supply_used, self.supply_cap
+        map[4] = self.workers.amount
+        map[5] = self.structures(UnitTypeId.NEXUS).amount
+        Tech_level = [UnitTypeId.PYLON, UnitTypeId.GATEWAY]#, UnitTypeId.CYBERNETICSCORE]
+        map[6] = sum(1 for tech_build in Tech_level if self.structures(tech_build))
+        map[7] = self.structures(UnitTypeId.GATEWAY).amount
+        map[8] = self.units(UnitTypeId.ZEALOT).amount
+        map[9] = iteration
+
     def make(self): #이건 비동기 함수로 하면 안됨!
         global count
         global finish_action
@@ -126,14 +141,16 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         
     async def on_step(self, iteration: int): # on_step is a method that is called every step of the game.
         global early_stop
-        global reward
+        global reward #최종 보상
         global finish_action #해당 명령을 지금 프레임에서 수행하였는지 여부!
-        global count
+        global count #명령의 순서 표기
+        global map #환경 정보 저장용
         if iteration == 0:
             self.check = True
         if iteration > 4000: #4000이 넘어가면 불가능한 경우이므로 종료
             with open(file_path, "a") as file:
                 file.write(f"{count}번째 명령 : {self.time_formatted}, {iteration}\n")
+            self.map_make(iteration)
             await self.client.leave() # 게임 종료
             early_stop = 0
         no_action = True
@@ -253,16 +270,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                 early_stop = 4000-iteration
                 await self.client.leave() # 게임 종료
         
-        #[minerals, gas / population, max_population / number_of_workers /
-        # number_of_nexuses, tech_level, iteration]
-        map = [0,0,0,0,0,0,0,0]
-        map[0], map[1] = self.minerals, self.vespene
-        map[2], map[3] = self.supply_used, self.supply_cap
-        map[4] = self.workers.amount
-        map[5] = self.structures(UnitTypeId.NEXUS).amount
-        Tech_level = [UnitTypeId.PYLON, UnitTypeId.GATEWAY]#, UnitTypeId.CYBERNETICSCORE]
-        map[6] += sum(1 for tech_build in Tech_level if self.structures(tech_build))
-        map[7] = iteration
+        self.map_make(iteration)
 
         #유닛 생산시 -의 값으로 정보를 가져오는 경우가 있음!
         if any(value < 0 for value in map):
@@ -308,7 +316,7 @@ with open("results.txt","a") as f:
 
 reward = int(early_stop)
 
-map = [0,0,0,0,0,0,0,0] #np.zeros((88, 96, 3), dtype=np.uint8)  #(224, 224였음)
+# map = [0,0,0,0,0,0,0,0,0,0] #np.zeros((88, 96, 3), dtype=np.uint8)  #(224, 224였음)
 print("end game", map, reward)
 observation = map
 data = {"state": map, "reward": reward, "action": None, "done": True}  # empty action waiting for the next one!
