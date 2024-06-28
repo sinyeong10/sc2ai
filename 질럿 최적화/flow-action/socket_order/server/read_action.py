@@ -2,7 +2,7 @@
 from sys import stdin
 import pickle
 
-log = [[], [{'state': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False}]]
+log = [[], []]
 
 def make_order(user_ans):
     #전송 flag, 명령의 순서, 명령
@@ -43,6 +43,10 @@ while True:
     user_ans = int(stdin.readline())
 
     if 1 not in log[0] and (user_ans == 2 or user_ans == 3):
+        user_ans = -1
+        print("필요건물 부족")
+        end_flag = True
+    elif 2 not in log[0] and user_ans == 3:
         user_ans = -1
         print("필요건물 부족")
         end_flag = True
