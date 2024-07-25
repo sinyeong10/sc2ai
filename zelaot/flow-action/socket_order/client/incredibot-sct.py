@@ -245,7 +245,12 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         if action == -1:
             stop_flag = True
 
-        nexus = self.townhalls.random
+        if self.townhalls:
+            nexus = self.townhalls.random
+        else:
+            print("\n\n넥서스가 터짐!!\n\n")
+            stop_flag = True
+
         if action == 0:
             #4이상 여유로울 때 프로브 생산
             supply_remaining = self.supply_cap - self. supply_used #공급한도-공급량

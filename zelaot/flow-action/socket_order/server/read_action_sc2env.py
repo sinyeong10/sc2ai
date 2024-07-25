@@ -38,10 +38,10 @@ class Sc2Env(gym.Env):
         self.log[0].append(user_ans)
 
         #action을 알아서 오류처리
-        if self.log[0].count(3) == 2:
-                print(user_ans, "완료, 마지막 명령")
-                user_ans = 9
-                self.end_flag = True
+        if (user_ans != 3 and self.log[0].count(3) == 2) or self.log[0].count(3) >= 3: #현재 추가된 명령이 3이 아니면서 이전에 3을 2번 하여 목표달성한 경우
+            print(user_ans, "완료, 마지막 명령")
+            user_ans = 9
+            self.end_flag = True
         elif 1 not in self.log[0] and (user_ans == 2 or user_ans == 3):
             print(user_ans, "필요건물 부족")
             user_ans = -1
@@ -60,7 +60,6 @@ class Sc2Env(gym.Env):
             user_ans = -1
             self.end_flag = True
         
-
         print("do something")
         self.make_order(user_ans)
 
@@ -72,6 +71,7 @@ class Sc2Env(gym.Env):
             print("socket_order.pkl 파일을 클라이언트에게 성공적으로 전송하였습니다.")
         except Exception as e:
             print(f"전송 오류 발생: {e}")
+
 
 
 
