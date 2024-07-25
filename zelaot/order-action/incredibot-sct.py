@@ -48,7 +48,8 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                 
 
                     if state_rwd_action['action'] is None:
-                        #print("No action yet")
+                        print("No action yet")
+                        time.sleep(1)
                         no_action = True
                         # return #아직 없으면 해당 스텝 넘김
                     else:

@@ -1,4 +1,4 @@
-#서버 강화학습 돌릴 컴퓨터
+#서버 강화학습 돌릴 컴퓨터 : 이거 먼저 실행되야 함!
 from sys import stdin
 import pickle
 

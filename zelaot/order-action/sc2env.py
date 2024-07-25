@@ -86,5 +86,5 @@ class Sc2Env(gym.Env):
 		with open('state_rwd_action.pkl', 'wb') as f:
 			pickle.dump(data, f)
 		# run incredibot-sct.py non-blocking:
-		subprocess.Popen(['python3', 'order-action/incredibot-sct.py'])
+		subprocess.Popen(['python3', r'zelaot\order-action\incredibot-sct.py'])
 		return observation  # reward, done, info can't be included

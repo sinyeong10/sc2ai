@@ -26,7 +26,6 @@ step_punishment = ((np.exp(steps_for_pun**3)/10) - 0.1)*10
 
 early_stop = 0
 reward = 0
-
 class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
     async def on_step(self, iteration: int): # on_step is a method that is called every step of the game.
         global early_stop
@@ -48,11 +47,12 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                 
 
                     if state_rwd_action['action'] is None:
-                        #print("No action yet")
+                        print("No action yet", state_rwd_action)
+                        time.sleep(0.01)
                         no_action = True
                         # return #아직 없으면 해당 스텝 넘김
                     else:
-                        #print("Action found")
+                        print("Action found :", state_rwd_action['action'])
                         no_action = False
             except:
                 pass
@@ -62,7 +62,6 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         reward = 50
         action = state_rwd_action['action']
         # print(iteration, action)
-    
         '''
         0:일꾼
         1:파일런 건설

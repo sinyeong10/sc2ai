@@ -19,7 +19,7 @@ from sc2.unit_command import UnitCommand
 
 def init_set():
     print("값 초기화")
-    data = {"state": [0, 0, 0, 0, 0, 0, 0, 0], 'reward': 0, "action": None, "done": False}  # empty action waiting for the next one!
+    data = {"state": [0,0,0,0,0,0,0,0,0,0], 'reward': 0, "action": None, "done": False}  # empty action waiting for the next one!
     with open('state_rwd_action.pkl', 'wb') as f:
         # Save this dictionary as a file(pickle)
         pickle.dump(data, f)
@@ -105,8 +105,8 @@ Tech_level = [UnitTypeId.PYLON, UnitTypeId.GATEWAY]#, UnitTypeId.CYBERNETICSCORE
 class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
     def map_make(self, iteration):
         global Tech_level
-        #[minerals, gas / population, max_population / number_of_workers /
-        # number_of_nexuses, tech_level, iteration]
+        #[minerals, gas / population, max_population / number_of_workers, number_of_nexuses
+        #/tech_level / number_of_gate, number_of_zealot / iteration]
         # map = [0,0,0,0,0,0,0,0,0,0]
         map[0], map[1] = self.minerals, self.vespene
         map[2], map[3] = self.supply_used, self.supply_cap

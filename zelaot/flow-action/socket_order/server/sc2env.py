@@ -13,15 +13,16 @@ class Sc2Env(gym.Env):
 		# Define action and observation space
 		# They must be gym.spaces objects
 		# Example when using discrete actions:
-		self.action_space = spaces.Discrete(8)
+		self.action_space = spaces.Discrete(4)
 
-		#[minerals, gas / population, max_population / number_of_workers / number_of_nexuses, tech_level, iteration]
+		
+        #[minerals, gas / population, max_population / number_of_workers, number_of_nexuses
+        #/tech_level / number_of_gate, number_of_zealot / iteration]
 		# 이산 변수 (0부터 n-1까지 범위)
-		self.observation_space = spaces.MultiDiscrete([2001, 2001, 201, 201, 45, 3, 4, 4001])
+		self.observation_space = spaces.MultiDiscrete([2001, 2001, 201, 201, 45, 3, 4, 10, 25, 4001])
 		#Box(low=0, high=255,shape=(88, 96, 3), dtype=np.uint8) #(224, 224였음)
 
 	def step(self, action):
-		print(action,"을 계산함")
 		wait_for_action = True
 		# waits for action.
 		while wait_for_action:
@@ -42,7 +43,6 @@ class Sc2Env(gym.Env):
 							pickle.dump(state_rwd_action, f)
 			except Exception as e:
 				#print(str(e))
-				print(action, "명령넣다 에러남", wait_for_action)
 				pass
 
 		# waits for the new state to return (map and reward) (no new action yet. )
@@ -63,9 +63,8 @@ class Sc2Env(gym.Env):
 							wait_for_state = False
 
 			except Exception as e:
-				print("정보읽다에러남")
 				wait_for_state = True   
-				map = [0,0,0,0,0,0,0,0] #np.zeros((88, 96, 3), dtype=np.uint8) #(224, 224였음)
+				map = [0,0,0,0,0,0,0,0,0,0] #np.zeros((88, 96, 3), dtype=np.uint8) #(224, 224였음)
 				observation = map
 				# if still failing, input an ACTION, 3 (scout)
 				data = {"state": map, "reward": 0, "action": 0, "done": False}  # empty action waiting for the next one!
@@ -83,11 +82,11 @@ class Sc2Env(gym.Env):
 
 	def reset(self):
 		print("RESETTING ENVIRONMENT!!!!!!!!!!!!!")
-		map = [0,0,0,0,0,0,0,0] #np.zeros((88, 96, 3), dtype=np.uint8) #(224, 224였음)
+		map = [0,0,0,0,0,0,0,0,0,0] #np.zeros((88, 96, 3), dtype=np.uint8) #(224, 224였음)
 		observation = map
 		data = {"state": map, "reward": 0, "action": None, "done": False}  # empty action waiting for the next one!
 		with open('state_rwd_action.pkl', 'wb') as f:
 			pickle.dump(data, f)
 		# run incredibot-sct.py non-blocking:
-		subprocess.Popen(['python3', r'공허포격기 최적화\order-action\incredibot-sct.py'])
+		subprocess.Popen(['python3', r'zelaot\flow-action\socket_order\client\incredibot-sct.py'])
 		return observation  # reward, done, info can't be included
