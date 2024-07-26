@@ -28,39 +28,39 @@ class Sc2Env(gym.Env):
     def step(self, action):
         #액션 입력받는 부분
 
-        print('사용자 명령을 입력해주세요')
+        print("s/r", '사용자 명령을 입력해주세요')
         user_ans = action
 
         while user_ans not in [-1,0,1,2,3,4,5,6,7,8,9]:
-            print('사용자 명령을 다시 입력해주세요')
+            print("s/r", '사용자 명령을 다시 입력해주세요')
             user_ans = action
 
         self.log[0].append(user_ans)
 
         #action을 알아서 오류처리
         if (user_ans != 3 and self.log[0].count(3) == 2) or self.log[0].count(3) >= 3: #현재 추가된 명령이 3이 아니면서 이전에 3을 2번 하여 목표달성한 경우
-            print(user_ans, "완료, 마지막 명령")
+            print("s/r", user_ans, "완료, 마지막 명령")
             user_ans = 9
             self.end_flag = True
         elif 1 not in self.log[0] and (user_ans == 2 or user_ans == 3):
-            print(user_ans, "필요건물 부족")
+            print("s/r", user_ans, "필요건물 부족")
             user_ans = -1
             self.end_flag = True
         elif 2 not in self.log[0] and user_ans == 3:
-            print(user_ans, "필요건물 부족")
+            print("s/r", user_ans, "필요건물 부족")
             user_ans = -1
             self.end_flag = True
         elif user_ans == 0 and self.log[0].count(0) >= 4:#+8:
-            print(user_ans, "일꾼 수 과충족")
+            print("s/r", user_ans, "일꾼 수 과충족")
             user_ans = -1
             self.end_flag = True
         elif 12+self.log[0].count(0)+self.log[0].count(3)*2 >= 15+self.log[0].count(1)*8 and user_ans != 1:
-            print(12+self.log[0].count(0)+self.log[0].count(3)*2 , 15+self.log[0].count(1)*8)
-            print(user_ans, "인구수 부족")
+            print("s/r", 12+self.log[0].count(0)+self.log[0].count(3)*2 , 15+self.log[0].count(1)*8)
+            print("s/r", user_ans, "인구수 부족")
             user_ans = -1
             self.end_flag = True
         
-        print("do something")
+        print("s/r", "do something")
         self.make_order(user_ans)
 
         try:
@@ -68,9 +68,9 @@ class Sc2Env(gym.Env):
             with open("socket_order.pkl", "rb") as f:
                 order_data = f.read()
             self.client_socket.sendall(order_data)
-            print("socket_order.pkl 파일을 클라이언트에게 성공적으로 전송하였습니다.")
+            print("s/r", "socket_order.pkl 파일을 클라이언트에게 성공적으로 전송하였습니다.")
         except Exception as e:
-            print(f"전송 오류 발생: {e}")
+            print("s/r", f"전송 오류 발생: {e}")
 
 
 
@@ -83,20 +83,20 @@ class Sc2Env(gym.Env):
             data = self.client_socket.recv(1024)
             with open("rev_state_rwd_action.pkl", "wb") as f:
                 f.write(data)
-            print("rev_state_rwd_action.pkl 파일을 성공적으로 수신하였습니다.")
+            print("s/r", "rev_state_rwd_action.pkl 파일을 성공적으로 수신하였습니다.")
         except Exception as e:
-            print(f"수신 오류 발생: {e}")
+            print("s/r", f"수신 오류 발생: {e}")
 
         try:
             with open("./rev_state_rwd_action.pkl", "rb") as f:
                 rev_state_rwd_action = pickle.load(f)
-            print("rev_state :", rev_state_rwd_action)
+            print("s/r", "rev_state :", rev_state_rwd_action)
 
             self.log[1].append(rev_state_rwd_action)
 
         
         except Exception as e:
-            print("파일을 못 읽음")
+            print("s/r", "파일을 못 읽음")
             map = [0,0,0,0,0,0,0,0,0,0] #np.zeros((88, 96, 3), dtype=np.uint8) #(224, 224였음)
             observation = map
             # if still failing, input an ACTION, 3 (scout)
@@ -114,14 +114,13 @@ class Sc2Env(gym.Env):
         reward = rev_state_rwd_action['reward']
         done = rev_state_rwd_action['done']
 
-
         if rev_state_rwd_action['done'] or self.end_flag:
             # 클라이언트 소켓 닫기
-            print(f"연결 종료")#{client_address}와의 
+            print("s/r", f"\n\n연결 종료\n\n")#{client_address}와의 
             self.client_socket.close()
-            # self.server_socket.close()
+            self.server_socket.close()
 
-            print(self.log)
+            print("s/r", self.log)
 
             import datetime
 
@@ -134,20 +133,21 @@ class Sc2Env(gym.Env):
                 for elem in zip(self.log[0], self.log[1]):
                     f.write(f"{elem}\n")
                 f.write(f"\n")
-            print(f"데이터가 {filename} 파일에 성공적으로 저장되었습니다.")
+            print("s/r", f"데이터가 {filename} 파일에 성공적으로 저장되었습니다.")
 
 
-        info ={}
+        info = {}
         observation = state
         return observation, reward, done, info
 
     def reset(self):
-        print("RESETTING ENVIRONMENT!!!!!!!!!!!!!")
+        print("s/r", "RESETTING ENVIRONMENT!!!!!!!!!!!!!")
         map = [0,0,0,0,0,0,0,0,0,0] #np.zeros((88, 96, 3), dtype=np.uint8) #(224, 224였음)
         observation = map
         data = {"state": map, "reward": 0, "action": None, "done": False}  # empty action waiting for the next one!
         with open('state_rwd_action.pkl', 'wb') as f:
             pickle.dump(data, f)
+        print("s/r", "env.reset 초기화 : ", data)
         # # run incredibot-sct.py non-blocking:
         # subprocess.Popen(['python3', r'zelaot\flow-action\socket_order\client\incredibot-sct.py'])
         
@@ -160,7 +160,7 @@ class Sc2Env(gym.Env):
         #전송 flag, 명령의 순서, 명령
         order = {"flag":0, "idx":0, "action":user_ans}
 
-        print("user order :", order)
+        print("s/r", "user order :", order)
 
         with open("./socket_order.pkl", "wb") as f:
             pickle.dump(order, f)
@@ -172,29 +172,84 @@ class Sc2Env(gym.Env):
 
         self.log = [[], []]
 
-        data = {'state': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False}  # empty action waiting for the next one!
-        with open('state_rwd_action.pkl', 'wb') as f:
-            # Save this dictionary as a file(pickle)
-            pickle.dump(data, f)
-        print("초기화 : ", data)
+        # data = {'state': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False}  # empty action waiting for the next one!
+        # with open('state_rwd_action.pkl', 'wb') as f:
+        #     # Save this dictionary as a file(pickle)
+        #     pickle.dump(data, f)
+        # print("초기화 : ", data)
 
         import socket
 
         # 서버 소켓 생성
-        server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         # 서버 주소와 포트 설정
         server_address = ('172.30.1.45', 12345)  # 모든 네트워크 인터페이스에 바인딩
-        server_socket.bind(server_address)
+        self.server_socket.bind(server_address)
 
         # 클라이언트 연결을 기다림
-        server_socket.listen(1)
-        print("서버가 시작되었습니다. 클라이언트 연결을 기다립니다...")
+        self.server_socket.listen(1)
+        print("s/r", "서버가 시작되었습니다. 클라이언트 연결을 기다립니다...")
 
         subprocess.Popen(['python3', r'zelaot\flow-action\socket_order\client\incredibot-sct.py'])
 
         # 클라이언트 연결 대기
-        self.client_socket, self.client_address = server_socket.accept()
-        print(f"클라이언트가 연결되었습니다.") # {client_address}
+        self.client_socket, self.client_address = self.server_socket.accept()
+        print("s/r", f"클라이언트가 연결되었습니다.") # {client_address}
 
         self.end_flag = False
+
+    def forced_end(self):
+        print("s/r", "강제 종료 과정을 위해 가상환경 종료 정보 처리")
+        self.make_order(-1)
+
+        try:
+            # order.pkl 파일 전송
+            with open("socket_order.pkl", "rb") as f:
+                order_data = f.read()
+            self.client_socket.sendall(order_data)
+            print("s/r", "강제 종료 socket_order.pkl 파일을 클라이언트에게 성공적으로 전송하였습니다.")
+        except Exception as e:
+            print("s/r", f"강제 종료 전송 오류 발생: {e}")
+
+        
+        try:
+            # state_rwd_action.pkl 파일 수신
+            data = self.client_socket.recv(1024)
+            with open("rev_state_rwd_action.pkl", "wb") as f:
+                f.write(data)
+            print("s/r", "강제 종료 rev_state_rwd_action.pkl 파일을 성공적으로 수신하였습니다.")
+        except Exception as e:
+            print("s/r", f"강제 종료 수신 오류 발생: {e}")
+
+        try:
+            with open("./rev_state_rwd_action.pkl", "rb") as f:
+                rev_state_rwd_action = pickle.load(f)
+            print("s/r", "rev_state :", rev_state_rwd_action)
+
+        except Exception as e:
+            print("s/r", "강제 종료 데이터 받음")
+
+
+        # 클라이언트 소켓 닫기
+        print("s/r", f"\n\n강제 연결 종료\n\n")#{client_address}와의 
+        self.client_socket.close()
+        self.server_socket.close()
+
+        print("s/r", self.log)
+
+        import datetime
+
+        # 오늘 날짜를 기준으로 파일명 생성
+        today = datetime.date.today()
+        filename = f"log_{today}.txt"
+
+        # 데이터를 파일에 저장
+        with open(filename, 'a') as f:
+            for elem in zip(self.log[0], self.log[1]):
+                f.write(f"{elem}\n")
+            f.write(f"\n")
+        print("s/r", f"데이터가 {filename} 파일에 성공적으로 저장되었습니다.")
+
+
+                

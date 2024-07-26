@@ -35,14 +35,16 @@ if not os.path.exists(logdir):
 
 env = Sc2Env()
 
-model = PPO('MlpPolicy', env, verbose=1, tensorboard_log=logdir)
+model = PPO('MlpPolicy', env, verbose=1, tensorboard_log=logdir, n_steps=2048, batch_size=64)
 
-TIMESTEPS = 10000
+TIMESTEPS = 1 #10000
 iters = 0
-while iters < 100:
-    print("On iteration: ", iters)
+while iters < 1:
+    print("\n\n\nOn iteration: ", iters)
     iters += 1
-    model.learn(total_timesteps=TIMESTEPS, reset_num_timesteps=False, tb_log_name=f"PPO")
+    model.learn(total_timesteps=TIMESTEPS, tb_log_name=f"PPO") #, reset_num_timesteps=False
     model.save(f"{models_dir}/{TIMESTEPS*iters}")
+    env.forced_end()
+    # env.end_flag = True
 
 print("end")

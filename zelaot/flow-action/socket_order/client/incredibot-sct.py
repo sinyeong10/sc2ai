@@ -18,19 +18,19 @@ from sc2.unit_command import UnitCommand
 
 
 def init_set():
-    print("값 초기화")
+    print("c/i", "값 초기화")
     data = {"state": [0,0,0,0,0,0,0,0,0,0], 'reward': 0, "action": None, "done": False}  # empty action waiting for the next one!
     with open('state_rwd_action.pkl', 'wb') as f:
         # Save this dictionary as a file(pickle)
         pickle.dump(data, f)
-    print(data)
+    print("c/i", data)
 
     order = {"flag":0, "idx":0, "action":0}
 
     with open("./order.pkl", "wb") as f:
         pickle.dump(order, f)
 
-    print("first order :", order)
+    print("c/i", "first order :", order)
 
 init_set()
 
@@ -45,25 +45,24 @@ server_address = ('172.30.1.45', 12345)  # 예시: 서버의 IP 주소와 포트
 try:
     # 서버에 연결
     client_socket.connect(server_address)
-    print("서버에 연결되었습니다.")
+    print("c/i", "서버에 연결되었습니다.")
 
 except Exception as e:
-    print(f"서버 연결 중 오류 발생: {e}")
+    print("c/i", f"서버 연결 중 오류 발생: {e}")
 
 try:
     # order.pkl 파일 수신
     order_data = client_socket.recv(1024)
     with open("order.pkl", "wb") as f:
         f.write(order_data)
-    print("order.pkl 파일을 서버로부터 성공적으로 수신하였습니다.")
+    print("c/i", "처음으로 order.pkl 파일을 서버로부터 성공적으로 수신하였습니다.")
     
     with open("./order.pkl", "rb") as f:
         order = pickle.load(f)
-    print("order :", order)
+    print("c/i", "order :", order)
 
 except Exception as e:
-    print(f"오류 발생: {e}")
-
+    print("c/i", f"처음 명령 수신 오류 발생: {e}")
 
 
 
@@ -89,9 +88,10 @@ now = datetime.datetime.now()
 date_string = now.strftime('%Y-%m-%d')
 
 file_path = f"game_log-{date_string}.txt"
-print(file_path)
+print("c/i", file_path)
 
 
+#적공격을 아예 없애고 싶은 경우
 class tmpIncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
     async def on_step(self, iteration: int):
         pass
@@ -131,11 +131,12 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
     def make(self): #이건 비동기 함수로 하면 안됨!
         global count
         global finish_action
+        global stop_flag
         with open('order.pkl', 'rb') as f:
             data = pickle.load(f)
             
         if finish_action:
-            print(f"{count}번 째 명령인 {data['action']} 완료")
+            print("c/i", f"{count}번 째 명령인 {data['action']} 완료")
             count += 1
 
             #환경 송신 그리고 명령을 받음!!
@@ -145,9 +146,9 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                 with open("state_rwd_action.pkl", "rb") as f:
                     data = f.read()
                 client_socket.sendall(data)
-                print("state_rwd_action.pkl 파일을 서버에 성공적으로 전송하였습니다.")
+                print("c/i", "state_rwd_action.pkl 파일을 서버에 성공적으로 전송하였습니다.")
             except Exception as e:
-                print(f"오류 발생: {e}")
+                print("c/i", f"환경 보내는 데 오류 발생: {e}")
 
             
             try:
@@ -155,14 +156,22 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                 order_data = client_socket.recv(1024)
                 with open("order.pkl", "wb") as f:
                     f.write(order_data)
-                print("order.pkl 파일을 서버로부터 성공적으로 수신하였습니다.")
+                print("c/i", "order.pkl 파일을 서버로부터 성공적으로 수신하였습니다.")
+                print(order_data)
                 
+                #client 종료시 b''인 빈 문자열이 전송되기 때문에 문제 발생!!
+
                 with open("./order.pkl", "rb") as f:
                     order = pickle.load(f)
-                print("order :", order)
+                print("c/i", "order :", order)
 
             except Exception as e:
-                print(f"오류 발생: {e}")
+                print("c/i", f"받길 기다리는 데 안오는 오류 발생: {e}")
+                #여기서 iter하나가 timestep을 다 채워서 reset시 문제 발생
+                # client_socket.close() #여기서 닫아버리면 이후에 문제 발생
+                stop_flag = True #종료 시켜야 함
+        if stop_flag:
+            print("다음 프레임에 종료됨")
 
         finish_action = False
         
@@ -184,10 +193,14 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                 file.write(f"{count}번째 명령 : {self.time_formatted}, {iteration}\n")
             self.map_make(iteration)
             await self.client.leave() # 게임 종료
+            # time.sleep(3)
+            print("c/i", "\n\n게임 종료\n\n")
+
         no_action = True
 
-        self.make() #같은 클래스에서 명령 할당!
+        self.make() #같은 클래스에서 명령 할당! #원래 위치
         
+        #order.pkl파일에서 flag 속성에 따라 처리하는 걸 기다리는 것 대신 socket의 수신, 발신 구조로 처리했었음
         while no_action:
             try: #파일을 미리 생성
                 with open('order.pkl', 'rb') as f:
@@ -201,7 +214,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                         no_action = False
                         #다른 코드에서 해당 파일을 수정하였으므로 명령이 입력됨!
             except:
-                pass
+                print("c/i", "order.pkl 오류 난 파일이다 고쳐야한다...") #여기가 서버 종료 값을 여기서 받는 게 문제였음
 
         await self.distribute_workers() # put idle workers back to work
 
@@ -248,8 +261,17 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         if self.townhalls:
             nexus = self.townhalls.random
         else:
-            print("\n\n넥서스가 터짐!!\n\n")
+            print("c/i", "\n\n넥서스가 터짐!!\n\n")
             stop_flag = True
+
+        # #stop_flag True가 되는 위치로 가져옴 #다음 프레임에서 처리가 맞는 듯 마지막에 state를 생성해야함
+        # if stop_flag:
+        #     with open(file_path, "a") as file:
+        #         file.write(f"{count}번째 명령 : {self.time_formatted}, {iteration}\n")
+        #     self.map_make(iteration)
+        #     await self.client.leave() # 게임 종료
+        #     # time.sleep(3)
+        #     print("c/i", "\n\n게임 종료\n\n")
 
         if action == 0:
             #4이상 여유로울 때 프로브 생산
@@ -262,7 +284,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                 nexus.train(UnitTypeId.PROBE)  # train a probe
                 finish_action = True
             
-        elif action == 1:
+        elif action == 1:   
             if not self.structures(UnitTypeId.PYLON):
                 if self.can_afford(UnitTypeId.PYLON):
                     pos = nexus.position.towards(self.enemy_start_locations[0], 3)
@@ -309,7 +331,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         
         #현재 2개 이상 생산 중인 건물이 있고 새로 건물이 지어졌다면 생산명령을 분배함
         if self.structures(UnitTypeId.GATEWAY).ready.idle and len(self.structures(UnitTypeId.GATEWAY).ready[0].orders) > 1:
-            print("생산 재분배")
+            print("c/i", "생산 재분배")
             build_count = len(self.structures(UnitTypeId.GATEWAY).ready.idle) #생산 가능한 건물
             for gw in self.structures(UnitTypeId.GATEWAY).ready: #지금 생산중인 건물
                 while len(gw.orders) > 1 and build_count > 0: #2개이상의 생산이며 현재 생산 가능한 건물이 있다면
@@ -326,20 +348,22 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         if self.units(UnitTypeId.ZEALOT).amount >= 2 or not self.townhalls:
             if self.check:
                 await self.chat_send(f"{self.time_formatted}, {iteration}")
-                print(f"{self.time_formatted}, {iteration}")
+                print("c/i", f"{self.time_formatted}, {iteration}")
                 with open(file_path, "a") as file:
                     file.write(f"{action} : {self.time_formatted}, {iteration}\n")
                 self.check = False
                 early_stop = 4000-iteration
                 stop_flag = True
         
+        #state에 해당하는 map에 값을 넣음
         self.map_make(iteration)
         
-        if iteration % 100 == 0:
-            print(f"{map}, {action}\nIter: {iteration}. RWD: {reward}. VR: {self.units(UnitTypeId.ZEALOT).amount}")
+        if iteration % 100 == 0: #시간 100당 출력
+            print("c\i", "시간 경과에 따른 정보 출력", f"{map}, {action} Iter: {iteration}. RWD: {reward}. VR: {self.units(UnitTypeId.ZEALOT).amount}")
 
         # write the file: 
         # observation(minimap), reward for this step, Action(None if waiting for action, otherwise 0,1,2,3,4,5), Is the game over
+        # print("c\i", "state data 생성") #될때까지 매 프레임마다 state 생성
         data = {"state": map, "reward": reward, "action": None, "done": False}  # empty action waiting for the next one!
         with open('state_rwd_action.pkl', 'wb') as f:
             # Save this dictionary as a file(pickle)
@@ -358,20 +382,26 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                     self.do(nexus(AbilityId.EFFECT_CHRONOBOOSTENERGYCOST, target_structure))
                     break #한번만 하면 됨!
 
+
 result = run_game(  # run_game is a function that runs the game.
     maps.get("Simple64"), # the map we are playing on
     [Bot(Race.Protoss, IncrediBot()), # runs our coded bot, protoss race, and we pass our bot object 
-     Computer(Race.Terran, Difficulty.VeryEasy)], #Bot(Race.Zerg, tmpIncrediBot())], #기록이 중점이므로 아무것도 하지 않는 상대를 설정 #Computer(Race.Zerg, Difficulty.Hard)], # runs a pre-made computer agent, zerg race, with a hard difficulty.
+    Computer(Race.Terran, Difficulty.VeryEasy)], #Bot(Race.Zerg, tmpIncrediBot())], #기록이 중점이므로 아무것도 하지 않는 상대를 설정 #Computer(Race.Zerg, Difficulty.Hard)], # runs a pre-made computer agent, zerg race, with a hard difficulty.
     realtime=False, # When set to True, the agent is limited in how long each step can take to process.
 )
+
 
 with open("results.txt","a") as f:
     f.write(f"{result}\n")
 
+print("c/i", "\n\nresult 값 처리 함\n\n")
+
+
+
 reward = int(early_stop)
 
 # map = [0,0,0,0,0,0,0,0,0,0] #np.zeros((88, 96, 3), dtype=np.uint8)  #(224, 224였음)
-print("end game", map, reward)
+print("c/i", "end game", map, reward)
 observation = map
 data = {"state": map, "reward": reward, "action": None, "done": True}  # empty action waiting for the next one!
 with open('state_rwd_action.pkl', 'wb') as f:
@@ -382,12 +412,15 @@ try:
     with open("state_rwd_action.pkl", "rb") as f:
         data = f.read()
     client_socket.sendall(data)
-    print("state_rwd_action.pkl 파일을 서버에 성공적으로 전송하였습니다.")
+    print("c/i", "state_rwd_action.pkl 파일을 서버에 성공적으로 전송하였습니다.")
 except Exception as e:
-    print(f"오류 발생: {e}")
+    print("c/i", f"상태 반환 안해주는 오류 발생: {e}")
 finally:
     # 클라이언트 소켓 닫기
     client_socket.close()
+    print("c/i", "client 소켓 종료")
+
+print("c/i", "\n\n정상 종료\n\n")
 
 cv2.destroyAllWindows()
 cv2.waitKey(1)
