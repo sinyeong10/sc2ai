@@ -16,6 +16,8 @@ import asyncio
 from sc2.position import Point2
 from sc2.unit_command import UnitCommand
 
+debug = True
+
 
 def init_set():
     print("c/i", "값 초기화")
@@ -157,7 +159,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                 with open("order.pkl", "wb") as f:
                     f.write(order_data)
                 print("c/i", "order.pkl 파일을 서버로부터 성공적으로 수신하였습니다.")
-                print(order_data)
+                # print(order_data)
                 
                 #client 종료시 b''인 빈 문자열이 전송되기 때문에 문제 발생!!
 
@@ -185,6 +187,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         global Tech_level
         if iteration == 0:
             self.check = True
+            self.needzealot = 0
         if iteration > 4000: #4000이 넘어가면 불가능한 경우이므로 종료
             stop_flag = True
 
@@ -197,6 +200,20 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
             print("c/i", "\n\n게임 종료\n\n")
 
         no_action = True
+
+        
+
+        #이전 프레임에서 생산 명령이 많은 것을 취소했으므로 여기서 추가함
+        #명령보다 더 전에 실행되어야 함
+        #finish_action가 self.make에서 True이면 다음 명령을 받아오는 구조!
+        #따라서 먼저 처리!
+        while self.needzealot > 0 and self.structures(UnitTypeId.GATEWAY).ready.idle:
+            accel = self.structures(UnitTypeId.GATEWAY).ready.idle.random
+            accel.train(UnitTypeId.ZEALOT)
+            print(accel, "생산함")
+            await self.do_chrono_boost(accel)
+            self.needzealot -= 1
+
 
         self.make() #같은 클래스에서 명령 할당! #원래 위치
         
@@ -329,18 +346,28 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         #             build_count -= 1
         #             self.structures(UnitTypeId.GATEWAY).ready.idle.random.train(UnitTypeId.ZEALOT)
         
+
         #현재 2개 이상 생산 중인 건물이 있고 새로 건물이 지어졌다면 생산명령을 분배함
         if self.structures(UnitTypeId.GATEWAY).ready.idle and len(self.structures(UnitTypeId.GATEWAY).ready[0].orders) > 1:
-            print("c/i", "생산 재분배")
+            print("c/i", "생산 재분배\n\n\n")
             build_count = len(self.structures(UnitTypeId.GATEWAY).ready.idle) #생산 가능한 건물
+            print("c/i", "build_count", build_count)
+            # print("c/i", self.structures(UnitTypeId.GATEWAY).ready.idle, self.structures(UnitTypeId.GATEWAY).ready, self.structures(UnitTypeId.GATEWAY))
             for gw in self.structures(UnitTypeId.GATEWAY).ready: #지금 생산중인 건물
                 while len(gw.orders) > 1 and build_count > 0: #2개이상의 생산이며 현재 생산 가능한 건물이 있다면
                     # print(gw.orders, gw.orders[0], gw.orders[-1])
                     self.do(gw(AbilityId.CANCEL_LAST)) #취소함
+                    print(gw, "취소함")
                     build_count -= 1
-                    accel = self.structures(UnitTypeId.GATEWAY).ready.idle.random
-                    accel.train(UnitTypeId.ZEALOT)
-                    await self.do_chrono_boost(accel)
+
+                    #취소가 해당 프레임에 이뤄지지 않아서 자원이 100미만인 경우 생산을 하지 못함!
+                    #다음 프레임으로 넘겨야함...
+                    self.needzealot += 1
+                    # accel = self.structures(UnitTypeId.GATEWAY).ready.idle.random
+                    # accel.train(UnitTypeId.ZEALOT)
+                    # print(accel, "생산함")
+                    # await self.do_chrono_boost(accel)
+            
 
         #9의 경우는 걸리지 않음, end조건 확인하고 끝
 

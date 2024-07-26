@@ -88,3 +88,1479 @@
 (3, {'state': [45, 0, 14, 23, 12, 1, 2, 2, 0, 447], 'reward': 0, 'action': None, 'done': False})
 (9, {'state': [2315, 0, 14, 31, 12, 1, 2, 3, 1, 1520], 'reward': 0, 'action': None, 'done': True})
 
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [70, 0, 12, 23, 12, 1, 1, 0, 0, 160], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 12, 23, 12, 1, 2, 1, 0, 199], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [360, 0, 12, 23, 12, 1, 2, 2, 0, 431], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [210, 0, 14, 23, 12, 1, 2, 2, 0, 432], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [110, 0, 14, 23, 12, 1, 2, 2, 0, 433], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [10, 0, 14, 23, 12, 1, 2, 2, 0, 434], 'reward': 0, 'action': None, 'done': False})
+(9, {'state': [3660, 0, 22, 31, 12, 1, 2, 3, 2, 2369], 'reward': 1632, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [65, 0, 12, 23, 12, 1, 1, 0, 0, 158], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 12, 23, 12, 1, 2, 1, 0, 199], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 12, 23, 12, 1, 2, 2, 0, 281], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [210, 0, 12, 23, 12, 1, 2, 3, 0, 436], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [60, 0, 14, 23, 12, 1, 2, 3, 0, 437], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [10, 0, 14, 23, 12, 1, 2, 4, 0, 462], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 14, 23, 12, 1, 2, 4, 0, 509], 'reward': 0, 'action': None, 'done': False})
+(9, {'state': [1525, 0, 24, 31, 12, 1, 2, 4, 2, 1576], 'reward': 2425, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [65, 0, 12, 23, 12, 1, 1, 0, 0, 158], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 12, 23, 12, 1, 2, 1, 0, 199], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [375, 0, 12, 23, 12, 1, 2, 2, 0, 437], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [225, 0, 14, 23, 12, 1, 2, 2, 0, 438], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [125, 0, 14, 23, 12, 1, 2, 2, 0, 439], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [25, 0, 14, 23, 12, 1, 2, 3, 0, 440], 'reward': 0, 'action': None, 'done': False})
+(9, {'state': [2450, 0, 22, 31, 12, 1, 2, 3, 2, 1986], 'reward': 2015, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 43], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [65, 0, 12, 23, 12, 1, 1, 0, 0, 108], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [510, 0, 12, 23, 12, 1, 2, 1, 0, 355], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [370, 0, 14, 23, 12, 1, 2, 1, 0, 356], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [235, 0, 14, 23, 12, 1, 2, 1, 0, 357], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [160, 0, 14, 23, 12, 1, 2, 1, 0, 358], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [65, 0, 14, 23, 12, 1, 2, 1, 0, 359], 'reward': 0, 'action': None, 'done': False})
+(9, {'state': [160, 0, 20, 31, 12, 1, 2, 3, 1, 647], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [65, 0, 12, 23, 12, 1, 1, 0, 0, 158], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 12, 23, 12, 1, 1, 0, 0, 172], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 12, 23, 12, 1, 2, 1, 0, 253], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 12, 31, 12, 1, 2, 2, 0, 308], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 12, 31, 12, 1, 2, 2, 0, 383], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [10, 0, 12, 39, 12, 1, 2, 3, 0, 434], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 14, 39, 12, 1, 2, 3, 0, 482], 'reward': 0, 'action': None, 'done': False})
+(9, {'state': [310, 0, 16, 39, 12, 1, 2, 3, 2, 632], 'reward': 3369, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [75, 0, 12, 23, 12, 1, 1, 0, 0, 160], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 12, 23, 12, 1, 2, 1, 0, 199], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [380, 0, 12, 23, 12, 1, 2, 2, 0, 435], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [230, 0, 14, 23, 12, 1, 2, 2, 0, 436], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [130, 0, 14, 23, 12, 1, 2, 2, 0, 437], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [30, 0, 14, 23, 12, 1, 2, 2, 0, 438], 'reward': 0, 'action': None, 'done': False})
+(9, {'state': [4910, 0, 20, 31, 12, 1, 2, 2, 2, 2972], 'reward': 1029, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [75, 0, 12, 23, 12, 1, 1, 0, 0, 160], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 12, 23, 12, 1, 2, 1, 0, 199], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [380, 0, 12, 23, 12, 1, 2, 2, 0, 435], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [230, 0, 14, 23, 12, 1, 2, 2, 0, 436], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [130, 0, 14, 23, 12, 1, 2, 2, 0, 437], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [30, 0, 14, 23, 12, 1, 2, 2, 0, 438], 'reward': 0, 'action': None, 'done': False})
+(9, {'state': [1290, 0, 16, 31, 12, 1, 2, 3, 2, 1061], 'reward': 2940, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [70, 0, 12, 23, 12, 1, 1, 0, 0, 162], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 12, 23, 12, 1, 2, 1, 0, 199], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [365, 0, 12, 23, 12, 1, 2, 2, 0, 439], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [220, 0, 14, 23, 12, 1, 2, 2, 0, 440], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [125, 0, 14, 23, 12, 1, 2, 2, 0, 441], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [25, 0, 14, 23, 12, 1, 2, 2, 0, 442], 'reward': 0, 'action': None, 'done': False})
+(9, {'state': [1485, 0, 22, 31, 12, 1, 2, 3, 2, 1320], 'reward': 2681, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [75, 0, 12, 23, 12, 1, 1, 0, 0, 161], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [10, 0, 12, 23, 12, 1, 2, 1, 0, 199], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [385, 0, 12, 23, 12, 1, 2, 2, 0, 435], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [235, 0, 14, 23, 12, 1, 2, 2, 0, 436], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [135, 0, 14, 23, 12, 1, 2, 2, 0, 437], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [35, 0, 14, 23, 12, 1, 2, 2, 0, 438], 'reward': 0, 'action': None, 'done': False})
+(9, {'state': [310, 0, 16, 31, 12, 1, 2, 3, 2, 579], 'reward': 3422, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 14, 15, 13, 1, 0, 0, 0, 95], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 14, 15, 13, 1, 0, 0, 0, 97], 'reward': 0, 'action': None, 'done': True})
+
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 12, 15, 12, 1, 1, 0, 0, 103], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 123], 'reward': 0, 'action': None, 'done': False})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [25, 0, 13, 23, 13, 1, 1, 0, 0, 163], 'reward': 0, 'action': None, 'done': False})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 12, 15, 12, 1, 1, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [20, 0, 13, 23, 13, 1, 1, 0, 0, 160], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 13, 23, 13, 1, 2, 1, 0, 199], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 23, 13, 1, 2, 1, 0, 269], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 31, 13, 1, 2, 2, 0, 341], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 31, 13, 1, 2, 3, 0, 360], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 14, 31, 14, 1, 2, 3, 0, 433], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 14, 31, 14, 1, 2, 4, 0, 479], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 14, 31, 14, 1, 2, 4, 0, 499], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 15, 31, 14, 1, 2, 4, 0, 543], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 15, 31, 14, 1, 2, 4, 0, 545], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 13, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 0, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [95, 0, 13, 23, 13, 1, 1, 0, 0, 189], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [50, 0, 13, 23, 13, 1, 1, 0, 0, 190], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 14, 23, 13, 1, 2, 1, 0, 213], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 14, 23, 14, 1, 2, 1, 0, 287], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 14, 23, 14, 1, 2, 2, 0, 314], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 15, 31, 14, 1, 2, 2, 0, 358], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 15, 31, 14, 1, 2, 2, 0, 360], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [75, 0, 12, 23, 12, 1, 1, 0, 0, 161], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [535, 0, 12, 23, 12, 1, 2, 1, 0, 434], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [385, 0, 14, 23, 12, 1, 2, 1, 0, 435], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [290, 0, 14, 23, 12, 1, 2, 1, 0, 436], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [140, 0, 14, 23, 12, 1, 2, 1, 0, 437], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [40, 0, 14, 23, 12, 1, 2, 1, 0, 438], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [510, 0, 16, 31, 12, 1, 2, 3, 2, 683], 'reward': 3318, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 13, 15, 12, 1, 1, 0, 0, 74], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [75, 0, 12, 23, 12, 1, 1, 0, 0, 163], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [530, 0, 12, 23, 12, 1, 2, 1, 0, 438], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [430, 0, 14, 23, 12, 1, 2, 1, 0, 439], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [935, 0, 16, 23, 12, 1, 2, 1, 2, 687], 'reward': 3314, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [70, 0, 12, 23, 12, 1, 1, 0, 0, 162], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 12, 23, 12, 1, 2, 1, 0, 199], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 23, 12, 1, 2, 2, 0, 227], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 23, 13, 1, 2, 2, 0, 304], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 23, 13, 1, 2, 3, 0, 327], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 14, 23, 14, 1, 2, 3, 0, 403], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 14, 23, 14, 1, 2, 4, 0, 445], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 16, 23, 14, 1, 2, 4, 0, 469], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 17, 23, 14, 1, 2, 4, 0, 533], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [155, 0, 17, 23, 15, 1, 2, 5, 1, 597], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [160, 0, 17, 23, 15, 1, 2, 5, 1, 599], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 12, 1, 1, 0, 0, 123], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 13, 23, 13, 1, 1, 0, 0, 199], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 23, 13, 1, 2, 1, 0, 225], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 14, 31, 14, 1, 2, 1, 0, 296], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 14, 31, 14, 1, 2, 2, 0, 365], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 14, 31, 14, 1, 2, 3, 0, 431], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 14, 31, 14, 1, 2, 4, 0, 453], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 15, 31, 14, 1, 2, 4, 0, 496], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [10, 0, 17, 31, 15, 1, 2, 4, 0, 562], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 17, 31, 15, 1, 2, 5, 0, 602], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 17, 31, 15, 1, 2, 5, 0, 644], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 17, 31, 15, 1, 2, 5, 1, 686], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [380, 0, 19, 47, 15, 1, 2, 5, 2, 839], 'reward': 3162, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 14, 15, 13, 1, 0, 0, 0, 96], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 14, 15, 13, 1, 1, 0, 0, 122], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 14, 15, 13, 1, 1, 0, 0, 124], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [10, 0, 13, 15, 12, 1, 1, 0, 0, 103], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 14, 23, 13, 1, 1, 0, 0, 172], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [510, 0, 14, 23, 14, 1, 2, 1, 0, 451], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [465, 0, 16, 23, 14, 1, 2, 1, 0, 452], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [370, 0, 17, 23, 14, 1, 2, 1, 0, 453], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [375, 0, 17, 23, 14, 1, 2, 1, 0, 455], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [75, 0, 12, 23, 12, 1, 1, 0, 0, 163], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [540, 0, 12, 23, 12, 1, 2, 1, 0, 444], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [450, 0, 14, 23, 12, 1, 2, 1, 0, 445], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [955, 0, 16, 23, 12, 1, 2, 1, 2, 693], 'reward': 3308, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 0, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 122], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 13, 15, 13, 1, 1, 0, 0, 124], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 0, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 13, 15, 13, 1, 0, 0, 0, 74], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 13, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 13, 15, 13, 1, 0, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 96], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 14, 15, 13, 1, 1, 0, 0, 145], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 14, 23, 14, 1, 1, 0, 0, 193], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 14, 23, 14, 1, 1, 0, 0, 195], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 12, 15, 12, 1, 1, 0, 0, 103], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 12, 23, 12, 1, 1, 0, 0, 172], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 12, 31, 12, 1, 2, 1, 0, 253], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 31, 12, 1, 2, 2, 0, 279], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 31, 12, 1, 2, 2, 0, 327], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 31, 13, 1, 2, 2, 0, 354], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [85, 0, 14, 31, 14, 1, 2, 2, 0, 442], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 16, 39, 14, 1, 2, 2, 0, 446], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [455, 0, 18, 39, 14, 1, 2, 2, 2, 638], 'reward': 3363, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [10, 0, 12, 15, 12, 1, 1, 0, 0, 103], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 12, 23, 12, 1, 1, 0, 0, 173], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 12, 31, 12, 1, 2, 1, 0, 226], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 12, 31, 12, 1, 2, 1, 0, 281], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 12, 31, 12, 1, 2, 1, 0, 330], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 12, 47, 12, 1, 2, 1, 0, 404], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 12, 55, 12, 1, 2, 2, 0, 458], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 14, 55, 12, 1, 2, 2, 0, 510], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 14, 55, 12, 1, 2, 2, 0, 537], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 15, 55, 12, 1, 2, 2, 0, 581], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [260, 0, 17, 63, 13, 1, 2, 2, 2, 707], 'reward': 3294, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [10, 0, 12, 15, 12, 1, 1, 0, 0, 103], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [15, 0, 12, 15, 12, 1, 1, 0, 0, 105], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 13, 15, 13, 1, 0, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 122], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 13, 15, 13, 1, 1, 0, 0, 124], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 13, 15, 13, 1, 0, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 95], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [50, 0, 14, 23, 14, 1, 1, 0, 0, 190], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 14, 23, 14, 1, 2, 1, 0, 233], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [455, 0, 14, 23, 14, 1, 2, 2, 0, 468], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [355, 0, 16, 23, 14, 1, 2, 2, 0, 469], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [705, 0, 18, 23, 14, 1, 2, 2, 2, 610], 'reward': 3391, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 13, 15, 12, 1, 1, 0, 0, 74], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 13, 15, 13, 1, 0, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [15, 0, 13, 15, 13, 1, 0, 0, 0, 76], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [70, 0, 12, 23, 12, 1, 1, 0, 0, 162], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [530, 0, 12, 23, 12, 1, 2, 1, 0, 442], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [430, 0, 14, 23, 12, 1, 2, 1, 0, 443], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [380, 0, 14, 23, 12, 1, 2, 1, 0, 444], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [290, 0, 15, 23, 12, 1, 2, 1, 0, 445], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [805, 0, 17, 31, 13, 1, 2, 1, 2, 691], 'reward': 3310, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 0, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 122], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 23, 13, 1, 1, 0, 0, 194], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 31, 13, 1, 2, 1, 0, 264], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 31, 13, 1, 2, 2, 0, 332], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 31, 13, 1, 2, 3, 0, 403], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [45, 0, 13, 31, 13, 1, 2, 4, 0, 473], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 15, 31, 13, 1, 2, 4, 0, 499], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 15, 31, 13, 1, 2, 4, 0, 523], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 16, 31, 14, 1, 2, 4, 0, 599], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 16, 39, 14, 1, 2, 5, 1, 646], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [335, 0, 18, 39, 14, 1, 2, 5, 2, 799], 'reward': 3202, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 102], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 152], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 1, 0, 0, 154], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 14, 15, 13, 1, 0, 0, 0, 95], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [80, 0, 14, 23, 14, 1, 1, 0, 0, 205], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [30, 0, 14, 23, 14, 1, 1, 0, 0, 206], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 15, 23, 14, 1, 2, 1, 0, 259], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [430, 0, 15, 23, 15, 1, 2, 2, 0, 479], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [280, 0, 17, 23, 15, 1, 2, 2, 0, 480], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [290, 0, 17, 23, 15, 1, 2, 2, 0, 482], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [10, 0, 12, 15, 12, 1, 1, 0, 0, 103], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [15, 0, 12, 15, 12, 1, 1, 0, 0, 105], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 0, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 96], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 14, 15, 13, 1, 1, 0, 0, 98], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 13, 15, 13, 1, 0, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 96], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 14, 15, 13, 1, 1, 0, 0, 145], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [10, 0, 14, 15, 13, 1, 1, 0, 0, 147], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [25, 0, 13, 23, 13, 1, 1, 0, 0, 160], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [10, 0, 13, 23, 13, 1, 2, 1, 0, 199], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 23, 13, 1, 2, 1, 0, 223], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [380, 0, 14, 31, 14, 1, 2, 1, 0, 435], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [280, 0, 16, 31, 14, 1, 2, 1, 0, 436], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [180, 0, 16, 31, 14, 1, 2, 1, 0, 437], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [750, 0, 18, 39, 14, 1, 2, 1, 2, 684], 'reward': 3317, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 1, 0, 0, 102], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 14, 23, 13, 1, 1, 0, 0, 172], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 14, 23, 13, 1, 2, 1, 0, 196], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [505, 0, 15, 23, 15, 1, 2, 1, 0, 450], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [405, 0, 17, 23, 15, 1, 2, 1, 0, 451], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [255, 0, 17, 23, 15, 1, 2, 1, 0, 452], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [160, 0, 17, 23, 15, 1, 2, 1, 0, 453], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [60, 0, 17, 23, 15, 1, 2, 1, 0, 454], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [665, 0, 19, 39, 15, 1, 2, 2, 2, 699], 'reward': 3302, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 14, 15, 13, 1, 0, 0, 0, 96], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 14, 15, 13, 1, 0, 0, 0, 98], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 102], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 123], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 1, 0, 0, 152], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 13, 15, 12, 1, 1, 0, 0, 154], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 13, 15, 13, 1, 0, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 122], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 23, 13, 1, 1, 0, 0, 193], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [510, 0, 13, 31, 13, 1, 2, 1, 0, 472], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [415, 0, 15, 31, 13, 1, 2, 1, 0, 473], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [970, 0, 17, 31, 13, 1, 2, 1, 2, 721], 'reward': 3280, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [75, 0, 12, 23, 12, 1, 1, 0, 0, 163], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 12, 23, 12, 1, 2, 1, 0, 199], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 12, 23, 12, 1, 2, 2, 0, 253], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [270, 0, 12, 31, 12, 1, 2, 2, 0, 440], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [170, 0, 14, 31, 12, 1, 2, 2, 0, 441], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [475, 0, 16, 31, 12, 1, 2, 2, 2, 582], 'reward': 3419, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 13, 15, 13, 1, 0, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 122], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 13, 15, 13, 1, 1, 0, 0, 124], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [10, 0, 12, 15, 12, 1, 1, 0, 0, 103], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 123], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 1, 0, 0, 152], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 23, 12, 1, 1, 0, 0, 172], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 14, 31, 13, 1, 1, 0, 0, 247], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [570, 0, 15, 31, 15, 1, 2, 1, 0, 518], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [470, 0, 17, 31, 15, 1, 2, 1, 0, 519], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [370, 0, 17, 31, 15, 1, 2, 1, 0, 520], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [275, 0, 17, 31, 15, 1, 2, 1, 0, 521], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [125, 0, 17, 31, 15, 1, 2, 1, 0, 522], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [30, 0, 17, 31, 15, 1, 2, 1, 0, 523], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [600, 0, 19, 55, 15, 1, 2, 2, 2, 767], 'reward': 3234, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 13, 15, 13, 1, 0, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [100, 0, 13, 23, 13, 1, 1, 0, 0, 190], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 13, 23, 13, 1, 2, 1, 0, 212], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [450, 0, 13, 23, 13, 1, 2, 2, 0, 463], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [305, 0, 15, 23, 13, 1, 2, 2, 0, 464], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [155, 0, 15, 23, 13, 1, 2, 2, 0, 465], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [10, 0, 15, 23, 13, 1, 2, 2, 0, 466], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 15, 23, 13, 1, 2, 5, 0, 511], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 15, 23, 13, 1, 2, 5, 0, 592], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 15, 31, 13, 1, 2, 6, 1, 640], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [330, 0, 17, 31, 13, 1, 2, 6, 2, 793], 'reward': 3208, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 14, 15, 13, 1, 0, 0, 0, 96], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 14, 15, 13, 1, 0, 0, 0, 98], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 13, 15, 13, 1, 0, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 95], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [30, 0, 14, 23, 14, 1, 1, 0, 0, 184], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 14, 23, 14, 1, 2, 1, 0, 236], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 14, 23, 14, 1, 2, 2, 0, 256], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 15, 23, 14, 1, 2, 2, 0, 321], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [240, 0, 15, 23, 15, 1, 2, 3, 0, 461], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [140, 0, 17, 23, 15, 1, 2, 3, 0, 462], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [530, 0, 19, 23, 15, 1, 2, 3, 2, 614], 'reward': 3387, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 13, 15, 13, 1, 0, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [95, 0, 13, 23, 13, 1, 1, 0, 0, 189], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 23, 13, 1, 1, 0, 0, 190], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 23, 13, 1, 2, 1, 0, 239], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 31, 13, 1, 2, 1, 0, 312], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 13, 39, 13, 1, 2, 2, 0, 384], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [85, 0, 13, 39, 13, 1, 2, 3, 0, 470], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 15, 39, 13, 1, 2, 3, 0, 473], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 15, 39, 13, 1, 2, 3, 0, 542], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 15, 47, 13, 1, 2, 4, 0, 613], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 15, 47, 13, 1, 2, 5, 1, 657], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [335, 0, 17, 47, 13, 1, 2, 5, 2, 810], 'reward': 3191, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [20, 0, 13, 23, 13, 1, 1, 0, 0, 160], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 13, 23, 13, 1, 1, 0, 0, 172], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 14, 23, 13, 1, 2, 1, 0, 199], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 15, 23, 14, 1, 2, 1, 0, 246], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 15, 23, 14, 1, 2, 1, 0, 248], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [10, 0, 12, 15, 12, 1, 1, 0, 0, 103], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [15, 0, 12, 15, 12, 1, 1, 0, 0, 105], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 12, 15, 12, 1, 1, 0, 0, 103], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 12, 23, 12, 1, 1, 0, 0, 173], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [460, 0, 12, 31, 12, 1, 2, 1, 0, 448], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [365, 0, 14, 31, 12, 1, 2, 1, 0, 449], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [325, 0, 14, 31, 12, 1, 2, 1, 0, 450], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [225, 0, 15, 31, 12, 1, 2, 1, 0, 451], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [125, 0, 15, 31, 12, 1, 2, 1, 0, 452], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 15, 31, 12, 1, 2, 1, 0, 470], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 15, 31, 12, 1, 2, 2, 0, 500], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 16, 31, 13, 1, 2, 2, 0, 550], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 16, 47, 13, 1, 2, 2, 0, 574], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 16, 47, 13, 1, 2, 2, 0, 576], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [10, 0, 13, 15, 12, 1, 1, 0, 0, 103], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [15, 0, 13, 15, 12, 1, 1, 0, 0, 105], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [10, 0, 13, 15, 12, 1, 1, 0, 0, 103], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 14, 23, 13, 1, 1, 0, 0, 172], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 14, 23, 14, 1, 2, 1, 0, 223], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 14, 23, 14, 1, 2, 1, 0, 293], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 14, 31, 14, 1, 2, 2, 0, 358], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 14, 31, 14, 1, 2, 3, 0, 379], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 15, 31, 15, 1, 2, 3, 0, 448], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 15, 31, 15, 1, 2, 3, 0, 450], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 102], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 152], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 12, 23, 12, 1, 1, 0, 0, 199], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 12, 39, 12, 1, 1, 0, 0, 281], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 39, 12, 1, 2, 1, 0, 306], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 47, 13, 1, 2, 1, 0, 377], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 47, 13, 1, 2, 2, 0, 423], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 47, 13, 1, 2, 2, 0, 496], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [25, 0, 13, 55, 13, 1, 2, 3, 0, 555], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 15, 55, 13, 1, 2, 3, 0, 609], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 15, 55, 13, 1, 2, 4, 0, 636], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 16, 55, 13, 1, 2, 4, 0, 684], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 16, 55, 13, 1, 2, 4, 0, 702], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 17, 55, 14, 1, 2, 4, 0, 704], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 13, 15, 13, 1, 0, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 96], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 14, 15, 13, 1, 1, 0, 0, 98], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [75, 0, 12, 23, 12, 1, 1, 0, 0, 160], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [530, 0, 12, 23, 12, 1, 2, 1, 0, 433], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [380, 0, 14, 23, 12, 1, 2, 1, 0, 434], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [280, 0, 14, 23, 12, 1, 2, 1, 0, 435], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [185, 0, 14, 23, 12, 1, 2, 1, 0, 436], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [670, 0, 16, 31, 12, 1, 2, 2, 2, 682], 'reward': 3319, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 13, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 13, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 13, 15, 13, 1, 0, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 122], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 171], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [10, 0, 13, 15, 13, 1, 1, 0, 0, 173], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 12, 15, 12, 1, 1, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 13, 15, 12, 1, 1, 0, 0, 103], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [20, 0, 13, 15, 12, 1, 1, 0, 0, 105], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 12, 15, 12, 1, 1, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 13, 15, 12, 1, 1, 0, 0, 103], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [20, 0, 13, 15, 12, 1, 1, 0, 0, 105], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 0, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [90, 0, 13, 23, 13, 1, 1, 0, 0, 185], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [40, 0, 13, 23, 13, 1, 1, 0, 0, 186], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 14, 23, 13, 1, 1, 0, 0, 192], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [545, 0, 15, 23, 15, 1, 2, 1, 0, 464], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [450, 0, 17, 23, 15, 1, 2, 1, 0, 465], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [350, 0, 17, 23, 15, 1, 2, 1, 0, 466], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [965, 0, 19, 31, 15, 1, 2, 1, 2, 713], 'reward': 3288, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 13, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 13, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 13, 15, 13, 1, 0, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 95], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 14, 15, 13, 1, 1, 0, 0, 97], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 13, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 13, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 0, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 95], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 14, 15, 13, 1, 1, 0, 0, 122], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 14, 15, 13, 1, 1, 0, 0, 124], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 102], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 12, 23, 12, 1, 1, 0, 0, 173], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 12, 31, 12, 1, 2, 1, 0, 253], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 12, 31, 12, 1, 2, 2, 0, 300], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [190, 0, 12, 39, 12, 1, 2, 2, 0, 447], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [95, 0, 14, 39, 12, 1, 2, 2, 0, 448], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [465, 0, 16, 39, 12, 1, 2, 2, 2, 630], 'reward': 3371, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 13, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [25, 0, 13, 23, 13, 1, 1, 0, 0, 163], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [520, 0, 13, 23, 13, 1, 2, 1, 0, 442], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [420, 0, 15, 23, 13, 1, 2, 1, 0, 443], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [965, 0, 17, 23, 13, 1, 2, 1, 2, 691], 'reward': 3310, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 13, 15, 13, 1, 0, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [95, 0, 13, 23, 13, 1, 1, 0, 0, 189], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 23, 13, 1, 2, 1, 0, 212], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 23, 13, 1, 2, 2, 0, 283], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 23, 13, 1, 2, 3, 0, 357], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 13, 23, 13, 1, 2, 4, 0, 425], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 23, 13, 1, 2, 5, 0, 473], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 15, 23, 13, 1, 2, 5, 0, 520], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 15, 23, 13, 1, 2, 5, 0, 541], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 16, 23, 13, 1, 2, 5, 0, 592], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [355, 0, 18, 31, 14, 1, 2, 5, 2, 745], 'reward': 3256, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [15, 0, 13, 23, 13, 1, 1, 0, 0, 158], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 23, 13, 1, 2, 1, 0, 172], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [485, 0, 14, 23, 14, 1, 2, 1, 0, 432], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [435, 0, 16, 23, 14, 1, 2, 1, 0, 433], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [435, 0, 17, 23, 14, 1, 2, 1, 0, 435], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [75, 0, 12, 23, 12, 1, 1, 0, 0, 161], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [540, 0, 12, 23, 12, 1, 2, 1, 0, 436], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [440, 0, 14, 23, 12, 1, 2, 1, 0, 437], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [390, 0, 14, 23, 12, 1, 2, 1, 0, 438], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [340, 0, 15, 23, 12, 1, 2, 1, 0, 439], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [240, 0, 15, 23, 12, 1, 2, 1, 0, 440], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [90, 0, 15, 23, 12, 1, 2, 1, 0, 441], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 15, 23, 12, 1, 2, 1, 0, 446], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [505, 0, 18, 39, 14, 1, 2, 2, 2, 685], 'reward': 3316, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 0, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 95], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 14, 15, 13, 1, 1, 0, 0, 97], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 0, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 95], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 14, 15, 13, 1, 1, 0, 0, 97], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 13, 15, 13, 1, 0, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 122], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 13, 15, 13, 1, 1, 0, 0, 124], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 0, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [95, 0, 13, 23, 13, 1, 1, 0, 0, 189], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [610, 0, 13, 23, 13, 1, 2, 1, 0, 465], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [510, 0, 15, 23, 13, 1, 2, 1, 0, 466], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [1055, 0, 17, 23, 13, 1, 2, 1, 2, 714], 'reward': 3287, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 13, 15, 12, 1, 1, 0, 0, 74], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 0, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 122], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 23, 13, 1, 1, 0, 0, 194], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 31, 13, 1, 2, 1, 0, 264], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 31, 13, 1, 2, 2, 0, 312], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 31, 13, 1, 2, 2, 0, 335], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 14, 31, 13, 1, 2, 2, 0, 359], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 14, 31, 13, 1, 2, 2, 0, 361], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [70, 0, 12, 23, 12, 1, 1, 0, 0, 160], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [20, 0, 12, 23, 12, 1, 1, 0, 0, 161], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 13, 23, 12, 1, 2, 1, 0, 226], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 23, 13, 1, 2, 2, 0, 298], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [190, 0, 13, 23, 13, 1, 2, 3, 0, 435], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [90, 0, 15, 23, 13, 1, 2, 3, 0, 436], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [455, 0, 17, 23, 13, 1, 2, 3, 2, 603], 'reward': 3398, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 0, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 13, 15, 13, 1, 0, 0, 0, 74], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 0, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 122], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 171], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 23, 13, 1, 1, 0, 0, 216], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 31, 13, 1, 1, 0, 0, 240], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 14, 39, 14, 1, 1, 0, 0, 310], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 14, 47, 14, 1, 2, 1, 0, 376], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 14, 47, 14, 1, 2, 2, 0, 445], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 14, 47, 14, 1, 2, 3, 0, 511], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 14, 47, 14, 1, 2, 4, 0, 577], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 14, 47, 14, 1, 2, 4, 0, 593], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 15, 47, 15, 1, 2, 5, 0, 666], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 15, 47, 15, 1, 2, 6, 0, 709], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [10, 0, 15, 47, 15, 1, 2, 6, 0, 711], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 13, 15, 13, 1, 0, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 122], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 145], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 14, 15, 13, 1, 1, 0, 0, 172], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [10, 0, 14, 15, 13, 1, 1, 0, 0, 174], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 13, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 12, 15, 12, 1, 1, 0, 0, 103], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 12, 23, 12, 1, 1, 0, 0, 173], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 23, 12, 1, 2, 1, 0, 199], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 31, 12, 1, 2, 1, 0, 228], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 14, 31, 13, 1, 2, 1, 0, 302], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 14, 31, 13, 1, 2, 2, 0, 325], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 15, 31, 14, 1, 2, 2, 0, 376], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 15, 31, 15, 1, 2, 2, 0, 419], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 15, 31, 15, 1, 2, 2, 0, 463], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 17, 39, 15, 1, 2, 2, 0, 523], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 17, 47, 15, 1, 2, 3, 0, 567], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [275, 0, 19, 47, 15, 1, 2, 3, 2, 678], 'reward': 3323, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 0, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 122], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 13, 15, 13, 1, 1, 0, 0, 124], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 13, 15, 13, 1, 0, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [15, 0, 13, 15, 13, 1, 0, 0, 0, 76], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 12, 15, 12, 1, 1, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [25, 0, 13, 23, 13, 1, 1, 0, 0, 163], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 23, 13, 1, 2, 1, 0, 199], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 23, 13, 1, 2, 1, 0, 267], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 31, 13, 1, 2, 2, 0, 342], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 31, 13, 1, 2, 3, 0, 390], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 31, 13, 1, 2, 3, 0, 442], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 15, 39, 13, 1, 2, 3, 0, 510], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 15, 39, 13, 1, 2, 4, 0, 582], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 15, 39, 13, 1, 2, 5, 1, 632], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 15, 39, 13, 1, 2, 5, 1, 685], 'reward': 0, 'action': None, 'done': False})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 99], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 12, 23, 12, 1, 1, 0, 0, 173], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 12, 31, 12, 1, 2, 1, 0, 226], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 12, 31, 12, 1, 2, 1, 0, 281], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 12, 39, 12, 1, 2, 1, 0, 352], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 12, 47, 12, 1, 2, 2, 0, 403], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 47, 12, 1, 2, 2, 0, 431], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 47, 13, 1, 2, 2, 0, 508], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 55, 13, 1, 2, 3, 0, 553], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 15, 55, 13, 1, 2, 3, 0, 621], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 15, 55, 13, 1, 2, 4, 0, 666], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 15, 55, 13, 1, 2, 4, 1, 717], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 15, 63, 13, 1, 2, 4, 1, 788], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 15, 63, 13, 1, 2, 5, 1, 810], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 16, 71, 14, 1, 2, 5, 1, 880], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 16, 71, 14, 1, 2, 6, 1, 948], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 16, 71, 14, 1, 2, 6, 1, 970], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 17, 71, 14, 1, 2, 6, 1, 972], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 100], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 12, 23, 12, 1, 1, 0, 0, 173], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 23, 12, 1, 2, 1, 0, 201], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 31, 12, 1, 2, 1, 0, 226], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 13, 31, 12, 1, 2, 1, 0, 253], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [15, 0, 13, 31, 12, 1, 2, 1, 0, 255], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 14, 15, 13, 1, 0, 0, 0, 96], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 14, 15, 13, 1, 0, 0, 0, 98], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 12, 15, 12, 1, 1, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 1, 0, 0, 102], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 14, 15, 13, 1, 1, 0, 0, 146], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 14, 23, 13, 1, 1, 0, 0, 172], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 14, 23, 13, 1, 1, 0, 0, 174], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [70, 0, 12, 23, 12, 1, 1, 0, 0, 158], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [20, 0, 12, 23, 12, 1, 1, 0, 0, 159], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 23, 12, 1, 2, 1, 0, 226], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 23, 13, 1, 2, 2, 0, 294], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 23, 13, 1, 2, 3, 0, 343], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 13, 23, 13, 1, 2, 3, 0, 390], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 31, 13, 1, 2, 3, 0, 462], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 13, 39, 13, 1, 2, 4, 0, 510], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [10, 0, 15, 39, 13, 1, 2, 4, 0, 559], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [250, 0, 17, 39, 13, 1, 2, 4, 2, 666], 'reward': 3335, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 14, 15, 13, 1, 0, 0, 0, 96], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [85, 0, 14, 23, 14, 1, 1, 0, 0, 211], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [645, 0, 14, 23, 14, 1, 2, 1, 0, 492], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [550, 0, 16, 23, 14, 1, 2, 1, 0, 493], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [1130, 0, 18, 23, 14, 1, 2, 1, 2, 741], 'reward': 3260, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 13, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 13, 15, 13, 1, 0, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [15, 0, 13, 15, 13, 1, 0, 0, 0, 76], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 13, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 0, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 122], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 171], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 31, 13, 1, 1, 0, 0, 240], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 31, 13, 1, 2, 1, 0, 265], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 14, 39, 13, 1, 2, 1, 0, 310], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [370, 0, 14, 47, 14, 1, 2, 1, 0, 515], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [220, 0, 16, 47, 14, 1, 2, 1, 0, 516], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [120, 0, 16, 47, 14, 1, 2, 1, 0, 517], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [705, 0, 18, 47, 14, 1, 2, 2, 2, 764], 'reward': 3237, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [75, 0, 12, 23, 12, 1, 1, 0, 0, 161], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [25, 0, 12, 23, 12, 1, 1, 0, 0, 162], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 23, 12, 1, 2, 1, 0, 226], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [365, 0, 13, 23, 13, 1, 2, 2, 0, 441], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [265, 0, 15, 23, 13, 1, 2, 2, 0, 442], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [165, 0, 15, 23, 13, 1, 2, 2, 0, 443], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [20, 0, 15, 23, 13, 1, 2, 2, 0, 444], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 15, 23, 13, 1, 2, 2, 0, 450], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 16, 23, 13, 1, 2, 3, 0, 511], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 16, 23, 14, 1, 2, 3, 0, 530], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 17, 23, 14, 1, 2, 3, 0, 532], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 12, 15, 12, 1, 1, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [10, 0, 13, 15, 12, 1, 1, 0, 0, 76], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 13, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 13, 15, 13, 1, 0, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [95, 0, 13, 23, 13, 1, 1, 0, 0, 189], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [50, 0, 13, 23, 13, 1, 1, 0, 0, 190], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 14, 23, 13, 1, 2, 1, 0, 238], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 14, 23, 14, 1, 2, 2, 0, 264], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 15, 23, 14, 1, 2, 2, 0, 329], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 15, 23, 15, 1, 2, 3, 0, 391], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 15, 23, 15, 1, 2, 4, 0, 456], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 15, 23, 15, 1, 2, 5, 0, 499], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 17, 23, 15, 1, 2, 5, 0, 539], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [265, 0, 19, 23, 15, 1, 2, 5, 2, 644], 'reward': 3357, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [25, 0, 13, 23, 13, 1, 1, 0, 0, 163], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [520, 0, 13, 23, 13, 1, 2, 1, 0, 443], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [425, 0, 15, 23, 13, 1, 2, 1, 0, 444], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [965, 0, 17, 23, 13, 1, 2, 1, 2, 692], 'reward': 3309, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [15, 0, 13, 15, 12, 1, 1, 0, 0, 103], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 1, 0, 0, 123], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 13, 15, 12, 1, 1, 0, 0, 125], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [5, 0, 13, 15, 13, 1, 0, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 122], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 1, 0, 0, 172], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 13, 31, 13, 1, 1, 0, 0, 241], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 39, 13, 1, 2, 1, 0, 291], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [405, 0, 13, 47, 13, 1, 2, 1, 0, 521], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [310, 0, 15, 47, 13, 1, 2, 1, 0, 522], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [860, 0, 17, 47, 13, 1, 2, 1, 2, 770], 'reward': 3231, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 13, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [70, 0, 12, 23, 12, 1, 1, 0, 0, 160], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [530, 0, 12, 23, 12, 1, 2, 1, 0, 435], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [430, 0, 14, 23, 12, 1, 2, 1, 0, 436], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [330, 0, 14, 23, 12, 1, 2, 1, 0, 437], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [830, 0, 16, 31, 12, 1, 2, 1, 2, 684], 'reward': 3317, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [10, 0, 12, 15, 12, 1, 1, 0, 0, 103], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [15, 0, 12, 15, 12, 1, 1, 0, 0, 105], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 14, 15, 13, 1, 0, 0, 0, 96], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 14, 15, 13, 1, 0, 0, 0, 98], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 13, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 13, 15, 12, 1, 1, 0, 0, 74], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [10, 0, 12, 15, 12, 1, 1, 0, 0, 103], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 12, 15, 12, 1, 1, 0, 0, 152], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 12, 23, 12, 1, 1, 0, 0, 172], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 13, 23, 12, 1, 1, 0, 0, 199], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 13, 23, 12, 1, 1, 0, 0, 201], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(3, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 12, 15, 12, 1, 1, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [20, 0, 13, 23, 13, 1, 1, 0, 0, 160], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 23, 13, 1, 2, 1, 0, 224], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [335, 0, 13, 23, 13, 1, 2, 2, 0, 430], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [240, 0, 15, 23, 13, 1, 2, 2, 0, 431], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [140, 0, 15, 23, 13, 1, 2, 2, 0, 432], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 15, 23, 13, 1, 2, 2, 0, 438], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [5, 0, 15, 23, 13, 1, 2, 3, 0, 516], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [0, 0, 15, 39, 13, 1, 2, 4, 0, 565], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [335, 0, 17, 39, 13, 1, 2, 4, 2, 718], 'reward': 3283, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 13, 15, 12, 1, 0, 0, 0, 2], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 12, 15, 12, 1, 1, 0, 0, 74], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 13, 15, 12, 1, 1, 0, 0, 103], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [0, 0, 13, 15, 12, 1, 1, 0, 0, 123], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 14, 23, 13, 1, 1, 0, 0, 172], 'reward': 0, 'action': None, 'done': False})
+(2, {'state': [0, 0, 15, 23, 14, 1, 1, 0, 0, 243], 'reward': 0, 'action': None, 'done': False})
+(0, {'state': [5, 0, 15, 23, 14, 1, 1, 0, 0, 245], 'reward': 0, 'action': None, 'done': True})
+
+(2, {'state': [50, 0, 12, 15, 12, 1, 0, 0, 0, 1], 'reward': 0, 'action': None, 'done': True})
+
+(1, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 45], 'reward': 0, 'action': None, 'done': False})
+(3, {'state': [5, 0, 12, 15, 12, 1, 0, 0, 0, 47], 'reward': 0, 'action': None, 'done': True})
+
+(0, {'state': [0, 0, 12, 15, 12, 1, 0, 0, 0, 0], 'reward': 0, 'action': None, 'done': False})
+(1, {'state': [0, 0, 13, 15, 13, 1, 0, 0, 0, 72], 'reward': 0, 'action': None, 'done': False})
+
