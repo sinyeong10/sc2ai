@@ -36,14 +36,15 @@ if not os.path.exists(logdir):
 env = Sc2Env()
 
 try:
-    model = PPO.load(f"{models_dir}/sin_ppo_1", env=env)
+    model = PPO.load(r"models/sin_ppo_1/4.zip", env=env)
+    print("모델 로드함")
 except:
-    print("모델 못 불러옴 새로 함")  
     model = PPO('MlpPolicy', env, verbose=1, tensorboard_log=logdir, n_steps=512, batch_size=8)
+    print("모델 못 불러옴 새로 함")  
 
 TIMESTEPS = 1 #10000
-iters = 1
-while iters < 5:
+iters = 4
+while iters < 8:
     print("\n\n\nOn iteration: ", iters)
     iters += 1
     model.learn(total_timesteps=TIMESTEPS, tb_log_name=f"PPO") #, reset_num_timesteps=False
