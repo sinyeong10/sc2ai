@@ -68,6 +68,35 @@ except Exception as e:
 
 
 
+if order['action'] == -1:
+    print("\n\n가상환경실행안시키고 조기 종료함")
+    
+    first_map = [50, 0, 12, 15, 12, 1, 0, 0, 0, 1]
+    print("c/i", "end game", first_map, 0)
+    data = {"state": first_map, "reward": 0, "action": None, "done": True}  # empty action waiting for the next one!
+    with open('state_rwd_action.pkl', 'wb') as f:
+        pickle.dump(data, f)
+        
+    try:
+        # state_rwd_action.pkl 파일 전송
+        with open("state_rwd_action.pkl", "rb") as f:
+            data = f.read()
+        client_socket.sendall(data)
+        print("c/i", "state_rwd_action.pkl 파일을 서버에 성공적으로 전송하였습니다.")
+    except Exception as e:
+        print("c/i", f"상태 반환 안해주는 오류 발생: {e}")
+    finally:
+        # 클라이언트 소켓 닫기
+        client_socket.close()
+        print("c/i", "client 소켓 종료")
+
+    cv2.destroyAllWindows()
+    cv2.waitKey(1)
+    time.sleep(3)
+    sys.exit()
+
+
+
 
 SAVE_REPLAY = True
 
@@ -160,18 +189,26 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                     f.write(order_data)
                 print("c/i", "order.pkl 파일을 서버로부터 성공적으로 수신하였습니다.")
                 # print(order_data)
-                
+            except Exception as e:    
+                print("c/i", "order.pkl 파일의 수신 에러")
                 #client 종료시 b''인 빈 문자열이 전송되기 때문에 문제 발생!!
 
+            if order_data == b"":
+                print("c/i", f"받길 기다리는 데 안오는 오류 발생함")
+                stop_flag = True #종료 시켜야 함
+
+            try:
                 with open("./order.pkl", "rb") as f:
                     order = pickle.load(f)
                 print("c/i", "order :", order)
 
             except Exception as e:
-                print("c/i", f"받길 기다리는 데 안오는 오류 발생: {e}")
+                print("c/i", f"파일이 잘못된 오류 발생: {e}")
                 #여기서 iter하나가 timestep을 다 채워서 reset시 문제 발생
                 # client_socket.close() #여기서 닫아버리면 이후에 문제 발생
                 stop_flag = True #종료 시켜야 함
+                #위의 if문으로 처리하게 함!
+
         if stop_flag:
             print("다음 프레임에 종료됨")
 
@@ -209,6 +246,8 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         #따라서 먼저 처리!
         while self.needzealot > 0 and self.structures(UnitTypeId.GATEWAY).ready.idle:
             accel = self.structures(UnitTypeId.GATEWAY).ready.idle.random
+            #근데 질럿 생산시 필요한 자원이 없으면 에러!
+
             accel.train(UnitTypeId.ZEALOT)
             print(accel, "생산함")
             await self.do_chrono_boost(accel)
@@ -218,6 +257,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         self.make() #같은 클래스에서 명령 할당! #원래 위치
         
         #order.pkl파일에서 flag 속성에 따라 처리하는 걸 기다리는 것 대신 socket의 수신, 발신 구조로 처리했었음
+        #여기서 order.pkl 파일 매번 다시 읽음! 없으면 처음 명령만 반복됨!
         while no_action:
             try: #파일을 미리 생성
                 with open('order.pkl', 'rb') as f:
@@ -231,7 +271,9 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                         no_action = False
                         #다른 코드에서 해당 파일을 수정하였으므로 명령이 입력됨!
             except:
-                print("c/i", "order.pkl 오류 난 파일이다 고쳐야한다...") #여기가 서버 종료 값을 여기서 받는 게 문제였음
+                if self.check:
+                    self.check = False
+                    print("c/i", "order.pkl 오류 난 파일이다 고쳐야한다...") #여기가 서버 종료 값을 여기서 받는 게 문제였음
 
         await self.distribute_workers() # put idle workers back to work
 
@@ -409,6 +451,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                     self.do(nexus(AbilityId.EFFECT_CHRONOBOOSTENERGYCOST, target_structure))
                     break #한번만 하면 됨!
 
+print("겜 실행")
 
 result = run_game(  # run_game is a function that runs the game.
     maps.get("Simple64"), # the map we are playing on
@@ -417,6 +460,7 @@ result = run_game(  # run_game is a function that runs the game.
     realtime=False, # When set to True, the agent is limited in how long each step can take to process.
 )
 
+print("겜 종료")
 
 with open("results.txt","a") as f:
     f.write(f"{result}\n")

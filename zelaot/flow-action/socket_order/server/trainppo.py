@@ -6,7 +6,7 @@ from wandb.integration.sb3 import WandbCallback
 import wandb
 
 
-model_name = "sin_ppo"#f"{int(time.time())}"
+model_name = "sin_ppo_1"#f"{int(time.time())}"
 
 models_dir = f"models/{model_name}/"
 logdir = f"logs/{model_name}/"
@@ -35,10 +35,14 @@ if not os.path.exists(logdir):
 
 env = Sc2Env()
 
-model = PPO('MlpPolicy', env, verbose=1, tensorboard_log=logdir, n_steps=256, batch_size=8)
+try:
+    model = PPO.load(f"{models_dir}/sin_ppo_1", env=env)
+except:
+    print("모델 못 불러옴 새로 함")  
+    model = PPO('MlpPolicy', env, verbose=1, tensorboard_log=logdir, n_steps=512, batch_size=8)
 
 TIMESTEPS = 1 #10000
-iters = 0
+iters = 1
 while iters < 5:
     print("\n\n\nOn iteration: ", iters)
     iters += 1
