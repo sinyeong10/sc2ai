@@ -73,7 +73,7 @@ if order['action'] == -1:
     
     first_map = [50, 0, 12, 15, 12, 1, 0, 0, 0, 1]
     print("c/i", "end game", first_map, 0)
-    data = {"state": first_map, "reward": 0, "action": None, "done": True}  # empty action waiting for the next one!
+    data = {"state": first_map, "reward": -1000, "action": None, "done": True}  # empty action waiting for the next one!
     with open('state_rwd_action.pkl', 'wb') as f:
         pickle.dump(data, f)
         
@@ -96,7 +96,7 @@ if order['action'] == -1:
     sys.exit()
 
 
-
+reward = 100
 
 SAVE_REPLAY = True
 
@@ -105,7 +105,7 @@ SAVE_REPLAY = True
 # step_punishment = ((np.exp(steps_for_pun**3)/10) - 0.1)*10
 
 early_stop = 0
-reward = 0
+# reward = 0
 
 # try:
 #     order = list(map(int, sys.argv[1].split()))
@@ -222,6 +222,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         global map #환경 정보 저장용
         global stop_flag #빨리 종료 시키기 위함
         global Tech_level
+        reward = -1
         if iteration == 0:
             self.check = True
             self.needzealot = 0
@@ -235,6 +236,16 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
             await self.client.leave() # 게임 종료
             # time.sleep(3)
             print("c/i", "\n\n게임 종료\n\n")
+            with open('order.pkl', 'rb') as f:
+                    order = pickle.load(f)
+            action = order['action']
+            print("action", action)
+            if action == -1:
+                reward = -1000
+            elif action == 9:
+                reward = int(early_stop)*int(early_stop)//1000
+            else:
+                print("\n\n\n\n명령 오류!!!!\n\n\n\n")
 
         no_action = True
 
@@ -316,6 +327,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         #예외 처리는 다 모델에서 처리함!
         if action == -1:
             stop_flag = True
+            reward = -100
 
         if self.townhalls:
             nexus = self.townhalls.random
@@ -469,7 +481,7 @@ print("c/i", "\n\nresult 값 처리 함\n\n")
 
 
 
-reward = int(early_stop)
+# reward = int(early_stop)
 
 # map = [0,0,0,0,0,0,0,0,0,0] #np.zeros((88, 96, 3), dtype=np.uint8)  #(224, 224였음)
 print("c/i", "end game", map, reward)
