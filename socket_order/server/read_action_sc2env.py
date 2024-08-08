@@ -16,7 +16,7 @@ class Sc2Env(gym.Env):
         # Example when using discrete actions:
         self.action_space = spaces.Discrete(4)
 
-        
+        #환경 값
         #[minerals, gas / population, max_population / number_of_workers, number_of_nexuses
         #/tech_level / number_of_gate, number_of_zealot / iteration]
         # 이산 변수 (0부터 n-1까지 범위)
@@ -184,6 +184,7 @@ class Sc2Env(gym.Env):
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         # 서버 주소와 포트 설정
+        #컴퓨터 ip주소 설정
         server_address = ('172.30.1.45', 12345)  # 모든 네트워크 인터페이스에 바인딩
         self.server_socket.bind(server_address)
 
@@ -191,7 +192,7 @@ class Sc2Env(gym.Env):
         self.server_socket.listen(1)
         print("s/r", "서버가 시작되었습니다. 클라이언트 연결을 기다립니다...")
 
-        subprocess.Popen(['python3', r'zelaot\flow-action\socket_order\client\incredibot-sct.py'])
+        subprocess.Popen(['python3', r'socket_order\client\incredibot-sct.py'])
 
         # 클라이언트 연결 대기
         self.client_socket, self.client_address = self.server_socket.accept()

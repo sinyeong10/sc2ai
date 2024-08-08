@@ -2,7 +2,7 @@ from stable_baselines3 import PPO
 from read_action_sc2env import Sc2Env
 
 
-LOAD_MODEL = r"models\sin_ppo_1\5.zip"
+LOAD_MODEL = r"models\sin_ppo_1\5.zip" #불러올 모델명
 # Environment:
 env = Sc2Env()
 # env.reset()

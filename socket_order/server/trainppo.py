@@ -1,3 +1,4 @@
+#stable_baselines3에 있는 모든 모델 가능
 from stable_baselines3 import PPO
 import os
 from read_action_sc2env import Sc2Env
@@ -6,7 +7,7 @@ from wandb.integration.sb3 import WandbCallback
 import wandb
 
 
-model_name = "sin_ppo_1"#f"{int(time.time())}"
+model_name = f"{int(time.time())}" #저장할 모델명 설정
 
 models_dir = f"models/{model_name}/"
 logdir = f"logs/{model_name}/"
@@ -20,7 +21,7 @@ conf_dict = {"Model": "v19",
 
 run = wandb.init(
     project=f'SC2RLv6',
-    entity="cbrnt1210",#"ericoh5050", #"sentdex",
+    entity="cbrnt1210",#"ericoh5050", #"sentdex", #여길 wandb 계정이름으로
     config=conf_dict,
     sync_tensorboard=True,  # auto-upload sb3's tensorboard metrics
     save_code=True,  # optional
@@ -36,14 +37,14 @@ if not os.path.exists(logdir):
 env = Sc2Env()
 
 try:
-    model = PPO.load(r"models/sin_ppo_1/4.zip", env=env)
+    model = PPO.load(r"models/sin_ppo_1/4.zip", env=env) #이전 모델이 있어 이어서 학습하는 경우, iters만 수정하여 하면 됨
     print("모델 로드함")
 except:
     model = PPO('MlpPolicy', env, verbose=1, tensorboard_log=logdir, n_steps=512, batch_size=8)
     print("모델 못 불러옴 새로 함")  
 
 TIMESTEPS = 1 #10000
-iters = 4
+iters = 0
 while iters < 8:
     print("\n\n\nOn iteration: ", iters)
     iters += 1
