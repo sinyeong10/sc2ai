@@ -2,7 +2,7 @@ from stable_baselines3 import DQN
 from read_action_sc2env import Sc2Env
 
 
-LOAD_MODEL = r"C:\sc2ai\models\sin_dqn_1\900.zip"
+LOAD_MODEL = r"models\sin_dqn_min_action\12200.zip"
 # Environment:
 env = Sc2Env()
 # env.reset()

@@ -20,7 +20,7 @@ class Sc2Env(gym.Env):
         #[minerals, gas / population, max_population / number_of_workers, number_of_nexuses
         #/tech_level / number_of_gate, number_of_zealot / iteration]
         # 이산 변수 (0부터 n-1까지 범위)
-        self.observation_space = spaces.MultiDiscrete([2001, 2001, 201, 201, 45, 3, 4, 10, 25, 4001])
+        self.observation_space = spaces.MultiDiscrete([201, 201, 45, 3, 4, 10, 25, 4001]) #2001, 2001, 자원 값 삭제
         #Box(low=0, high=255,shape=(88, 96, 3), dtype=np.uint8) #(224, 224였음)
         
 
@@ -137,7 +137,7 @@ class Sc2Env(gym.Env):
 
 
         info = {}
-        observation = state
+        observation = state[2:] #자원 값 삭제
         return observation, reward, done, info
 
     def reset(self):
@@ -152,7 +152,7 @@ class Sc2Env(gym.Env):
         # subprocess.Popen(['python3', r'zelaot\flow-action\socket_order\client\incredibot-sct.py'])
         
         self.server_set()
-        return observation  # reward, done, info can't be included
+        return observation[2:] #자원 값 삭제  # reward, done, info can't be included
         
 
 
@@ -184,7 +184,7 @@ class Sc2Env(gym.Env):
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         # 서버 주소와 포트 설정
-        server_address = ('172.30.1.45', 12345)  # 모든 네트워크 인터페이스에 바인딩
+        server_address = ('172.30.1.43', 12345)  # 모든 네트워크 인터페이스에 바인딩
         self.server_socket.bind(server_address)
 
         # 클라이언트 연결을 기다림

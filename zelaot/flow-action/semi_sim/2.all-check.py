@@ -22,6 +22,6 @@ import subprocess
 for i in range(len(loaded_order)):
     order = next(nested_list_iterator)
     print(i, order)
-    subprocess.run(["python", '질럿 최적화/flow-action/fix-order/incredibot-sct.py', ' '.join(map(str, order))])
+    subprocess.run(["python", 'zelaot/flow-action/semi_sim/3.read_action.py', ' '.join(map(str, order))])
 # print(ans)
 print("end")

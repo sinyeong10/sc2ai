@@ -1,6 +1,16 @@
 #서버 강화학습 돌릴 컴퓨터 : 이거 먼저 실행되야 함!
 from sys import stdin
 import pickle
+import sys
+
+try:
+    all_order = list(map(int, sys.argv[1].split()))
+except:
+    print("order이 전달되지 않음!")
+    all_order = [0,0,1,2,2,3,3,9]
+    # sys.exit()
+cnt = 0
+user_order = False
 
 log = [[], []]
 
@@ -32,6 +42,10 @@ server_socket.bind(server_address)
 server_socket.listen(1)
 print("서버가 시작되었습니다. 클라이언트 연결을 기다립니다...")
 
+import subprocess
+# subprocess.Popen(["python", 'zelaot/flow-action/socket_order/client/incredibot-sct.py'])
+subprocess.Popen(["python", 'zelaot/flow-action/semi_sim/4.semi_sim.py'])
+
 # 클라이언트 연결 대기
 client_socket, client_address = server_socket.accept()
 print(f"클라이언트가 연결되었습니다.") # {client_address}
@@ -41,12 +55,18 @@ end_flag = False
 first_check_flag = False #어느 시점에서 불가능한 경우를 처리할 지
 
 while True:
-    print('사용자 명령을 입력해주세요')
-    user_ans = int(stdin.readline())
-
-    while user_ans not in [-1,0,1,2,3,4,5,6,7,8,9]:
-        print('사용자 명령을 다시 입력해주세요')
+    if user_order:
+        print('사용자 명령을 입력해주세요')
         user_ans = int(stdin.readline())
+        while user_ans not in [-1,0,1,2,3,4,5,6,7,8,9]:
+            print('사용자 명령을 다시 입력해주세요')
+            user_ans = int(stdin.readline())
+    elif all_order:
+        user_ans = all_order[cnt]
+        cnt += 1
+    else:
+        print("명령을 받을 수단이 없당")
+        
     if first_check_flag:
         if log[0].count(3) == 2:
                 user_ans = 9

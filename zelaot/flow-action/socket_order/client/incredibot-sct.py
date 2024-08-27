@@ -42,7 +42,7 @@ import socket
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # 서버 주소와 포트 설정 (서버의 IP 주소와 포트 번호)
-server_address = ('172.30.1.45', 12345)  # 예시: 서버의 IP 주소와 포트 번호를 적절히 설정
+server_address = ('172.30.1.43', 12345)  # 예시: 서버의 IP 주소와 포트 번호를 적절히 설정
 
 try:
     # 서버에 연결
@@ -73,7 +73,7 @@ if order['action'] == -1:
     
     first_map = [50, 0, 12, 15, 12, 1, 0, 0, 0, 1]
     print("c/i", "end game", first_map, 0)
-    data = {"state": first_map, "reward": -1000, "action": None, "done": True}  # empty action waiting for the next one!
+    data = {"state": first_map, "reward": -1000, "action": order['action'], "done": True}  # empty action waiting for the next one!
     with open('state_rwd_action.pkl', 'wb') as f:
         pickle.dump(data, f)
         
@@ -445,7 +445,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         # write the file: 
         # observation(minimap), reward for this step, Action(None if waiting for action, otherwise 0,1,2,3,4,5), Is the game over
         # print("c\i", "state data 생성") #될때까지 매 프레임마다 state 생성
-        data = {"state": map, "reward": reward, "action": None, "done": False}  # empty action waiting for the next one!
+        data = {"state": map, "reward": reward, "action": action, "done": False}  # empty action waiting for the next one!
         with open('state_rwd_action.pkl', 'wb') as f:
             # Save this dictionary as a file(pickle)
             pickle.dump(data, f)
