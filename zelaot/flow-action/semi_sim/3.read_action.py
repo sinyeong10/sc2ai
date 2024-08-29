@@ -2,12 +2,12 @@
 from sys import stdin
 import pickle
 import sys
-
+flag = 0
 try:
     all_order = list(map(int, sys.argv[1].split()))
 except:
     print("order이 전달되지 않음!")
-    all_order = [0,0,1,2,2,3,3,9]
+    all_order = [0, 0, 0, 1, 0, 2, 2, 2, 3, 1, 3, 3, 3, 1, 3, 1,9]#[0,0,1,2,2,3,3,1,3,3,3,9]
     # sys.exit()
 cnt = 0
 user_order = False
@@ -18,7 +18,7 @@ def make_order(user_ans):
     #전송 flag, 명령의 순서, 명령
     order = {"flag":0, "idx":0, "action":user_ans}
 
-    print("user order :", order)
+    # print("user order :", order)
 
     with open("./socket_order.pkl", "wb") as f:
         pickle.dump(order, f)
@@ -27,7 +27,7 @@ data = {'state': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'reward': 0, 'action': None, 'd
 with open('state_rwd_action.pkl', 'wb') as f:
     # Save this dictionary as a file(pickle)
     pickle.dump(data, f)
-print("초기화 : ", data)
+# print("초기화 : ", data)
 
 import socket
 
@@ -43,8 +43,10 @@ server_socket.listen(1)
 print("서버가 시작되었습니다. 클라이언트 연결을 기다립니다...")
 
 import subprocess
-# subprocess.Popen(["python", 'zelaot/flow-action/socket_order/client/incredibot-sct.py'])
-subprocess.Popen(["python", 'zelaot/flow-action/semi_sim/4.semi_sim.py'])
+if flag == 0:
+    subprocess.Popen(["python", 'zelaot/flow-action/semi_sim/incredibot-sct.py'])
+else:
+    subprocess.Popen(["python", 'zelaot/flow-action/semi_sim/4.semi_sim.py'])
 
 # 클라이언트 연결 대기
 client_socket, client_address = server_socket.accept()
@@ -68,7 +70,7 @@ while True:
         print("명령을 받을 수단이 없당")
         
     if first_check_flag:
-        if log[0].count(3) == 2:
+        if log[0].count(3) == 5:
                 user_ans = 9
                 print("완료, 마지막 명령")
                 end_flag = True
@@ -91,7 +93,7 @@ while True:
             end_flag = True
     
 
-    print("do something")
+    # print("do something")
     make_order(user_ans)
 
     try:
@@ -99,7 +101,7 @@ while True:
         with open("socket_order.pkl", "rb") as f:
             order_data = f.read()
         client_socket.sendall(order_data)
-        print("socket_order.pkl 파일을 클라이언트에게 성공적으로 전송하였습니다.")
+        # print("socket_order.pkl 파일을 클라이언트에게 성공적으로 전송하였습니다.")
     except Exception as e:
         print(f"전송 오류 발생: {e}")
 
@@ -109,13 +111,13 @@ while True:
         data = client_socket.recv(1024)
         with open("rev_state_rwd_action.pkl", "wb") as f:
             f.write(data)
-        print("rev_state_rwd_action.pkl 파일을 성공적으로 수신하였습니다.")
+        # print("rev_state_rwd_action.pkl 파일을 성공적으로 수신하였습니다.")
     except Exception as e:
         print(f"수신 오류 발생: {e}")
 
     with open("./rev_state_rwd_action.pkl", "rb") as f:
         rev_state_rwd_action = pickle.load(f)
-    print("rev_state :", rev_state_rwd_action)
+    # print("rev_state :", rev_state_rwd_action)
     
     log[0].append(user_ans)
     log[1].append(rev_state_rwd_action)
@@ -128,17 +130,23 @@ while True:
         server_socket.close()
         break
 
-print(log)
+# print(log)
+
+if log[1][-1]["state"][-1] == 4001:
+    raise ValueError
 
 import datetime
 
 # 오늘 날짜를 기준으로 파일명 생성
 today = datetime.date.today()
-filename = f"log_{today}.txt"
+if flag == 0:
+    filename = f"5__full_log.txt"
+else:
+    filename = f"5__semi_log.txt"
 
 # 데이터를 파일에 저장
 with open(filename, 'a') as f:
     for elem in zip(log[0], log[1]):
         f.write(f"{elem}\n")
     f.write(f"\n")
-print(f"데이터가 {filename} 파일에 성공적으로 저장되었습니다.")
+# print(f"데이터가 {filename} 파일에 성공적으로 저장되었습니다.")

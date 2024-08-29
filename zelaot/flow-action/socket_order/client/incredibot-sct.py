@@ -243,7 +243,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
             if action == -1:
                 reward = -1000
             elif action == 9:
-                reward = int(early_stop)*int(early_stop)//1000
+                reward = np.exp(-0.01 * (iteration-1000)) #int(early_stop)*int(early_stop)//1000
             else:
                 print("\n\n\n\n명령 오류!!!!\n\n\n\n")
 

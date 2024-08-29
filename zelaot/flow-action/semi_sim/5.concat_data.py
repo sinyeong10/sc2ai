@@ -1,7 +1,7 @@
 # 파일 경로 설정
-file_path1 = 'zelaot/flow-action/semi_sim/full_log.txt'
-file_path2 = 'zelaot/flow-action/semi_sim/sim_log.txt'
-output_path = 'zelaot/flow-action/semi_sim/data.txt'
+file_path1 = 'zelaot/flow-action/semi_sim/5__full_log.txt'
+file_path2 = 'zelaot/flow-action/semi_sim/5__sim_log.txt'
+output_path = 'zelaot/flow-action/semi_sim/5__data.txt'
 
 # 결과를 저장할 리스트
 updated_lines = []

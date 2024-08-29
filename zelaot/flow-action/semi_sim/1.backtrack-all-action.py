@@ -12,7 +12,7 @@ mineral_field = 8
 order = []
 tmp = []
 def backtrack(idx, num_worker, num_pylon, num_gateway, num_jealot):
-    if num_jealot == 2: #2마리 달성 목표!
+    if num_jealot == 5: #2마리 달성 목표!
         order.append(tmp[:]+[9])
         return
     
@@ -31,23 +31,25 @@ def backtrack(idx, num_worker, num_pylon, num_gateway, num_jealot):
     #동시에 실시하면 일꾼, 파일런, 질럿의 순서로 완료됨
     #처음 파일런 조건을 추가! 일꾼 3마리를 먼저 뽑지 않아도 됨!
     if num_pylon == 0 or num_worker+2*num_jealot+ 1+2*num_gateway+1 > 15+num_pylon*8:
-        tmp.append(1)
+        if num_pylon > 3:
+            print("aa")
+        tmp.append(1) 
         backtrack(idx+1, num_worker, num_pylon+1, num_gateway, num_jealot)
         tmp.pop()
 
-    if num_pylon >= 1 and num_gateway<2: #기지 기반자원 수급량으로 최대 5개까지 가능
+    if num_pylon >= 1 and num_gateway<3: #기지 기반자원 수급량으로 최대 5개까지 가능
         tmp.append(2)
         backtrack(idx+1, num_worker, num_pylon, num_gateway+1, num_jealot)
         tmp.pop()
 
-    if 2 in tmp and 15 + num_pylon*8-num_worker >= 2: #게이트가 지어질 시 질럿 생산, 현재 인구수가 2이상일 시 질럿 생산
+    if 2 in tmp and 15 + num_pylon*8-num_worker-num_jealot*2 >= 2: #게이트가 지어질 시 질럿 생산, 현재 인구수가 2이상일 시 질럿 생산
         tmp.append(3)
         backtrack(idx+1, num_worker, num_pylon, num_gateway, num_jealot+1)
         tmp.pop()
 
 backtrack(0,12,0,0,0)
 print(len(order))
-print(order)
+# print(order)
 import pickle
 
 with open("./all_order.pkl", "wb") as f:

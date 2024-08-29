@@ -8,19 +8,19 @@ import pickle
 import time
 
 def init_set():
-    print("c/i", "값 초기화")
+    # print("c/i", "값 초기화")
     data = {"state": base, 'reward': 0, "action": None, "done": False}  # empty action waiting for the next one!
     with open('state_rwd_action.pkl', 'wb') as f:
         # Save this dictionary as a file(pickle)
         pickle.dump(data, f)
-    print("c/i", data)
+    # print("c/i", data)
 
     order = {"flag":0, "idx":0, "action":0}
 
     with open("./order.pkl", "wb") as f:
         pickle.dump(order, f)
 
-    print("c/i", "first order :", order)
+    # print("c/i", "first order :", order)
 
 init_set()
 socket_flag = True
@@ -47,22 +47,22 @@ def order_receive_state_send():
     global stop_flag
     reward = 0
     try:
-        print("c/i", "수신 대기")
+        # print("c/i", "수신 대기")
         # order.pkl 파일 수신
         order_data = client_socket.recv(1024)
         with open("order.pkl", "wb") as f:
             f.write(order_data)
-        print("c/i", "처음으로 order.pkl 파일을 서버로부터 성공적으로 수신하였습니다.")
+        # print("c/i", "처음으로 order.pkl 파일을 서버로부터 성공적으로 수신하였습니다.")
         
         with open("./order.pkl", "rb") as f:
             order_file = pickle.load(f)
-        print("c/i", "order :", order_file)
+        # print("c/i", "order :", order_file)
         order = order_file["action"]
 
     except Exception as e:
         print("c/i", f"처음 명령 수신 오류 발생: {e}")
 
-    if base[6] == 2:
+    if base[6] == 5:
         stop_flag = True
         
     if order == 0:
@@ -113,7 +113,7 @@ def order_receive_state_send():
         with open("state_rwd_action.pkl", "rb") as f:
             data = f.read()
         client_socket.sendall(data)
-        print("c/i", base, "state_rwd_action.pkl 파일을 서버에 성공적으로 전송하였습니다.")
+        # print("c/i", base, "state_rwd_action.pkl 파일을 서버에 성공적으로 전송하였습니다.")
     except Exception as e:
         print("c/i", f"상태 반환 안해주는 오류 발생: {e}")
 
