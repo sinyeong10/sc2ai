@@ -21,13 +21,13 @@ with open(file_path, 'r') as file:
                 state = tuple(elem[1]["state"][2:9])
                 frame = elem[1]["state"][9]
                 frame += 1
-                frame *= frame_value
+                frame_elem = frame*frame_value
                 reward = elem[1]["reward"]
                 print(state)
                 if state in state_data:
-                    state_data[state].append((frame,all_action))
+                    state_data[state].append((frame_elem,all_action,frame,end_frame))
                 else:
-                    state_data[state] = [(frame, all_action)]
+                    state_data[state] = [(frame_elem,all_action,frame,end_frame)]
             cnt += 1
             tmp = []
         else:

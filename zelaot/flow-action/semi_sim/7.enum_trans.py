@@ -14,6 +14,18 @@ with open(file_path, 'r') as file:
         break
 # print(state_data)
 
+# cnt = 0
+# for elema, elemb in sim_list.items():
+#     cnt += 1
+#     if (cnt < 100 or cnt > 200):
+#         continue
+#     print(cnt, elema, elemb)
+#     try:
+#         print(state_data[elemb])
+#     except:
+#         print(f"{elemb}가 없음")
+#     print()
+
 def start(start_tuple):
     print("\n", start_tuple)
     if start_tuple[-1] >=5:
