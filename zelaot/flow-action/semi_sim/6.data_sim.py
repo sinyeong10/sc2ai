@@ -14,12 +14,14 @@ with open(file_path, 'r') as file:
             cal_value = tmp[-1][1]["state"][-1]
             end_reward = np.exp(-0.01 * (cal_value-1000)) #tmp[-1][1]["reward"]
             print(end_reward)
-            end_frame = tmp[-1][1]["state"][-1]
+            end_frame = tmp[-1][1]["state"][-1] +1
             print(end_frame)
             frame_value = end_reward/end_frame
             for elem in tmp[:-1]: #마지막 9는 앞과 동일한 상태
                 state = tuple(elem[1]["state"][2:9])
-                frame = elem[1]["state"][9]*frame_value
+                frame = elem[1]["state"][9]
+                frame += 1
+                frame *= frame_value
                 reward = elem[1]["reward"]
                 print(state)
                 if state in state_data:

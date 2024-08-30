@@ -10,12 +10,15 @@ cnt = 0
 with open(file_path1, 'r') as file1, open(file_path2, 'r') as file2:
     for line1, line2 in zip(file1, file2):
         cnt += 1
+        # if cnt <= 69187:
+        #     continue
         if line1 == line2:
             updated_lines.append("")
             continue
         # 각 줄을 튜플로 변환
         entry1 = eval(line1.strip())
         entry2 = eval(line2.strip())
+        print(cnt)
         print(entry1)
         print(entry2)
         # state 정보 추출 및 업데이트

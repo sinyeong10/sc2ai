@@ -50,6 +50,10 @@ def backtrack(idx, num_worker, num_pylon, num_gateway, num_jealot):
 backtrack(0,12,0,0,0)
 print(len(order))
 # print(order)
+for i, elem in enumerate(order):
+    if elem == [0,0,0,1,0,2,2,2,1,3,3,3,3,1,3,9]:
+    # if i >= 4804:
+        print(i, elem)
 import pickle
 
 with open("./all_order.pkl", "wb") as f:
