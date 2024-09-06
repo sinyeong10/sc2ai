@@ -1,8 +1,8 @@
 base = (12, 15, 12, 1, 0, 0, 0)
 sim_list = {}
 for a in range(5): #일꾼
-    for b in range(4): #파일런
-        for c in range(6): #게이트
+    for b in range(3): #파일런
+        for c in range(4): #게이트
             for d in range(6): #질럿
                 sim_list[(a,b,c,d)] = (12+a+2*d, 15+8*b, 12+a, 1, 2 if c else 1 if b else 0, 0+c, 0+d)
 # print(sim_list)
@@ -14,17 +14,22 @@ with open(file_path, 'r') as file:
         break
 # print(state_data)
 
-# cnt = 0
-# for elema, elemb in sim_list.items():
-#     cnt += 1
-#     if (cnt < 100 or cnt > 200):
-#         continue
-#     print(cnt, elema, elemb)
-#     try:
-#         print(state_data[elemb])
-#     except:
-#         print(f"{elemb}가 없음")
-#     print()
+cnt = 0
+for elema, elemb in sim_list.items():
+    cnt += 1
+    # if (cnt < 100 or cnt > 200):
+    #     continue
+    # print(cnt, elema, elemb)
+    if elemb[-1] != 2:
+        continue
+    try:
+        # a = state_data[elemb]
+        print(elema, state_data[elemb][-1][-1])
+    except:
+        # print(f"{elemb}가 없음")
+        pass
+    print()
+#(22, 23, 12, 1, 2, 1, 5)
 
 def start(start_tuple):
     print("\n", start_tuple)
