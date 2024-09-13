@@ -4,16 +4,18 @@ import matplotlib.pyplot as plt
 
 
 class Renderer:
-    def __init__(self, reward_map, goal_state, one_hot, find_one_hot, find_matrix):
-        self.reward_map = reward_map
+    def __init__(self, matrix, goal_state, one_hot, find_one_hot, find_matrix):
+        plt.close()
+        plt.close()
+        self.matrix = matrix
         self.goal_state = goal_state
 
         self.one_hot = one_hot
         self.find_one_hot = find_one_hot
         self.find_matrix = find_matrix
         
-        self.ys = len(self.reward_map)
-        self.xs = len(self.reward_map[0])
+        self.ys = len(self.matrix)
+        self.xs = len(self.matrix[0])
 
         self.ax = None
         self.fig = None
@@ -31,7 +33,7 @@ class Renderer:
         ax.set_ylim(0, self.ys)
         ax.grid(True)
 
-    def render_v(self, v=None, policy=None, print_value=True):
+    def render_v(self, cnt, v=None, policy=None, print_value=True):
         self.set_figure()
 
         ys, xs = self.ys, self.xs
@@ -44,7 +46,7 @@ class Renderer:
 
             # dict -> ndarray
             v_dict = v
-            v = np.zeros(self.reward_map.shape)
+            v = np.zeros(self.matrix.shape)
             for state, value in v_dict.items():
                 # print(state, self.find_one_hot[state], self.find_matrix[self.find_one_hot[state]], value)
                 v[self.find_matrix[self.find_one_hot[state]]] = value
@@ -52,6 +54,7 @@ class Renderer:
             vmax, vmin = v.max(), v.min()
             vmax = max(vmax, abs(vmin))
             vmin = -1 * vmax
+            #값이 너무 작을 때를 대비해서 처리함
             vmax = 1 if vmax < 1 else vmax
             vmin = -1 if vmin > -1 else vmin
 
@@ -62,20 +65,20 @@ class Renderer:
         for y in range(ys):
             for x in range(xs):
                 state = (y, x)
-                # r = self.reward_map[y, x]
-                # print(state, self.reward_map[state])
-                if self.reward_map[state] == None:
+                # r = self.matrix[y, x]
+                # print(state, self.matrix[state]) #(0, 1) 0
+                if self.matrix[state] < 0: #-는 보상이 없는 공간!
                     r = None
-                else:
-                    r = 0 if self.one_hot[self.reward_map[state]] not in self.goal_state else self.goal_state[self.one_hot[self.reward_map[state]]]
+                else: #최종 목적지면 보상 아니면 0
+                    r = 0 if self.one_hot[self.matrix[state]] not in self.goal_state else self.goal_state[self.one_hot[self.matrix[state]]]
                 # print(r)
-                if r != 0 and r is not None:
+                if r != 0 and r is not None: #보상이 있으면 최종 위치!
                     txt = 'End Frame ' + str(r)
-                    if self.one_hot[self.reward_map[state]] in self.goal_state:
+                    if self.one_hot[self.matrix[state]] in self.goal_state:
                         txt = txt + ' (GOAL)'
                     ax.text(x+.1, ys-y-0.9, txt)
-                # print(state, self.reward_map[state])
-                if (v is not None) and self.reward_map[state] is not None:# state != self.wall_state:
+                # print(state, self.matrix[state])
+                if (v is not None) and self.matrix[state] >= 0:# state != self.wall_state:
                     if print_value:
                         offsets = [(0.4, -0.15), (-0.15, -0.3)]
                         key = 0
@@ -83,27 +86,43 @@ class Renderer:
                         offset = offsets[key]
                         ax.text(x+offset[0], ys-y+offset[1], "{:12.2f}".format(v[y, x]))
 
-                if policy is not None and self.reward_map[state] is not None:# state != self.wall_state:
+                if policy is not None and self.matrix[state] >= 0:# state != self.wall_state:
                     actions = policy[state]
                     max_actions = [kv[0] for kv in actions.items() if kv[1] == max(actions.values())]
 
                     arrows = ["0", "1", "2", "3"]#["↑", "↓", "←", "→"]
-                    offsets = [(0, 0.1), (0, -0.1), (-0.1, 0), (0.1, 0)]
+                    offsets = [(0, 0.1), (0, 0.1), (0, 0.1), (0, 0.1)]#(0, 0.1),  (0, -0.1), (-0.1, 0), (0.1, 0)]
                     for action in max_actions:
                         arrow = arrows[action]
                         offset = offsets[action]
-                        if self.one_hot[self.reward_map[state]] in self.goal_state:
-                            # print(self.one_hot[self.reward_map[state]])
+                        if self.one_hot[self.matrix[state]] in self.goal_state: #최종은 제외
+                            # print(self.one_hot[self.matrix[state]])
                             continue
                         ax.text(x+0.45+offset[0], ys-y-0.5+offset[1], arrow)
 
-                if self.reward_map[state] is None: #state == self.wall_state:
+                if self.matrix[state] < 0: #state == self.wall_state:
                     ax.add_patch(plt.Rectangle((x,ys-y-1), 1, 1, fc=(0.4, 0.4, 0.4, 1.)))
-        # plt.show()
-        
-        plt.savefig(r'C:/sc2ai/zelaot/flow-action/semi_sim/V_s.png')
 
-    def render_q(self, q, show_greedy_policy=True):
+                if self.matrix[state] <= -30: #"→"
+                    ax.text(x+0.6+0, ys-y-0.45-0.3, "→", fontsize=25)
+                
+                if self.matrix[state] <= -40: #"↓","→"
+                    ax.text(x+0.3+0, ys-y-0.45-0.1, "↓", fontsize=25)
+                
+                if self.matrix[state] <= -50: #"→","↓","→"
+                    ax.text(x+0.1+0, ys-y-0.45-0.3, "→", fontsize=25)
+
+
+                if self.matrix[state] == -20: #"↓"
+                    pass
+
+
+        plt.show(block=False)
+        print(f'C:/sc2ai/zelaot/flow-action/semi_sim/V_s_{cnt}.png')
+        plt.savefig(f'C:/sc2ai/zelaot/flow-action/semi_sim/V_s_{cnt}.png')
+        plt.pause(1)
+
+    def render_q(self, cnt, q, show_greedy_policy=True):
         self.set_figure(figsize=(10,10))
 
         ys, xs = self.ys, self.xs
@@ -126,21 +145,22 @@ class Renderer:
                 for action in action_space:
                     state = (y, x)
 
-                    # r = self.reward_map[y, x]
+                    # r = self.matrix[y, x]
                     # print(state)
-                    if self.reward_map[state] == None:
+                    if self.matrix[state] < 0:
                         r = None
                     else:
-                        r = 0 if self.one_hot[self.reward_map[state]] not in self.goal_state else self.goal_state[self.one_hot[self.reward_map[state]]]
+                        r = 0 if self.one_hot[self.matrix[state]] not in self.goal_state else self.goal_state[self.one_hot[self.matrix[state]]]
                     # print(r)
 
                     if r != 0 and r is not None:
                         txt = 'End Frame ' + str(r)
-                        if self.one_hot[self.reward_map[state]] in self.goal_state:
+                        if self.one_hot[self.matrix[state]] in self.goal_state:
                             txt = txt + ' (GOAL)'
                         ax.text(x+.05, ys-y-0.95, txt)
 
-                    if self.reward_map[state] is not None and self.one_hot[self.reward_map[state]] in self.goal_state:
+                    #접근가능한 상태이고 최종상태이면 넘어감
+                    if self.matrix[state] >= 0 and self.one_hot[self.matrix[state]] in self.goal_state:
                         continue
 
                     tx, ty = x, ys-y-1
@@ -157,13 +177,12 @@ class Renderer:
                         2: (-0.2, 0.4),
                         3: (0.4, 0.4),
                     }
-                    if self.reward_map[state] is None: #state == self.wall_state:
+                    if self.matrix[state] < 0: #state == self.wall_state:
                         ax.add_patch(plt.Rectangle((tx, ty), 1, 1, fc=(0.4, 0.4, 0.4, 1.)))
-                    elif self.one_hot[self.reward_map[state]] in self.goal_state:
+                    elif self.one_hot[self.matrix[state]] in self.goal_state:
                         ax.add_patch(plt.Rectangle((tx, ty), 1, 1, fc=(0., 1., 0., 1.)))
                     else:
-
-                        tq = q[(self.one_hot[self.reward_map[state]], action)]
+                        tq = q[(self.one_hot[self.matrix[state]], action)]
                         color_scale = 0.5 + (tq / qmax) / 2  # normalize: 0.0-1.0
 
                         poly = plt.Polygon(action_map[action],fc=cmap(color_scale))
@@ -171,22 +190,34 @@ class Renderer:
 
                         offset= offset_map[action]
                         ax.text(tx+offset[0], ty+offset[1], "{:12.2f}".format(tq))
-        # plt.show()
 
-        plt.savefig('C:/sc2ai/zelaot/flow-action/semi_sim/Q_s_a.png')
+                            
+                    if self.matrix[state] <= -30: #"→"
+                        ax.text(x+0.6+0, ys-y-0.45-0.3, "→", fontsize=25)
+                    
+                    if self.matrix[state] <= -40: #"↓","→"
+                        ax.text(x+0.3+0, ys-y-0.45-0.1, "↓", fontsize=25)
+                    
+                    if self.matrix[state] <= -50: #"→","↓","→"
+                        ax.text(x+0.1+0, ys-y-0.45-0.3, "→", fontsize=25)
+
+        plt.show(block=False)
+        plt.savefig(f'C:/sc2ai/zelaot/flow-action/semi_sim/Q_s_a_{cnt}.png')
+        plt.pause(1)
 
         if show_greedy_policy:
             policy = {}
             for y in range(self.ys):
                 for x in range(self.xs):
                     state = (y, x)
-                    if self.reward_map[state] is not None:
-                        # print(state, action, q[state, action], q[self.one_hot[self.reward_map[state]], action])
-                        qs = [q[self.one_hot[self.reward_map[state]], action] for action in range(4)]  # action_size
+                    if self.matrix[state] >= 0:
+                        # print(state, action, q[state, action], q[self.one_hot[self.matrix[state]], action])
+                        qs = [q[self.one_hot[self.matrix[state]], action] for action in range(4)]  # action_size
                         max_action = np.argmax(qs)
                     else: #None이 state면 defaultdict라 무조건 0임!
                         max_action = 0
                     probs = {0:0.0, 1:0.0, 2:0.0, 3:0.0}
                     probs[max_action] = 1
                     policy[state] = probs
-            self.render_v(None, policy)
+            self.render_v(cnt, None, policy)
+        

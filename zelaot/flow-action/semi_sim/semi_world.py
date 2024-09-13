@@ -11,7 +11,7 @@ class SemiWorld:
             2: "gate",
             3: "zealot",
         }
-        self.reward_map = {
+        self.reward_map = { #보상 설정, 여기에 없는 key로 접근시 모두 0
             (0, 1, 1, 2) : 835,
             (0, 1, 2, 2) : 832,
             (0, 1, 3, 2) : 725,
@@ -68,10 +68,10 @@ class SemiWorld:
         self.agent_state = self.start_state   # 에이전트 초기 상태(좌표)
 
         self.sim_list = {}
-        for d in range(3): #질럿    
-            for c in range(3): #게이트
-                for b in range(2): #파일런
-                    for a in range(5): #일꾼
+        for a in range(5): #일꾼
+            for b in range(2): #파일런
+                for c in range(3): #게이트
+                    for d in range(3): #질럿    
                         self.sim_list[(a,b,c,d)] = (12+a+2*d, 15+8*b, 12+a, 1, 2 if c else 1 if b else 0, 0+c, 0+d)
         
         file_path = 'zelaot/flow-action/semi_sim/5__state_data.txt'
@@ -80,37 +80,42 @@ class SemiWorld:
                 self.state_data = dict(eval(elem))
                 break
 
-        self.one_hot = {-100 : (0, 0, 0, 0)}
-        self.find_one_hot = {(0, 0, 0, 0) : -100}
-        cnt = 0
+        self.one_hot = {0 : (0, 0, 0, 0)}
+        self.find_one_hot = {(0, 0, 0, 0) : 0}
+        cnt = 1
         for key, value in self.sim_list.items():
             if value in self.state_data:
                 self.one_hot[cnt] = key
                 self.find_one_hot[key] = cnt
                 cnt += 1
+        #값을 직접 보고 검증할 필요 존재(혹시 모를 양식 문제 해결)
         print(self.one_hot)
         print(self.find_one_hot)
 
         self.matrix = np.array([
-            [-100, 3, 8, 13, None, 23, None, 33],
-            [None, None, None, None, 18, None, 28, None],
-            [0, 4, 9, 14, None, 24, None, 34],
-            [None, None, None, None, 19, None, 29, None],
-            [1, 5, 10, 15, None, 25, None, 35],
-            [None, None, None, None, 20, None, 30, None],
-            [2, 6, 11, 16, None, 26, None, 36],
-            [None, None, None, None, 21, None, 31, None],
-            [None, 7, 12, 17, None, 27, None, 37],
-            [None, None, None, None, 22, None, 32, None]
-        ])
+            [0, 1, 2, -30, 3, -30, 4, -1],
+            [-1, -1, -40, 5, -50, 6, -30, 7],
 
-        self.find_matrix = {-100 : (0, 0)}
-        for num in range(38):
+            [8, 9, 10, -30, 11, -30, 12, -1],
+            [-1, -1, -40, 13, -50, 14, -30, 15],
+
+            [16, 17, 18, -30, 19, -30, 20, -1],
+            [-1, -1, -40, 21, -50, 22, -30, 23],
+
+            [24, 25, 26, -30, 27, -30, 28, -1],
+            [-1, -1, -40, 29, -50, 30, -30, 31],
+
+            [-1, 32, 33, -30, 34, -30, 35, -1],
+            [-1, -1, -40, 36, -50, 37, -30, 38]
+            ])
+
+        self.find_matrix = {}
+        for num in range(39):
             for i in range(10): 
                 for j in range(8):
                     if self.matrix[i][j] == num:
                         self.find_matrix[num] = (i,j)
-        print(self.find_matrix)
+        print("self.find_matrix\n", self.find_matrix)
 
 
     @property
@@ -184,13 +189,13 @@ class SemiWorld:
         self.agent_state = next_state
         return next_state, reward, done
 
-    def render_v(self, v=None, policy=None, print_value=True):
+    def render_v(self, cnt, v=None, policy=None, print_value=True):
         #가능한 공간, 종료 시점, 불가능한 공간
         renderer = render_helper.Renderer(self.matrix, self.reward_map,
                                           self.one_hot, self.find_one_hot, self.find_matrix)
-        renderer.render_v(v, policy, print_value)
+        renderer.render_v(cnt, v, policy, print_value)
 
-    def render_q(self, q=None, print_value=True):
+    def render_q(self, cnt, q=None, print_value=True):
         renderer = render_helper.Renderer(self.matrix, self.reward_map,
                                           self.one_hot, self.find_one_hot, self.find_matrix)  
-        renderer.render_q(q, print_value)
+        renderer.render_q(cnt, q, print_value)

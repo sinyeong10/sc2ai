@@ -56,10 +56,11 @@ class McAgent:
 env = SemiWorld()
 agent = McAgent()
 
-episodes = 1000000
+episodes = 100000
 for episode in range(episodes):
     state = env.reset()
     agent.reset()
+    # print(episode)
 
     while True:
         action = agent.get_action(state)
@@ -71,7 +72,8 @@ for episode in range(episodes):
             break
 
         state = next_state
-
+    if episode % 1000 == 0:
+        env.render_q(episode, agent.Q)
 print(agent.Q)
 # [그림 5-17] 및 [그림 5-18]
-env.render_q(agent.Q)
+env.render_q(episodes, agent.Q)

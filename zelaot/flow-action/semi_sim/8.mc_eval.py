@@ -60,4 +60,4 @@ for episode in range(episodes):  # 에피소드 1000번 수행
 
 print("그리기")
 # [그림 5-12] 몬테카를로법으로 얻은 가치 함수
-env.render_v(agent.V)
+env.render_v(episodes, agent.V)
