@@ -179,7 +179,7 @@ class SemiWorld:
         next_state = self.next_state(state, action)
 
         if next_state is None:
-            reward = -0.001 #0시 최종보상을 못받음
+            reward = -1 #0시 최종보상을 못찾음
             done = True
         else:
             reward = self.reward(state, action, next_state)

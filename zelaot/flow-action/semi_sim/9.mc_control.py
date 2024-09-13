@@ -19,7 +19,7 @@ class McAgent:
     def __init__(self):
         self.gamma = 1
         self.epsilon = 0.1  # (첫 번째 개선) ε-탐욕 정책의 ε
-        self.alpha = 0.1    # (두 번째 개선) Q 함수 갱신 시의 고정값 α
+        self.alpha = 0.1    # (두 번째 개선) Q 함수 갱신 시의 고정값 α #점차 반복할 수록 1인 경우(최종 보상)의 경우로 수렴해감
         self.action_size = 4
 
         random_actions = {0: 0.25, 1: 0.25, 2: 0.25, 3: 0.25}
@@ -49,19 +49,24 @@ class McAgent:
             key = (state, action)
             # self.cnts[key] += 1
             # self.Q[key] += (G - self.Q[key]) / self.cnts[key]
-            self.Q[key] += (G - self.Q[key]) * self.alpha
+
+            # self.Q[key] += (G - self.Q[key]) * self.alpha
+            
+            if G > 0: #0이상은 바로 최대값이 되게 함
+                self.Q[key] += (G - self.Q[key]) * 1#self.alpha
+            else: #0이하는 선택안하게 -줌                
+                self.Q[key] += (G - self.Q[key]) * self.alpha
             self.pi[state] = greedy_probs(self.Q, state, self.epsilon)
 
 
 env = SemiWorld()
 agent = McAgent()
 
-episodes = 100000
+episodes = 1000
 for episode in range(episodes):
     state = env.reset()
     agent.reset()
     # print(episode)
-
     while True:
         action = agent.get_action(state)
         next_state, reward, done = env.step(action)

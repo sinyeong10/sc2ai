@@ -34,7 +34,7 @@ class Renderer:
         ax.grid(True)
 
     def render_v(self, cnt, v=None, policy=None, print_value=True):
-        self.set_figure()
+        self.set_figure(figsize=(10,10))
 
         ys, xs = self.ys, self.xs
         ax = self.ax
@@ -103,14 +103,21 @@ class Renderer:
                 if self.matrix[state] < 0: #state == self.wall_state:
                     ax.add_patch(plt.Rectangle((x,ys-y-1), 1, 1, fc=(0.4, 0.4, 0.4, 1.)))
 
-                if self.matrix[state] <= -30: #"→"
+                if self.matrix[state] == -30: #"→"
+                    ax.text(x+0.05+0, ys-y-0.3-0.1, "3", fontsize=10, color='blue')
+                    ax.text(x+0.05+0, ys-y-0.45-0.3, "→", fontsize=25, color='blue')
+                
+                if self.matrix[state] == -40: #"↓","→"
+                    ax.text(x+0.6+0.1, ys-y-0.3-0.05, "2", fontsize=10)
                     ax.text(x+0.6+0, ys-y-0.45-0.3, "→", fontsize=25)
+                    ax.text(x+0.3+0.15, ys-y-0.45-0.1, "↓", fontsize=25)
                 
-                if self.matrix[state] <= -40: #"↓","→"
-                    ax.text(x+0.3+0, ys-y-0.45-0.1, "↓", fontsize=25)
-                
-                if self.matrix[state] <= -50: #"→","↓","→"
-                    ax.text(x+0.1+0, ys-y-0.45-0.3, "→", fontsize=25)
+                if self.matrix[state] == -50: #"→","↓","→"
+                    ax.text(x+0.6+0.1, ys-y-0.3-0.05, "2", fontsize=10)
+                    ax.text(x+0.6+0, ys-y-0.45-0.3, "→", fontsize=25)
+                    ax.text(x+0.3+0.15, ys-y-0.45-0.1, "↓", fontsize=25)
+                    ax.text(x+0.05+0, ys-y-0.3-0.1, "3", fontsize=10, color='blue')
+                    ax.text(x+0.05+0, ys-y-0.45-0.3, "→", fontsize=25, color='blue')
 
 
                 if self.matrix[state] == -20: #"↓"
@@ -191,15 +198,21 @@ class Renderer:
                         offset= offset_map[action]
                         ax.text(tx+offset[0], ty+offset[1], "{:12.2f}".format(tq))
 
-                            
-                    if self.matrix[state] <= -30: #"→"
+                    if self.matrix[state] == -30: #"→"
+                        ax.text(x+0.05+0, ys-y-0.3-0.1, "3", fontsize=10, color='blue')
+                        ax.text(x+0.05+0, ys-y-0.45-0.3, "→", fontsize=25, color='blue')
+                    
+                    if self.matrix[state] == -40: #"↓","→"
+                        ax.text(x+0.6+0.1, ys-y-0.3-0.05, "2", fontsize=10)
                         ax.text(x+0.6+0, ys-y-0.45-0.3, "→", fontsize=25)
+                        ax.text(x+0.3+0.15, ys-y-0.45-0.1, "↓", fontsize=25)
                     
-                    if self.matrix[state] <= -40: #"↓","→"
-                        ax.text(x+0.3+0, ys-y-0.45-0.1, "↓", fontsize=25)
-                    
-                    if self.matrix[state] <= -50: #"→","↓","→"
-                        ax.text(x+0.1+0, ys-y-0.45-0.3, "→", fontsize=25)
+                    if self.matrix[state] == -50: #"→","↓","→"
+                        ax.text(x+0.6+0.1, ys-y-0.3-0.05, "2", fontsize=10)
+                        ax.text(x+0.6+0, ys-y-0.45-0.3, "→", fontsize=25)
+                        ax.text(x+0.3+0.15, ys-y-0.45-0.1, "↓", fontsize=25)
+                        ax.text(x+0.05+0, ys-y-0.3-0.1, "3", fontsize=10, color='blue')
+                        ax.text(x+0.05+0, ys-y-0.45-0.3, "→", fontsize=25, color='blue')
 
         plt.show(block=False)
         plt.savefig(f'C:/sc2ai/zelaot/flow-action/semi_sim/Q_s_a_{cnt}.png')
