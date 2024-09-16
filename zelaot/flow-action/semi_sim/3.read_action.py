@@ -5,10 +5,30 @@ import sys
 flag = 0
 try:
     all_order = list(map(int, sys.argv[1].split()))
+
+    if flag == 0:
+        filename = f"5__full_log.txt"
+    else:
+        filename = f"5__semi_log.txt"
+
+    # 데이터를 파일에 저장
+    with open(filename, 'a') as f:
+        f.write(f"{all_order}\n")
 except:
     print("order이 전달되지 않음!")
-    all_order = [0, 0, 0, 1, 0, 2, 2, 2, 3, 1, 3, 3, 3, 1, 3, 1,9]#[0,0,1,2,2,3,3,1,3,3,3,9]
+    all_order = [9]#[0,0,1,2,2,3,3,1,3,3,3,9]
     # sys.exit()
+
+    if flag == 0:
+        filename = f"5__full_log.txt"
+    else:
+        filename = f"5__semi_log.txt"
+
+    # 데이터를 파일에 저장
+    with open(filename, 'a') as f:
+        f.write(f"{all_order}\n")
+    sys.exit()
+
 cnt = 0
 user_order = False
 

@@ -51,8 +51,9 @@ backtrack(0,12,0,0,0)
 print(len(order))
 # print(order)
 for i, elem in enumerate(order):
-    if elem == [0,0,0,1,0,2,2,2,1,3,3,3,3,1,3,9]:
+    # if elem == [1, 2, 3, 3, 3, 2, 2, 1, 3, 3, 9]: #(12, 15, 12, 1, 2, 1, 0)
     # if i >= 4804:
+    if elem.count(1) == 2 and elem.count(2) >= 1:
         print(i, elem)
 import pickle
 
