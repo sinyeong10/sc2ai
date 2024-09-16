@@ -14,6 +14,7 @@ with open(file_path, 'r') as file:
         break
 # print(state_data)
 
+#[0,0,0,0]형식과 (12, 15, 12, 1, 0, 0, 0)환경을 매칭
 # cnt = 0
 # for elema, elemb in sim_list.items():
 #     cnt += 1
