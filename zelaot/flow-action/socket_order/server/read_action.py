@@ -25,7 +25,7 @@ import socket
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # 서버 주소와 포트 설정
-server_address = ('172.30.1.43', 12345)  # 모든 네트워크 인터페이스에 바인딩
+server_address = ('192.168.0.17', 12345)#('172.30.1.43', 12345)  # 모든 네트워크 인터페이스에 바인딩
 server_socket.bind(server_address)
 
 # 클라이언트 연결을 기다림

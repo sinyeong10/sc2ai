@@ -42,7 +42,7 @@ import socket
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # 서버 주소와 포트 설정 (서버의 IP 주소와 포트 번호)
-server_address = ('172.30.1.43', 12345)  # 예시: 서버의 IP 주소와 포트 번호를 적절히 설정
+server_address = ('192.168.0.17', 12345)#('172.30.1.43', 12345)  # 예시: 서버의 IP 주소와 포트 번호를 적절히 설정
 
 try:
     # 서버에 연결
@@ -223,6 +223,7 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
         global stop_flag #빨리 종료 시키기 위함
         global Tech_level
         reward = -1
+        self.prezealot = False #같은 프레임에서 생산 명령 내리고 취소하는 걸 막기 위함
         if iteration == 0:
             self.check = True
             self.needzealot = 0
@@ -251,18 +252,34 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
 
         
 
+        #자체 최적화를 어디까지 해야하는가..
+        #2개 취소시 문제 가능성 발생
+        #1, 취소된 자원으로 다른 일 함
+        #2, 생산하며 취소가 일어남
+        #=> 같은 프레임에서 생성과 취소가 나타나서 자원 계산이 정확하지 않는 듯!
+
         #이전 프레임에서 생산 명령이 많은 것을 취소했으므로 여기서 추가함
         #명령보다 더 전에 실행되어야 함
         #finish_action가 self.make에서 True이면 다음 명령을 받아오는 구조!
         #따라서 먼저 처리!
         while self.needzealot > 0 and self.structures(UnitTypeId.GATEWAY).ready.idle:
-            accel = self.structures(UnitTypeId.GATEWAY).ready.idle.random
-            #근데 질럿 생산시 필요한 자원이 없으면 에러!
+            if not(self.can_afford(UnitTypeId.ZEALOT, check_supply_cost = False)): #자원 부족이거나, 인구 부족 시 false
+                print(iteration, self.minerals, "\n\n\n\nerror\n\n\n", self.needzealot, self.structures(UnitTypeId.GATEWAY).ready.idle)
+                file_name = "error.txt"
+                with open(file_name, 'a') as file:
+                    file.write(f"\n\n\n\nerror\n\n\n", iteration, self.minerals, self.needzealot, self.structures(UnitTypeId.GATEWAY).ready.idle,"\n")
+                break
+                # raise ValueError
+            else:
+                #취소하고 대기하다 다른 곳에 자원쓰면 문제 발생, 따라서 일단 ready.random으로 추가하는 것이 맞는 듯
+                accel = self.structures(UnitTypeId.GATEWAY).ready.idle.random
+                #근데 질럿 생산시 필요한 자원이 없으면 에러!
 
-            accel.train(UnitTypeId.ZEALOT)
-            print(accel, "생산함")
-            await self.do_chrono_boost(accel)
-            self.needzealot -= 1
+                accel.train(UnitTypeId.ZEALOT)
+                print(iteration, self.minerals, accel, "생산함")
+                await self.do_chrono_boost(accel)
+                self.needzealot -= 1
+                self.prezealot = True
 
 
         self.make() #같은 클래스에서 명령 할당! #원래 위치
@@ -403,25 +420,27 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
 
         #현재 2개 이상 생산 중인 건물이 있고 새로 건물이 지어졌다면 생산명령을 분배함
         if self.structures(UnitTypeId.GATEWAY).ready.idle and len(self.structures(UnitTypeId.GATEWAY).ready[0].orders) > 1:
-            print("c/i", "생산 재분배\n\n\n")
-            build_count = len(self.structures(UnitTypeId.GATEWAY).ready.idle) #생산 가능한 건물
-            print("c/i", "build_count", build_count)
-            # print("c/i", self.structures(UnitTypeId.GATEWAY).ready.idle, self.structures(UnitTypeId.GATEWAY).ready, self.structures(UnitTypeId.GATEWAY))
-            for gw in self.structures(UnitTypeId.GATEWAY).ready: #지금 생산중인 건물
-                while len(gw.orders) > 1 and build_count > 0: #2개이상의 생산이며 현재 생산 가능한 건물이 있다면
-                    # print(gw.orders, gw.orders[0], gw.orders[-1])
-                    self.do(gw(AbilityId.CANCEL_LAST)) #취소함
-                    print(gw, "취소함")
-                    build_count -= 1
+            if not(self.prezealot):
+                print("c/i", "생산 재분배\n\n\n")
+                build_count = len(self.structures(UnitTypeId.GATEWAY).ready.idle) #생산 가능한 건물
+                print("c/i", "build_count", build_count)
+                # print("c/i", self.structures(UnitTypeId.GATEWAY).ready.idle, self.structures(UnitTypeId.GATEWAY).ready, self.structures(UnitTypeId.GATEWAY))
+                for gw in self.structures(UnitTypeId.GATEWAY).ready: #지금 생산중인 건물
+                    while len(gw.orders) > 1 and build_count > 0: #2개이상의 생산이며 현재 생산 가능한 건물이 있다면
+                        # print(gw.orders, gw.orders[0], gw.orders[-1])
+                        self.do(gw(AbilityId.CANCEL_LAST)) #취소함
+                        print(iteration, self.minerals, gw, "취소함")
+                        build_count -= 1
 
-                    #취소가 해당 프레임에 이뤄지지 않아서 자원이 100미만인 경우 생산을 하지 못함!
-                    #다음 프레임으로 넘겨야함...
-                    self.needzealot += 1
-                    # accel = self.structures(UnitTypeId.GATEWAY).ready.idle.random
-                    # accel.train(UnitTypeId.ZEALOT)
-                    # print(accel, "생산함")
-                    # await self.do_chrono_boost(accel)
-            
+                        #취소가 해당 프레임에 이뤄지지 않아서 자원이 100미만인 경우 생산을 하지 못함!
+                        #다음 프레임으로 넘겨야함...
+                        self.needzealot += 1
+                        # accel = self.structures(UnitTypeId.GATEWAY).ready.idle.random
+                        # accel.train(UnitTypeId.ZEALOT)
+                        # print(accel, "생산함")
+                        # await self.do_chrono_boost(accel)
+            else:
+                print("해당 프레임에서 재생산 명령이 내려짐")
 
         #9의 경우는 걸리지 않음, end조건 확인하고 끝
 
