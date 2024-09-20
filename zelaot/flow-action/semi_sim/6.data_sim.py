@@ -1,3 +1,12 @@
+import os
+
+if os.path.exists(r'zelaot\flow-action\data_set\semi_sim_data\result_data.txt'):
+    with open(r'zelaot\flow-action\data_set\semi_sim_data\result_data.txt', 'r') as file:
+        result_data = eval(file.read())
+else:
+    result_data = {}
+
+
 file_path = "zelaot/flow-action/semi_sim/5__data.txt"
 import numpy as np
 state_data = {}
@@ -35,11 +44,20 @@ with open(file_path, 'r') as file:
                     state_data[state].append((frame_elem,all_action,frame,end_frame))
                 else:
                     state_data[state] = [(frame_elem,all_action,frame,end_frame)]
+
+            if tuple(all_action) in result_data:
+                result_data[tuple(all_action)].append(tmp[-1][1]["state"][:2]+tmp[-1][1]["state"][-1:])
+            else:
+                result_data[tuple(all_action)] = tmp[-1][1]["state"][:2]+tmp[-1][1]["state"][-1:]
+
             cnt += 1
             tmp = []
         else:
             tmp.append(eval(line.strip()))
 
+with open(r'zelaot\flow-action\data_set\semi_sim_data\result_data.txt', 'w') as file:
+    file.write(str(result_data))
+    
 for state in state_data:
     state_data[state] = sorted(state_data[state], key=lambda x: x[0])
 
