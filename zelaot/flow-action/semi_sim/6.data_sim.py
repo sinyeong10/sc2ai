@@ -47,6 +47,7 @@ print("데이터 출력")
 for key, value in state_data.items():
     # print(key, min(value), max(value))
     print(key)
+    #key에 따른 가장 큰 가치를 출력, 여러개면 2개, 1개면 1개만 출력
     if len(value)>=2:
         print(value[0], value[1])
     else:

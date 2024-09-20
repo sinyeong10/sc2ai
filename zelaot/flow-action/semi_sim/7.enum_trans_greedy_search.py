@@ -31,6 +31,8 @@ for elema, elemb in sim_list.items():
         pass
     print()
 #(22, 23, 12, 1, 2, 1, 5)
+#마지막 값을 출력하는 기능인가?
+#질럿 2의 마지막 프레임을 모두 출력하는 기능인듯?
 
 def start(start_tuple):
     print("\n", start_tuple)
