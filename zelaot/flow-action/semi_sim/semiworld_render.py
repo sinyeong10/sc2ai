@@ -125,8 +125,8 @@ class Renderer:
 
 
         plt.show(block=False)
-        print(f'C:/sc2ai/zelaot/flow-action/semi_sim/V_s_{cnt}.png')
-        plt.savefig(f'C:/sc2ai/zelaot/flow-action/semi_sim/V_s_{cnt}.png')
+        print(f'./zelaot/flow-action/semi_sim/V_s_{cnt}.png')
+        plt.savefig(f'./zelaot/flow-action/semi_sim/V_s_{cnt}.png')
         plt.pause(1)
 
     def render_q(self, cnt, q, show_greedy_policy=True):
@@ -215,7 +215,7 @@ class Renderer:
                         ax.text(x+0.05+0, ys-y-0.45-0.3, "→", fontsize=25, color='blue')
 
         plt.show(block=False)
-        plt.savefig(f'C:/sc2ai/zelaot/flow-action/semi_sim/Q_s_a_{cnt}.png')
+        plt.savefig(f'./zelaot/flow-action/semi_sim/Q_s_a_{cnt}.png')
         plt.pause(1)
 
         if show_greedy_policy:
