@@ -22,7 +22,7 @@ import subprocess
 for i in range(len(loaded_order)):
     order = next(nested_list_iterator)
     print(i, order)
-    # if i >= 4804:
-    subprocess.run(["python", 'zelaot/flow-action/semi_sim/3.read_action.py', ' '.join(map(str, order))])
+    if i >= 3253:
+        subprocess.run(["python", 'zelaot/flow-action/semi_sim/3.read_action.py', ' '.join(map(str, order))])
 # print(ans)
 print("end")
