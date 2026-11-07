@@ -1,0 +1,53 @@
+질럿 2 로그 읽기
+  997 에피소드, 명령 8346개
+매개변수 적합 (질럿 2만 사용)
+  초기 손실 23.90
+  round 1: 손실 14.90  income=0.156, start_delay=24, probe=70, pylon=123, gate=235, zealot=158, chrono_len=103, chrono_regen=273, builder_pause=0, mine_delay=2, end_lag=9, income_add=0.120, income_over=0.070
+  round 2: 손실 10.52  income=0.160, start_delay=24, probe=62, pylon=131, gate=243, zealot=150, chrono_len=95, chrono_regen=273, builder_pause=0, mine_delay=2, end_lag=17, income_add=0.124, income_over=0.070
+  round 3: 손실 8.21  income=0.164, start_delay=24, probe=70, pylon=139, gate=251, zealot=142, chrono_len=103, chrono_regen=273, builder_pause=0, mine_delay=2, end_lag=17, income_add=0.128, income_over=0.070
+  round 4: 손실 5.99  income=0.168, start_delay=24, probe=78, pylon=131, gate=259, zealot=142, chrono_len=103, chrono_regen=273, builder_pause=8, mine_delay=2, end_lag=17, income_add=0.124, income_over=0.070
+  round 5: 손실 4.20  income=0.168, start_delay=24, probe=78, pylon=123, gate=267, zealot=142, chrono_len=103, chrono_regen=273, builder_pause=16, mine_delay=2, end_lag=17, income_add=0.124, income_over=0.070
+  round 6: 손실 2.94  income=0.168, start_delay=24, probe=70, pylon=115, gate=275, zealot=142, chrono_len=111, chrono_regen=273, builder_pause=8, mine_delay=2, end_lag=17, income_add=0.120, income_over=0.070
+  round 7: 손실 2.94  income=0.168, start_delay=24, probe=70, pylon=115, gate=275, zealot=142, chrono_len=111, chrono_regen=273, builder_pause=8, mine_delay=2, end_lag=17, income_add=0.120, income_over=0.070
+  round 8: 손실 2.89  income=0.168, start_delay=24, probe=70, pylon=115, gate=275, zealot=142, chrono_len=107, chrono_regen=273, builder_pause=12, mine_delay=2, end_lag=13, income_add=0.120, income_over=0.070
+  round 9: 손실 2.83  income=0.168, start_delay=24, probe=70, pylon=115, gate=275, zealot=142, chrono_len=103, chrono_regen=273, builder_pause=12, mine_delay=2, end_lag=13, income_add=0.120, income_over=0.070
+  round 10: 손실 2.82  income=0.168, start_delay=24, probe=70, pylon=115, gate=275, zealot=142, chrono_len=99, chrono_regen=273, builder_pause=12, mine_delay=2, end_lag=13, income_add=0.120, income_over=0.070
+  round 11: 손실 2.76  income=0.168, start_delay=24, probe=70, pylon=111, gate=275, zealot=142, chrono_len=95, chrono_regen=273, builder_pause=12, mine_delay=2, end_lag=13, income_add=0.120, income_over=0.070
+  round 12: 손실 2.76  income=0.168, start_delay=24, probe=70, pylon=111, gate=275, zealot=142, chrono_len=95, chrono_regen=273, builder_pause=12, mine_delay=2, end_lag=13, income_add=0.120, income_over=0.070
+  round 13: 손실 2.65  income=0.168, start_delay=24, probe=72, pylon=113, gate=275, zealot=142, chrono_len=97, chrono_regen=273, builder_pause=10, mine_delay=2, end_lag=13, income_add=0.120, income_over=0.070
+  round 14: 손실 2.65  income=0.168, start_delay=24, probe=72, pylon=113, gate=275, zealot=142, chrono_len=97, chrono_regen=273, builder_pause=10, mine_delay=2, end_lag=13, income_add=0.120, income_over=0.070
+  round 15: 손실 2.54  income=0.168, start_delay=23, probe=72, pylon=114, gate=275, zealot=142, chrono_len=97, chrono_regen=273, builder_pause=10, mine_delay=2, end_lag=12, income_add=0.120, income_over=0.070
+  round 16: 손실 2.47  income=0.167, start_delay=22, probe=72, pylon=115, gate=275, zealot=142, chrono_len=97, chrono_regen=273, builder_pause=11, mine_delay=3, end_lag=12, income_add=0.120, income_over=0.070
+  round 17: 손실 2.45  income=0.167, start_delay=22, probe=73, pylon=115, gate=275, zealot=142, chrono_len=97, chrono_regen=273, builder_pause=12, mine_delay=4, end_lag=12, income_add=0.120, income_over=0.070
+  round 18: 손실 2.43  income=0.167, start_delay=22, probe=74, pylon=115, gate=275, zealot=142, chrono_len=97, chrono_regen=273, builder_pause=13, mine_delay=5, end_lag=12, income_add=0.120, income_over=0.070
+  round 19: 손실 2.40  income=0.167, start_delay=22, probe=74, pylon=115, gate=275, zealot=142, chrono_len=97, chrono_regen=273, builder_pause=14, mine_delay=5, end_lag=12, income_add=0.120, income_over=0.070
+  적합 완료 48초, 학습 손실 2.40
+  일꾼: n=3382 평균 +0.4 절대 1.9 최대 43
+  파일런: n=1191 평균 +0.5 절대 1.5 최대 13
+  게이트: n=1779 평균 +0.2 절대 2.2 최대 13
+  질럿: n=1994 평균 -0.3 절대 3.1 최대 13
+  종료: n=997 평균 +0.4 절대 4.1 최대 51
+
+질럿 5 로그 읽기 (검증 전용)
+  명령열 4805개, 실패 0, MAE 12.9, 편향 -7.0, 최대 63.0, 10 이내 40%, 20 이내 87%, 순위 상관 0.966
+  실제 최적 [1, 2, 2, 2, 3, 3, 3, 3, 1, 3] 724.0 → 예측 731 (예측 순위 6)
+  예측 최적 [1, 2, 2, 2, 0, 3, 3, 3, 3, 3] 722 → 실제 725.0 (실제 순위 2)
+
+시뮬레이터 전수 평가: 명령열 4805개, 1초
+  1. [1, 2, 2, 2, 0, 3, 3, 3, 3, 3] 예측 722 실제 725.0
+  2. [1, 2, 2, 2, 3, 3, 3, 3, 3] 예측 722 실제 739.0
+  3. [1, 2, 2, 0, 2, 3, 3, 3, 3, 3] 예측 729 실제 735.0
+  4. [1, 2, 2, 2, 3, 3, 1, 3, 3, 3] 예측 731 실제 731.0
+  5. [1, 2, 2, 2, 3, 3, 3, 1, 3, 3] 예측 731 실제 735.0
+  6. [1, 2, 2, 2, 3, 3, 3, 3, 1, 3] 예측 731 실제 724.0
+  7. [0, 1, 2, 2, 2, 0, 3, 1, 3, 3, 3, 3] 예측 739 실제 742.0
+  8. [0, 1, 2, 2, 2, 0, 3, 3, 1, 3, 3, 3] 예측 739 실제 748.0
+  9. [0, 1, 2, 2, 2, 3, 3, 1, 3, 3, 3] 예측 739 실제 742.3333333333334
+  10. [0, 1, 2, 2, 2, 3, 3, 3, 1, 3, 3] 예측 739 실제 735.0
+
+시뮬레이터 Q-learning (질럿 5)
+  시드 0: 정책 [1, 2, 2, 2, 0, 3, 3, 3, 3, 3] 예측 722 실제 725.0 (탐색 중 최선 722 [1, 2, 2, 2, 0, 3, 3, 3, 3, 3]), Q 항목 15728, 94초
+  시드 1: 정책 [1, 2, 2, 2, 0, 3, 3, 3, 3, 3] 예측 722 실제 725.0 (탐색 중 최선 722 [1, 2, 2, 2, 3, 3, 3, 3, 3]), Q 항목 15728, 93초
+  시드 2: 정책 [1, 2, 2, 2, 0, 3, 3, 3, 3, 3] 예측 722 실제 725.0 (탐색 중 최선 722 [1, 2, 2, 2, 3, 3, 3, 3, 3]), Q 항목 15728, 92초
+
+결과 저장: C:\sin\claude\sc2ai\offline_rl\results\sim_transfer_results.md

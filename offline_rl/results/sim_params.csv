@@ -1,0 +1,15 @@
+param,value
+income,0.167
+income_add,0.1205
+income_over,0.07
+sat,16
+start_delay,22
+probe,74
+mine_delay,5
+pylon,115
+gate,275
+zealot,142
+chrono_len,97
+chrono_regen,273
+builder_pause,14
+end_lag,12
