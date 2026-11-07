@@ -1,3 +1,4 @@
 model/
 wandb/
-logs/__pycache__/
+logs/
+__pycache__/
