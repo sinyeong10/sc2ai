@@ -34,6 +34,7 @@ def main():
     ap.add_argument("--tick-frames", type=int, default=12)
     ap.add_argument("--beam", type=int, default=800)
     ap.add_argument("--opening", default="0,0,0,0,1", help="게임 초반(프레임<600, 일꾼 4)이면 고정 오프닝. none 이면 없음")
+    ap.add_argument("--status-file", default=str(ROOT / "results" / "live_status.json"), help="음성 게이트웨이가 읽는 상태 파일")
     args = ap.parse_args()
 
     P = dict(ss.DEFAULT_PARAMS)
@@ -54,7 +55,7 @@ def main():
                 announced = True
             time.sleep(0.25)
     ev = EventLog(ROOT / "results" / "live" / f"{time.strftime('%Y%m%d-%H%M%S')}.jsonl")
-    ctrl = Controller(client, P, log=log, eventlog=ev, beam=args.beam)
+    ctrl = Controller(client, P, log=log, eventlog=ev, beam=args.beam, status_file=args.status_file)
     files = IntentFile(args.intent_file)
     snap = client.observe()
     log(f"실행기 {client.info.get('backend')} 라이브 v2. 프레임 {snap['frame']} 미네랄 {snap['minerals']} 일꾼 {snap['workers']['total']}")

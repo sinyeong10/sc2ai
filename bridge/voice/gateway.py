@@ -105,8 +105,41 @@ def say_for(intent: dict) -> str:
     return {"army": "총공격", "cancel": "취소", "status": "상태", "rebalance": "일꾼 이전"}.get(k, k)
 
 
+ACTION_SAY = {0: "일꾼", 1: "파일런", 2: "게이트", 3: "질럿", 4: "멀티", 5: "가스", 6: "코어", 7: "드라군", 10: "성채", 11: "아카이브", 12: "하이템플러", 13: "다크템플러"}
+
+
+def status_sentence(st, stale_after=5.0) -> str:
+    """제어 루프 상태 파일 → TTS 용 한 문장."""
+    if not st:
+        return "제어 루프 상태를 알 수 없어요"
+    if time.time() - float(st.get("time", 0)) > stale_after:
+        return "제어 루프가 응답하지 않아요"
+    parts = []
+    g = st.get("goal")
+    if g:
+        parts.append(f"지금 {SAY_UNIT.get(g['unit'], g['unit'])} {g['count']} 중 {g['progress']} 완료")
+    else:
+        parts.append("진행 중인 목표 없음")
+    reqs = st.get("requests") or []
+    if reqs:
+        names = [ACTION_SAY.get(r["action"], str(r["action"])) for r in reqs[:6]]
+        waiting = [r for r in reqs if r["state"] == "queued" and r.get("reason")]
+        parts.append("남은 명령 " + ", ".join(names) + ("" if len(reqs) <= 6 else f" 외 {len(reqs) - 6}개"))
+        if waiting:
+            parts.append(f"{ACTION_SAY.get(waiting[0]['action'], '')} 대기 사유 {waiting[0]['reason']}")
+    q = st.get("queue") or []
+    if q:
+        parts.append("큐에 " + ", ".join((f"예비 미네랄 {i['minerals']}" if i["intent"] == "reserve" else f"{SAY_UNIT.get(i['unit'], i['unit'])} {i['count']}") for i in q[:5]))
+    r = st.get("reserve") or {}
+    if r.get("minerals") or r.get("gas"):
+        parts.append(f"예비 미네랄 {r.get('minerals', 0)} 가스 {r.get('gas', 0)}")
+    parts.append(f"미네랄 {st.get('minerals')} 가스 {st.get('gas')} 인구 {st.get('supply_in_use')} 중 {st.get('supply_total')} 일꾼 {st.get('workers')}")
+    return ". ".join(parts)
+
+
 class Gateway:
-    def __init__(self, intent_file: Path):
+    def __init__(self, intent_file: Path, status_file=None):
+        self.status_file = Path(status_file) if status_file else None
         self.intent_file = Path(intent_file)
         self.intent_file.parent.mkdir(parents=True, exist_ok=True)
         self.lock = threading.Lock()
@@ -133,6 +166,17 @@ class Gateway:
                 if parsed is None:
                     raise Invalid(f"명령으로 해석되지 않음: {text!r}")
                 intent = normalize_intent(parsed)
+            if intent["intent"] == "status":
+                # 질의: 의도 파일에 넣지 않고 제어 루프의 상태 파일을 읽어 문장으로 답한다
+                st = None
+                if self.status_file and self.status_file.exists():
+                    try:
+                        st = json.loads(self.status_file.read_text(encoding="utf-8"))
+                    except (OSError, json.JSONDecodeError):
+                        st = None
+                sent = status_sentence(st)
+                LOG.info("상태 질의 → %s", sent)
+                return {"ok": True, "intent": intent, "say": sent, "status": st}
             line = json.dumps(intent, ensure_ascii=False)
             with self.lock, open(self.intent_file, "a", encoding="utf-8") as f:
                 f.write(line + "\n")
@@ -221,10 +265,11 @@ def main():
     ap.add_argument("--http-port", type=int, default=15810)
     ap.add_argument("--tcp-port", type=int, default=15811)
     ap.add_argument("--log", default=str(Path(__file__).resolve().parent.parent / "results" / "voice_gateway.log"))
+    ap.add_argument("--status-file", default=str(Path(__file__).resolve().parent.parent / "results" / "live_status.json"), help="제어 루프가 쓰는 상태 파일")
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s",
                         handlers=[logging.StreamHandler(sys.stdout), logging.FileHandler(args.log, encoding="utf-8")])
-    gw = Gateway(Path(args.intent_file))
+    gw = Gateway(Path(args.intent_file), Path(args.status_file))
     threading.Thread(target=serve_tcp, args=(gw, args.host, args.tcp_port), daemon=True).start()
     httpd = ThreadingHTTPServer((args.host, args.http_port), make_http_handler(gw))
     LOG.info("HTTP %s:%d  의도 파일 %s", args.host, args.http_port, args.intent_file)

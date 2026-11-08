@@ -55,8 +55,9 @@ class Goal:
 
 
 class Controller:
-    def __init__(self, client, P, log=print, eventlog=None, beam=800):
+    def __init__(self, client, P, log=print, eventlog=None, beam=800, status_file=None):
         self.client, self.P, self.log, self.ev, self.beam = client, P, log, eventlog, beam
+        self.status_file = status_file  # 음성 게이트웨이가 읽어 "지금 뭐 하고 있어?" 에 답하는 상태 파일
         self.queue: list[Intent] = []
         self.goal: Goal | None = None
         self.reserve = {"minerals": 0, "gas": 0}
@@ -90,6 +91,7 @@ class Controller:
         self.maintain_supply(snap)
         self.fill_workers(snap)
         self.update_hud(snap)
+        self.write_status(snap)
         self.sent_since_obs = False
 
     # ---------------- 입력
@@ -297,6 +299,26 @@ class Controller:
         return (f"[상태] 목표 {g} / 요청 {rq} / 큐 {q} / 예비 m{self.reserve['minerals']} g{self.reserve['gas']} / 일꾼 목표 {self.worker_target} / "
                 f"프레임 {s.get('frame')} 미네랄 {s.get('minerals')} 가스 {s.get('gas')} 인구 {s.get('supply_in_use')}/{s.get('supply_total')} "
                 f"일꾼 {(s.get('workers') or {}).get('total')} / 건설 감시 {wt} / 위협 {s.get('threat')}")
+
+    def write_status(self, snap):
+        if not self.status_file:
+            return
+        import json, os, time as _t
+        reqs = [r for r in snap.get("requests", []) if r["state"] in ("queued", "issued")]
+        st = {"time": _t.time(), "frame": snap["frame"],
+              "goal": {"desc": self.goal.describe(), "unit": self.goal.unit, "count": self.goal.count, "progress": self.goal.progress(snap)} if self.goal else None,
+              "queue": [({"intent": "reserve", "minerals": i.minerals, "gas": i.gas} if i.intent == "reserve" else {"intent": "produce", "unit": i.unit, "count": i.count}) for i in self.queue],
+              "requests": [{"action": r["action"], "state": r["state"], "reason": r.get("reason", "")} for r in reqs],
+              "reserve": self.reserve, "worker_target": self.worker_target,
+              "minerals": snap["minerals"], "gas": snap["gas"], "supply_in_use": snap["supply_in_use"], "supply_total": snap["supply_total"],
+              "workers": snap["workers"]["total"], "threat": snap["threat"]}
+        tmp = str(self.status_file) + ".tmp"
+        try:
+            with open(tmp, "w", encoding="utf-8") as f:
+                json.dump(st, f, ensure_ascii=False)
+            os.replace(tmp, self.status_file)
+        except OSError:
+            pass
 
     def update_hud(self, snap):
         reqs = [r for r in snap.get("requests", []) if r["state"] in ("queued", "issued")]

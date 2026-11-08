@@ -123,7 +123,7 @@ def parse_utterance(text: str) -> dict | None:
         return {"intent": "army", "op": "attack", "text": raw}
     if any(k in s for k in ("취소", "캔슬", "cancel", "멈춰", "그만")):
         return {"intent": "cancel", "text": raw}
-    if any(k in s for k in ("상태", "status", "현황")):
+    if any(k in s for k in ("상태", "status", "현황", "뭐하고", "뭐만들", "뭐들어", "명령뭐", "무슨명령", "큐", "진행", "어디까지")):
         return {"intent": "status", "text": raw}
     if any(k in s for k in ("재분배", "리밸런스", "옮겨", "이전해")):
         return {"intent": "rebalance", "text": raw}

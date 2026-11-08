@@ -33,7 +33,13 @@ def post(url, body, json_body=True):
 
 
 tmp = Path(tempfile.mkdtemp()) / "intents.txt"
-gw = Gateway(tmp)
+status = tmp.with_name("live_status.json")
+status.write_text(json.dumps({"time": time.time(), "frame": 5000, "goal": {"desc": "zealot4", "unit": "zealot", "count": 4, "progress": 2},
+                              "queue": [{"intent": "produce", "unit": "nexus", "count": 1}, {"intent": "reserve", "minerals": 200, "gas": 0}],
+                              "requests": [{"action": 3, "state": "queued", "reason": "minerals"}, {"action": 3, "state": "queued", "reason": "minerals"}],
+                              "reserve": {"minerals": 0, "gas": 0}, "worker_target": 16, "minerals": 120, "gas": 30, "supply_in_use": 40, "supply_total": 49,
+                              "workers": 16, "threat": {}}, ensure_ascii=False), encoding="utf-8")
+gw = Gateway(tmp, status)
 httpd = ThreadingHTTPServer(("127.0.0.1", 0), make_http_handler(gw))
 hp = httpd.server_address[1]
 threading.Thread(target=httpd.serve_forever, daemon=True).start()
@@ -67,6 +73,8 @@ c.close()
 check(r1["ok"] and r1["intent"]["minerals"] == 200 and r1["intent"]["gas"] == 50, f"TCP 평문 → {r1.get('intent')}")
 check(r2["ok"] and r2["intent"]["count"] == 24, f"TCP JSON → {r2.get('intent')}")
 
+s, r = post(base + "/text", {"text": "지금 명령 뭐 들어갔어"})
+check(s == 200 and r["intent"]["intent"] == "status" and "질럿 4 중 2 완료" in r["say"] and "멀티 1" in r["say"], f"상태 질의 → {r.get('say')}")
 lines = [json.loads(l) for l in tmp.read_text(encoding="utf-8").splitlines()]
 check(len(lines) == 6 and lines[0]["unit"] == "zealot" and lines[-1]["intent"] == "worker_target", f"의도 파일 {len(lines)}줄 (받아들인 것만)")
 try:
