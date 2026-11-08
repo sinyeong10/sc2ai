@@ -130,6 +130,7 @@ class RemoteBackend(BuildEnv):
         self.connect_timeout = connect_timeout
         self.on_wait = on_wait or (lambda m: None)
         self.next_id = 0
+        self.inbox = []  # 실행기가 먼저 보낸 메시지(예: 라이브 모드의 사람 채팅 "text")
         self._connect()
 
     def _connect(self):
@@ -178,9 +179,17 @@ class RemoteBackend(BuildEnv):
                 if m.get("fatal"):
                     raise RuntimeError(f"실행기 오류: {m.get('message')}")
                 return m
-            if m.get("id") not in (None, msg_id):
+            if m.get("type") == "text" or m.get("id") is None:
+                self.inbox.append(m)  # 요청과 무관하게 먼저 온 메시지
+                continue
+            if m.get("id") != msg_id:
                 continue  # 이전 요청의 늦은 응답
             return m
+
+    def poll_inbox(self):
+        """쌓인 실행기발 메시지를 꺼낸다. 라이브 모드에서는 step(8, frames=...) 으로 주기적으로 읽어야 들어온다."""
+        out, self.inbox = self.inbox, []
+        return out
 
     def reset(self, target, **kw):
         msg_id = self.next_id
@@ -204,6 +213,18 @@ class RemoteBackend(BuildEnv):
 
     def status(self):
         return self._call({"type": "status"})
+
+    def rebalance(self):
+        """멀티로 본진 초과 일꾼 이전 (실행기 지원 시)."""
+        return self._call({"type": "rebalance"})
+
+    def hud(self, text):
+        """게임 화면 왼쪽 위에 띄울 상태 글. 줄 구분은 '|'. (실행기가 지원할 때만)"""
+        return self._call({"type": "hud", "text": text})
+
+    def set_reserve(self, minerals=0, gas=0):
+        """예비 자원: 실행기가 이 양 아래로는 쓰지 않는다 (라이브 모드에서 사람 몫)."""
+        return self._call({"type": "reserve", "minerals": int(minerals), "gas": int(gas)})
 
     def close(self):
         try:

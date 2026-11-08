@@ -9,3 +9,6 @@ bridge/backends.json
 bridge/results/*.log
 bridge/results/*.stdout.txt
 bridge/results/*.stderr.txt
+bridge/results/*.err
+bridge/results/intents.txt
+bridge/results/live/

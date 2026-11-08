@@ -27,11 +27,11 @@ SUPPLY = {0: 1, 1: 0, 2: 0, 3: 2}
 
 # 초기값: 2026-11-08 실게임 N=5 궤적(bridge/results/results_sc1_ums10.jsonl)과 BOSS 상수에서 잡음. 적합으로 갱신한다.
 DEFAULT_PARAMS = {
-    # 수입 상수는 2026-11-08 실측(bridge/results/income_by_workers.md, 일꾼 4~24기, 첫 파일런 6/7/8 비교)에서 고정한다.
-    # 1~8기(덩이당 1): 일꾼당 0.046, 9~16기: 한계 0.026, 17~24기: 한계 0.021 (미네랄/프레임). 적합 대상이 아니다.
-    "income": 0.046,
-    "income_add": 0.026,
-    "income_over": 0.021,
+    # 수입 상수는 2026-11-08 실측에서 고정한다. 6000프레임 창 재측정(income_by_workers_w6000.md, 17기 이상 표준편차 0.024→0.012):
+    # 1~8기(덩이당 1): 일꾼당 0.044, 9~16기: 한계 0.024, 17~24기: 한계 0.019 (미네랄/프레임). 적합 대상이 아니다.
+    "income": 0.044,
+    "income_add": 0.024,
+    "income_over": 0.019,
     "sat": 16,
     "start_delay": 40,     # 시작 후 첫 수입까지
     "probe": 302,          # 실측: 일꾼 명령 간격 302프레임(넥서스 큐 제한)
@@ -48,7 +48,7 @@ FIT_PARAMS = ["start_delay", "probe", "mine_delay", "pylon", "gate", "zealot", "
 
 class SC1Sim:
     __slots__ = ("P", "target", "events", "spent", "supply_used", "pylon_done", "gate_ready", "gate_busy", "gate_queue",
-                 "nexus_free", "zealot_done", "t", "end", "times")
+                 "nexus_free", "zealot_done", "t", "end", "times", "cap_base", "has_pylon")
 
     def __init__(self, P, target):
         self.P = P
@@ -65,6 +65,8 @@ class SC1Sim:
         self.t = -1
         self.end = None
         self.times: list[int] = []
+        self.cap_base = None  # 스냅샷에서 출발할 때 현재 인구 한도 (None 이면 START_CAP 기준)
+        self.has_pylon = False  # 스냅샷에 완성 파일런이 있으면 True (게이트 조건)
 
     # ---- 자원
     def _rate(self, n):
@@ -112,7 +114,8 @@ class SC1Sim:
         return None
 
     def cap_at(self, t):
-        return START_CAP + 8 * sum(1 for c in self.pylon_done if c <= t)
+        base = START_CAP if self.cap_base is None else self.cap_base
+        return base + 8 * sum(1 for c in self.pylon_done if c <= t)
 
     def supply_time(self, need, t):
         if self.supply_used + need <= self.cap_at(t):
@@ -128,7 +131,7 @@ class SC1Sim:
         P = self.P
         cost = COST[a]
         t = self.t + 1
-        if a == 2:
+        if a == 2 and not self.has_pylon:
             if not self.pylon_done:
                 return None
             t = max(t, min(self.pylon_done))
@@ -201,17 +204,23 @@ class SC1Sim:
         o.nexus_free = self.nexus_free
         o.zealot_done = list(self.zealot_done)
         o.t, o.end, o.times = self.t, self.end, list(self.times)
+        o.cap_base = self.cap_base
+        o.has_pylon = self.has_pylon
         return o
 
     # ---- 탐색용 낙관적 하한: 남은 질럿을 지금 게이트로 자원 제약 없이 만들 때의 완료 시각과, 미네랄 수입 제약 중 큰 쪽
-    def lower_bound(self):
+    def lower_bound(self, strict=False, extra_gates=0):
+        """strict=True: 참 하한(게이트 처리량만). 빔 순위용 기본값은 현재 수입으로 본 미네랄 항을 더한 추정치인데,
+        일꾼을 더 뽑으면 수입이 늘 수 있어 참 하한이 아니다. 전수 탐색의 가지치기에는 strict 를 쓴다."""
         r = self.target - len(self.zealot_done)
         if r <= 0:
             return self.end
         t = max(self.t, 0)
         P = self.P
-        busy = sorted(self.gate_busy) if self.gate_busy else [float(t + P["gate"])]
-        busy = [max(b, float(t)) for b in busy]
+        busy = [max(b, float(t)) for b in self.gate_busy]
+        # 아직 지을 수 있는 게이트(extra_gates)는 지금 명령하면 t+gate 에 쓸 수 있다고 본다. 이것을 빼면 참 하한이 아니다
+        # (게이트를 더 지어 더 빨리 끝내는 가지를 잘라 버린다, 2026-11-08 전수 탐색 오류의 원인).
+        busy += [float(t + P["gate"])] * (max(extra_gates, 0) if (self.gate_busy or extra_gates > 0) else 1)
         import heapq
         heapq.heapify(busy)
         last = t
@@ -219,6 +228,8 @@ class SC1Sim:
             b = heapq.heappop(busy)
             last = b + P["zealot"]
             heapq.heappush(busy, last)
+        if strict:
+            return last
         need = r * COST[3] - self.minerals_at(t)
         rate = self.rate_at(t)
         lb_min = t + (need / rate if rate > 0 and need > 0 else 0) + P["zealot"]
@@ -335,7 +346,20 @@ def beam_search(P, target, width=2000, max_gates=None, max_workers=12, topk=20, 
                 else:
                     cands.append((s2.lower_bound(), s2, seq))
         cands.sort(key=lambda c: (c[0], c[2]))
-        beam = [(s, seq) for _, s, seq in cands[:width]]
+        # 계층화: 하한만으로 자르면 일꾼이 많은(수입이 커서 하한이 낮은) 접두사가 빔을 독차지한다.
+        # (일꾼, 게이트) 구성 버킷마다 고르게 남기고, 남는 자리는 전체 순위로 채운다.
+        buckets = {}
+        for c in cands:
+            buckets.setdefault((c[2].count(0), c[2].count(2)), []).append(c)
+        per = max(1, width // max(1, len(buckets)))
+        kept = []
+        for items in buckets.values():
+            kept.extend(items[:per])
+        kept.sort(key=lambda c: (c[0], c[2]))
+        if len(kept) < width:
+            chosen = {id(c[1]) for c in kept}
+            kept.extend(c for c in cands if id(c[1]) not in chosen)
+        beam = [(s, seq) for _, s, seq in kept[:width]]
         depth += 1
     res = sorted((e, seq) for seq, e in finished.items())
     return res[:topk], len(finished)
@@ -361,7 +385,7 @@ def exhaustive(P, target, max_gates, max_workers, max_len=40, workers_before_zea
                 count += 1
                 results.append((s2.end, tuple(prefix)))
                 best[0] = min(best[0], s2.end)
-            elif len(prefix) < max_len and s2.lower_bound() <= best[0]:
+            elif len(prefix) < max_len and s2.lower_bound(strict=True, extra_gates=max_gates - prefix.count(2)) <= best[0]:
                 dfs(s2, prefix)
             prefix.pop()
 
@@ -405,3 +429,52 @@ if __name__ == "__main__":
     print(f"beam: {n}개 완성, 상위 5:")
     for e, s in top[:5]:
         print("  ", e, s)
+
+
+# --------------------------------------------------------------------------- 현재 상태에서 출발 (라이브 모드)
+def from_snapshot(P, obs, target_new):
+    """실행기 관측(obs: bridge.env.Obs, extra 에 스냅샷)에서 시뮬레이터를 초기화한다. target_new = 지금부터 더 만들 질럿 수.
+    시각은 게임 프레임 그대로 쓴다(t0 = obs.frame). 미네랄은 현재값에서 출발, 일꾼은 현재 수가 채취 중, 넥서스·게이트 큐와
+    짓는 중인 건물은 남은 시간으로 넣는다. 인구는 현재 사용/한도에서 출발한다."""
+    ex = obs.extra or {}
+    t0 = int(obs.frame)
+    st = obs.state
+    minerals, used, cap, workers = int(st[0]), int(st[2]), int(st[3]), int(st[4])
+    sim = SC1Sim(P, target_new)
+    sim.t = t0 - 1
+    # 실행기가 예약한 건설 비용(명령은 냈지만 아직 놓이지 않은 파일런·게이트)은 쓸 수 없는 돈이다
+    sim.spent = START_MINERALS - (minerals - int(ex.get("reserved_minerals", 0)))
+    mining = max(0, workers - int(ex.get("nexus_queue", 0)) * 0)  # 큐의 일꾼은 아직 유닛이 아니므로 workers 에 안 들어 있다
+    sim.events = [(t0, mining)]
+    # 넥서스 큐: 첫 유닛은 남은 시간 뒤, 그 뒤는 probe 간격
+    nq, nr = int(ex.get("nexus_queue", 0)), int(ex.get("nexus_remaining", 0))
+    sim.nexus_free = t0
+    for i in range(nq):
+        done = t0 + nr + i * P["probe"]
+        sim.nexus_free = done
+        sim.events.append((done + P["mine_delay"], 1))
+    # 인구: 현재 한도를 기준점으로 삼는다 (START_CAP + 8*완성 파일런 대신)
+    sim.supply_used = max(used, int(ex.get("supply_issued", used))) + nq  # 실행기는 큐의 유닛까지 센다
+    sim.pylon_done = [t0 + r for r in ex.get("pylons_building", [])]
+    sim.cap_base = cap
+    sim.has_pylon = cap > START_CAP or bool(ex.get("pylons_ready", 0))
+    # 게이트: 완성된 것은 큐 상태로 busy 계산, 짓는 중인 것은 남은 시간
+    for q, r in zip(ex.get("gate_queue", []), ex.get("gate_remaining", [])):
+        sim.gate_ready.append(t0)
+        busy = float(t0 + r + max(0, q - 1) * P["zealot"]) if q > 0 else float(t0)
+        sim.gate_busy.append(busy)
+        sim.gate_queue.append([busy] if q > 0 else [])
+    for r in ex.get("gateways_building", []):
+        sim.gate_ready.append(t0 + r)
+        sim.gate_busy.append(float(t0 + r))
+        sim.gate_queue.append([])
+    # 명령은 냈지만 아직 놓이지 않은 건물: 명령 뒤 경과 프레임(elapsed)으로 남은 시간을 추정한다
+    for e in ex.get("pylons_pending_elapsed", []):
+        sim.pylon_done.append(t0 + max(30, P["pylon"] - int(e)))
+    for e in ex.get("gateways_pending_elapsed", []):
+        done = t0 + max(30, P["gate"] - int(e))
+        sim.gate_ready.append(done)
+        sim.gate_busy.append(float(done))
+        sim.gate_queue.append([])
+    return sim
+

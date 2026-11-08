@@ -15,6 +15,7 @@
 #include <BWAPI.h>
 
 #include <map>
+#include <set>
 #include <memory>
 #include <string>
 #include <vector>
@@ -65,9 +66,18 @@ private:
     void autoMine();
     bool tryExecute(int action, std::string& why);
     bool canAffordSupply(BWAPI::UnitType t) const;
-    BWAPI::Unit pickBuilder(BWAPI::TilePosition near) const;
-    BWAPI::TilePosition findBuildTile(BWAPI::UnitType type, BWAPI::TilePosition anchor, int maxRadius, BWAPI::Unit builder) const;
+    int queuedSupply() const;     // 큐에서 대기 중(생산 전)인 유닛의 인구 (BW 2배 단위)
+    int supplyInUse() const;      // supplyUsed() + queuedSupply()
+    BWAPI::Unit pickBuilder(BWAPI::TilePosition near, const std::vector<int>* exclude = nullptr) const;
+    BWAPI::TilePosition findBuildTile(BWAPI::UnitType type, BWAPI::TilePosition anchor, int maxRadius, BWAPI::Unit builder, int pathMode = 0) const;
     BWAPI::Unit pickGateway() const;
+    bool keepsPath(BWAPI::TilePosition t, BWAPI::UnitType type, bool strict = true) const;  // 길막 방지(A3). strict: 2칸 통로
+    bool pendingOf(BWAPI::UnitType t) const;   // 명령은 냈지만 아직 놓이지 않은 건설이 있는가
+    BWAPI::TilePosition findExpansion() const; // 앞마당 넥서스 자리 (멀티)
+    void rebalanceWorkers(BWAPI::Unit depot);   // 멀티로 본진 초과 일꾼 이전
+    std::string techJson() const;
+    std::string watchesJson() const;
+    std::string abandonedJson();
     int countCompleted(BWAPI::UnitType t) const;
     int countAll(BWAPI::UnitType t) const;
     void logObservation(int action, int frame);
@@ -103,10 +113,32 @@ private:
         int issuedFrame = 0;
         int expectedCount = 0;   // 명령 시점의 해당 건물 수
         int retries = 0;
+        std::vector<int> tried;  // 실패한 건설 프로브 ID (갇힌 프로브를 다시 고르지 않게)
+        int requestId = -1;      // 라이브 v2: 이 건설을 요구한 요청
     };
+    // ---- 라이브 v2: 비동기 요청. 수명 queued → issued(건물: 놓일 때까지) → done | failed(사유)
+    struct Request {
+        int id = -1;
+        int action = -1;
+        std::string state;       // queued | issued | done | failed
+        std::string reason;      // 대기 사유 또는 실패 사유
+        int frameIn = 0, issuedFrame = -1, doneFrame = -1;
+    };
+    std::vector<Request> requests_;
+    void processRequests();
+    Request* findRequest(int id);
+    std::string snapshotJson(int id);
+    std::string requestsJson() const;
+    std::string buildingsJson() const;
+    void rebalanceBases();          // 일꾼 분배 규칙: 가스 3, 미네랄 기지당 덩이 2배수 → 3배수
+    int lostUnits_ = 0, lostBuildings_ = 0, lastLossFrame_ = -1;
+    int lastRebalanceFrame_ = 0;
+    std::vector<std::string> abandoned_;  // 포기한 건설(유형 이름). 다음 관측에 실어 보내고 비운다
+    std::set<int> badTiles_;              // build() 가 거부한 자리 (x*10000+y). 같은 자리로 되풀이하지 않게
     std::vector<BuildWatch> watches_;
     void checkBuildWatches();
-    bool issueBuild(BWAPI::UnitType type, BWAPI::TilePosition anchor, BWAPI::Unit& builderOut, BWAPI::TilePosition& tileOut, std::string& why);
+    bool issueBuild(BWAPI::UnitType type, BWAPI::TilePosition anchor, BWAPI::Unit& builderOut, BWAPI::TilePosition& tileOut, std::string& why,
+                    const std::vector<int>* exclude = nullptr);
     bool isBuilder(BWAPI::Unit u) const;
     int& lastId_;
     std::string& lastReply_;
@@ -122,6 +154,7 @@ private:
     BWAPI::Unit mainNexus_ = nullptr;
     BWAPI::TilePosition enemyStart_ = BWAPI::TilePositions::Unknown;
     std::vector<BWAPI::Unit> patches_;             // 넥서스 근처 미네랄, 거리순
+    std::vector<BWAPI::Unit> geysers_;             // 본진 간헐천 (건설 위치가 가스 길을 막지 않게)
     std::map<int, BWAPI::Unit> workerPatch_;       // 프로브 ID -> 패치
     std::vector<int> commandLog_;                  // 이번 에피소드의 명령열
     std::string logPath_;
@@ -133,4 +166,8 @@ private:
     int issuedSupply_ = 0;      // BW 2배 단위
     int maxFrames_ = 40000;     // 이 프레임을 넘기면 대기 중 명령을 실패로 응답한다 (BUILD_EXEC_MAX_FRAMES)
     int curSpeed_ = -1;         // 에피소드 중 0(최대), 대기 중 42(보통) — 창이 응답하게
+    bool live_ = false;
+    int reserveMinerals_ = 0;   // 예비 자원(reserve 메시지): 이 아래로는 쓰지 않는다
+    int reserveGas_ = 0;
+    std::string hudText_;       // 화면 상태 표시(hud 메시지), 줄 구분 '|'         // 라이브 모드: 사람과 함께. 프레임 블로킹·재시작 없음, 기본 속도, 채팅을 text 로 전달
 };
