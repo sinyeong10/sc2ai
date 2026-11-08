@@ -74,7 +74,7 @@ check(r1["ok"] and r1["intent"]["minerals"] == 200 and r1["intent"]["gas"] == 50
 check(r2["ok"] and r2["intent"]["count"] == 24, f"TCP JSON → {r2.get('intent')}")
 
 s, r = post(base + "/text", {"text": "지금 명령 뭐 들어갔어"})
-check(s == 200 and r["intent"]["intent"] == "status" and "질럿 4 중 2 완료" in r["say"] and "멀티 1" in r["say"], f"상태 질의 → {r.get('say')}")
+check(s == 200 and r["intent"]["intent"] == "status" and r["say"] == "들어간 명령 질럿 4 진행 중 2 완료, 멀티 1, 예비 미네랄 200", f"상태 질의 → {r.get('say')}")
 lines = [json.loads(l) for l in tmp.read_text(encoding="utf-8").splitlines()]
 check(len(lines) == 6 and lines[0]["unit"] == "zealot" and lines[-1]["intent"] == "worker_target", f"의도 파일 {len(lines)}줄 (받아들인 것만)")
 try:

@@ -109,32 +109,20 @@ ACTION_SAY = {0: "일꾼", 1: "파일런", 2: "게이트", 3: "질럿", 4: "멀�
 
 
 def status_sentence(st, stale_after=5.0) -> str:
-    """제어 루프 상태 파일 → TTS 용 한 문장."""
+    """제어 루프 상태 파일 → TTS 용 한 문장. 들어간 명령만 읽는다(자원·인구는 읽지 않는다, 사용자 결정)."""
     if not st:
         return "제어 루프 상태를 알 수 없어요"
     if time.time() - float(st.get("time", 0)) > stale_after:
         return "제어 루프가 응답하지 않아요"
-    parts = []
+    items = []
     g = st.get("goal")
     if g:
-        parts.append(f"지금 {SAY_UNIT.get(g['unit'], g['unit'])} {g['count']} 중 {g['progress']} 완료")
-    else:
-        parts.append("진행 중인 목표 없음")
-    reqs = st.get("requests") or []
-    if reqs:
-        names = [ACTION_SAY.get(r["action"], str(r["action"])) for r in reqs[:6]]
-        waiting = [r for r in reqs if r["state"] == "queued" and r.get("reason")]
-        parts.append("남은 명령 " + ", ".join(names) + ("" if len(reqs) <= 6 else f" 외 {len(reqs) - 6}개"))
-        if waiting:
-            parts.append(f"{ACTION_SAY.get(waiting[0]['action'], '')} 대기 사유 {waiting[0]['reason']}")
-    q = st.get("queue") or []
-    if q:
-        parts.append("큐에 " + ", ".join((f"예비 미네랄 {i['minerals']}" if i["intent"] == "reserve" else f"{SAY_UNIT.get(i['unit'], i['unit'])} {i['count']}") for i in q[:5]))
-    r = st.get("reserve") or {}
-    if r.get("minerals") or r.get("gas"):
-        parts.append(f"예비 미네랄 {r.get('minerals', 0)} 가스 {r.get('gas', 0)}")
-    parts.append(f"미네랄 {st.get('minerals')} 가스 {st.get('gas')} 인구 {st.get('supply_in_use')} 중 {st.get('supply_total')} 일꾼 {st.get('workers')}")
-    return ". ".join(parts)
+        items.append(f"{SAY_UNIT.get(g['unit'], g['unit'])} {g['count']} 진행 중 {g['progress']} 완료")
+    for i in st.get("queue") or []:
+        items.append(f"예비 미네랄 {i['minerals']}" if i["intent"] == "reserve" else f"{SAY_UNIT.get(i['unit'], i['unit'])} {i['count']}")
+    if not items:
+        return "들어간 명령 없음"
+    return "들어간 명령 " + ", ".join(items)
 
 
 class Gateway:
