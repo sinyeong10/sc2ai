@@ -90,6 +90,10 @@ OpenBW는 `BWAPILauncher`를 실행하는 셸에 둔다.
 - Chaoslauncher 는 관리자 권한이 필요하다(SeDebugPrivilege). 호환성 플래그 `RUNASADMIN` 을 레지스트리에 두면 더블클릭으로 된다.
   이미 떠 있는 인스턴스가 있으면 새로 띄워도 "Already running" 으로 꺼진다(트레이 확인).
 - 상대 변수는 `bridge/tools/make_ums_map.py` 로 만든 UMS 맵으로 없앤다(상대 컴퓨터에 AI 스크립트 없음).
+- 모듈 객체가 게임마다 새로 생기므로, 게임 단위 상태는 `onStart` 에서 초기화하고 게임을 넘는 값(요청 id, 게임 수)은 `ExecutorShared` 에 둔다.
+  스냅샷의 `game_id` = 시작 시각(초)-게임 번호. 제어 루프는 이것으로 저장 상태가 같은 게임인지 판단한다.
+- 집결지(`updateRally`)는 48프레임마다, 지금 값과 32픽셀 넘게 다를 때만 `setRallyPoint` 를 낸다(매 프레임 명령은 APM 낭비).
+  자동 자리는 본진 넥서스 기준 BFS 땅 거리(`groundDistance`)로 고른다. 직선 거리는 절벽 너머를 가깝다고 본다.
 
 ## 스레드와 흐름
 

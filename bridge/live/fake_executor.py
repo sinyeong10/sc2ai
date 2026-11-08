@@ -1,6 +1,7 @@
 """시험용 가짜 실행기. 프로토콜 v2 의미를 파이썬으로 흉내 낸다 (LiveClient 와 같은 메서드).
 
 단순 모델: 미네랄은 일꾼당 0.045/프레임, 가스는 어시밀레이터당 0.21. 유닛은 큐 진입 즉시 done, 건물은 build_delay 프레임 뒤 놓임.
+건물은 실제 실행기처럼: 명령(issued) 때 비용을 묶어 두고(reserved), 놓일 때 돈이 빠지고 건설 목록에 들어간다(그 전에는 pending).
 외부에서 상태를 건드려 사람의 행동(건물 짓기, 돈 쓰기, 유닛 손실)을 흉내 낸다.
 """
 from __future__ import annotations
@@ -13,8 +14,10 @@ SUPPLY = {0: 1, 3: 2, 7: 2, 12: 2, 13: 2}
 
 
 class FakeExecutor:
-    def __init__(self, build_delay=200, fail_actions=None):
+    def __init__(self, build_delay=200, fail_actions=None, game_id="fake-1"):
         self.frame = 0
+        self.game_id = game_id
+        self.rally_mode = "auto"
         self.minerals, self.gas = 50.0, 0.0
         self.workers = 4
         self.buildings = {k: {"ready": 1 if k == "nexus" else 0, "building": []} for k in BKEY.values()}
@@ -51,7 +54,17 @@ class FakeExecutor:
             for r in self.requests:
                 if r["state"] == "issued" and r["place_at"] <= self.frame:
                     r["state"], r["done_frame"] = "done", self.frame
+                    m, g = COST[r["action"]]
+                    self.minerals -= m
+                    self.gas -= g
+                    self.buildings[BKEY[r["action"]]]["building"].append(self.frame + 600)
             self._process()
+
+    def _holds(self):
+        """명령됐지만 아직 안 놓인 건물의 비용 (실행기의 reserved 중 예비를 뺀 부분)."""
+        m = sum(COST[x["action"]][0] for x in self.requests if x["state"] == "issued")
+        g = sum(COST[x["action"]][1] for x in self.requests if x["state"] == "issued")
+        return m, g
 
     def _have(self, key):
         b = self.buildings[key]
@@ -73,9 +86,9 @@ class FakeExecutor:
                     r["reason"] = f"{pre} not complete"
                 return
         m, g = COST[a]
-        reserved = sum(COST[x["action"]][0] for x in self.requests if x["state"] == "issued")
-        if self.minerals - reserved - self.reserve[0] < m or self.gas - self.reserve[1] < g:
-            r["reason"] = "minerals" if self.minerals - reserved - self.reserve[0] < m else "gas"
+        hm, hg = self._holds()
+        if self.minerals - hm - self.reserve[0] < m or self.gas - hg - self.reserve[1] < g:
+            r["reason"] = "minerals" if self.minerals - hm - self.reserve[0] < m else "gas"
             return
         if a in SUPPLY:
             if self.supply_total >= 200 and self.supply_used + SUPPLY[a] > 200:
@@ -90,10 +103,7 @@ class FakeExecutor:
                 return
         r["issued_frame"] = self.frame
         if a in BKEY:
-            r["state"], r["place_at"] = "issued", self.frame + self.build_delay
-            self.gas -= g
-            self.minerals -= m  # 단순화: 비용을 명령 때 뺀다
-            self.buildings[BKEY[a]]["building"].append(self.frame + self.build_delay + 600)
+            r["state"], r["place_at"] = "issued", self.frame + self.build_delay  # 비용은 놓일 때 빠진다 (그때까지 reserved)
         else:
             self.minerals -= m
             self.gas -= g
@@ -108,10 +118,12 @@ class FakeExecutor:
         b = {k: {"ready": v["ready"], "building": [max(0, d - self.frame) for d in v["building"]],
                  "pending": [self.frame - r["issued_frame"] for r in self.requests if r["state"] == "issued" and BKEY.get(r["action"]) == k]}
              for k, v in self.buildings.items()}
-        return {"type": "snapshot", "frame": self.frame, "live": True,
+        hm, hg = self._holds()
+        return {"type": "snapshot", "frame": self.frame, "live": True, "game_id": self.game_id,
+                "rally": {"mode": self.rally_mode, "x": -1, "y": -1},
                 "state": [int(self.minerals), int(self.gas), self.supply_used, self.supply_total, self.workers, 1, 0, b["gateway"]["ready"], self.units["zealot"], self.frame],
                 "minerals": int(self.minerals), "gas": int(self.gas),
-                "reserved_minerals": self.reserve[0], "reserved_gas": self.reserve[1], "reserve_minerals": self.reserve[0], "reserve_gas": self.reserve[1],
+                "reserved_minerals": hm + self.reserve[0], "reserved_gas": hg + self.reserve[1], "reserve_minerals": self.reserve[0], "reserve_gas": self.reserve[1],
                 "supply_used": self.supply_used, "supply_in_use": self.supply_used, "supply_total": self.supply_total,
                 "workers": {"total": self.workers, "minerals": self.workers, "gas": 0, "building": 0, "idle": 0},
                 "bases": [{"id": 1, "done": True, "remaining": 0, "x": 0, "y": 0, "patches": 8, "workers": self.workers, "queue": 0, "queue_remaining": 0}],
@@ -141,8 +153,19 @@ class FakeExecutor:
         self.hud_text = text
         return {"type": "status"}
 
+    def progress(self, text, permille=-1):
+        self.progress_text = (text, permille)
+        return {"type": "status"}
+
     def rebalance(self):
         return {"rebalanced": False}
+
+    def rally(self, op="here"):
+        self.rally_mode = {"here": "manual", "auto": "auto", "off": "off"}.get(op, "auto")
+        return {"type": "status", "op": op, "mode": self.rally_mode, "x": -1, "y": -1}
+
+    def army(self, op="attack"):
+        return {"type": "status", "op": op, "units": self.units["zealot"] + self.units["dragoon"]}
 
     def poll_inbox(self):
         out, self.inbox = self.inbox, []

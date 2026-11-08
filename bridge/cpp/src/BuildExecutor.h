@@ -34,6 +34,8 @@ struct ExecutorShared {
     int resetId = -1;
     int resetTarget = 0;
     int resetSeed = -1;
+    int nextRequestId = 100000;  // 라이브 요청 고유 id (프로세스 수명)
+    int games = 0;               // 이 프로세스에서 시작한 게임 수 (game_id 에 쓴다)
 };
 ExecutorShared& executorShared();
 
@@ -70,12 +72,23 @@ private:
     int supplyInUse() const;      // supplyUsed() + queuedSupply()
     BWAPI::Unit pickBuilder(BWAPI::TilePosition near, const std::vector<int>* exclude = nullptr) const;
     BWAPI::TilePosition findBuildTile(BWAPI::UnitType type, BWAPI::TilePosition anchor, int maxRadius, BWAPI::Unit builder, int pathMode = 0) const;
-    BWAPI::Unit pickGateway() const;
+    BWAPI::Unit pickGateway(bool* waiting = nullptr) const;
     bool keepsPath(BWAPI::TilePosition t, BWAPI::UnitType type, bool strict = true) const;  // 길막 방지(A3). strict: 2칸 통로
     bool pendingOf(BWAPI::UnitType t) const;   // 명령은 냈지만 아직 놓이지 않은 건설이 있는가
-    BWAPI::TilePosition findExpansion() const; // 앞마당 넥서스 자리 (멀티)
+    BWAPI::TilePosition findExpansion() const; // 앞마당 넥서스 자리 (멀티). 기지 수가 같으면 캐시
+    BWAPI::TilePosition computeExpansion() const;
+    const std::vector<int>& groundDistance() const;
+    mutable std::vector<int> groundDist_;
+    mutable BWAPI::TilePosition expansionCache_ = BWAPI::TilePositions::Invalid;
+    mutable int expansionCacheDepots_ = -1;
+    int nexusWaitSince_ = -1;                       // 앞마당 자리 대기 시작 프레임
+    BWAPI::TilePosition nexusWaitAnchor_ = BWAPI::TilePositions::Invalid;
     void rebalanceWorkers(BWAPI::Unit depot);   // 멀티로 본진 초과 일꾼 이전
     std::string techJson() const;
+    std::string upgradesJson() const;
+    bool tryUpgrade(BWAPI::UpgradeType up, std::string& why);
+    std::string progressText_;   // 우측 하단 진행 표시
+    int progressPermille_ = -1;
     std::string watchesJson() const;
     std::string abandonedJson();
     int countCompleted(BWAPI::UnitType t) const;
@@ -133,6 +146,19 @@ private:
     void rebalanceBases();          // 일꾼 분배 규칙: 가스 3, 미네랄 기지당 덩이 2배수 → 3배수
     int lostUnits_ = 0, lostBuildings_ = 0, lastLossFrame_ = -1;
     int lastRebalanceFrame_ = 0;
+    // 게임 식별자: 시작 시각(초) + 프로세스 안 게임 번호. 제어 루프가 재시작 뒤 저장 상태가 같은 게임인지 확인한다
+    std::string gameId_;
+    // 집결지: 0 자동(앞마당 길목·멀티 앞), 1 수동(rally 명령 때 화면 중앙), 2 끔(관리 안 함)
+    int rallyMode_ = 0;
+    BWAPI::Position rallyManual_ = BWAPI::Positions::Invalid;
+    BWAPI::Position rallyNow_ = BWAPI::Positions::Invalid;
+    int lastRallyFrame_ = -1000;
+    BWAPI::Position rallyAuto() const;
+    BWAPI::Position snapReachable(BWAPI::Position p, int radius) const;
+    void updateRally();
+    std::string lastWhy_;          // 마지막 대기 사유 (반복 거부 시 보고용)
+    mutable std::vector<char> walkGrid_;   // 타일 보행 가능(정적 지형). 게임 시작 뒤 한 번 계산
+    std::map<int, int> placeFailFrame_;    // 건물 유형별 마지막 자리 탐색 실패 프레임 (24프레임 쉼)
     std::vector<std::string> abandoned_;  // 포기한 건설(유형 이름). 다음 관측에 실어 보내고 비운다
     std::set<int> badTiles_;              // build() 가 거부한 자리 (x*10000+y). 같은 자리로 되풀이하지 않게
     std::vector<BuildWatch> watches_;

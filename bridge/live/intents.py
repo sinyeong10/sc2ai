@@ -18,19 +18,26 @@ UNIT_WORDS = {
     "assimilator": ("가스", "어시밀레이터", "assimilator", "gas", "a"),
     "core": ("코어", "core", "cyber", "c"),
     "citadel": ("성채", "citadel", "i"),
+    "forge": ("포지", "forge", "f"),
+    "up_weapons": ("공업", "공격업", "weapons", "uw"),
+    "up_armor": ("방업", "방어업", "armor", "ua"),
+    "up_shields": ("쉴드업", "쉴업", "shields", "us"),
     "archives": ("아카이브", "archives", "arch", "r"),
 }
 ARMY = ("zealot", "dragoon", "high_templar", "dark_templar")
-BUILDINGS = ("pylon", "gateway", "nexus", "assimilator", "core", "citadel", "archives")
+BUILDINGS = ("pylon", "gateway", "nexus", "assimilator", "core", "citadel", "archives", "forge")
+UPGRADES = ("up_weapons", "up_armor", "up_shields")
 EXEC_ACTION = {"worker": 0, "pylon": 1, "gateway": 2, "zealot": 3, "nexus": 4, "assimilator": 5, "core": 6, "dragoon": 7,
-               "citadel": 10, "archives": 11, "high_templar": 12, "dark_templar": 13}
+               "citadel": 10, "archives": 11, "high_templar": 12, "dark_templar": 13, "forge": 14,
+               "up_weapons": 15, "up_armor": 16, "up_shields": 17}
 ACTION_UNIT = {v: k for k, v in EXEC_ACTION.items()}
-HUD_LETTER = {0: "W", 1: "P", 2: "G", 3: "Z", 4: "N", 5: "A", 6: "C", 7: "D", 10: "I", 11: "R", 12: "T", 13: "K"}
+HUD_LETTER = {0: "W", 1: "P", 2: "G", 3: "Z", 4: "N", 5: "A", 6: "C", 7: "D", 10: "I", 11: "R", 12: "T", 13: "K",
+              14: "F", 15: "+W", 16: "+A", 17: "+S"}
 
 
 @dataclasses.dataclass
 class Intent:
-    intent: str                 # produce | reserve | worker_target | status | cancel | rebalance | debug
+    intent: str                 # produce | reserve | worker_target | status | cancel | rebalance | army | rally | debug
     unit: str | None = None
     count: int = 1
     minerals: int = 0
@@ -50,6 +57,10 @@ def parse_text(text: str) -> Intent | None:
         return Intent("cancel", source="text", raw=text)
     if t in ("attack", "atk", "공격", "총공격"):
         return Intent("army", source="text", raw=text, args={"op": "attack"})
+    m = re.match(r"^(rally|집결|집결지)\s*(here|auto|off|여기|자동|해제|끔)?$", t)
+    if m:
+        op = {"here": "here", "여기": "here", "auto": "auto", "자동": "auto", "off": "off", "해제": "off", "끔": "off"}.get(m.group(2) or "here")
+        return Intent("rally", source="text", raw=text, args={"op": op})
     if t in ("rebalance", "move", "이전"):
         return Intent("rebalance", source="text", raw=text)
     # 예상외 상황 주입(시험): x1 돈 쓰기(게이트 150), x2 짓던 건물 취소, x3 자기 파일런 공격, x4 자기 게이트 공격
@@ -97,6 +108,8 @@ def parse_intent_json(line: str) -> Intent | None:
         return Intent(kind, source="file", raw=line)
     if kind == "army":
         return Intent("army", source="file", raw=line, args={"op": d.get("op", "attack")})
+    if kind == "rally":
+        return Intent("rally", source="file", raw=line, args={"op": d.get("op", "here")})
     if kind == "debug":
         return Intent("debug", source="file", raw=line, args={k: v for k, v in d.items() if k != "intent"})
     return None

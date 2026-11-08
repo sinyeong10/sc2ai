@@ -1,10 +1,12 @@
 """음성 인식 결과(한국어/영어 문장) → 의도 JSON. 규칙 기반 NLU. Dialogflow 식 의도 스키마와 같은 꼴을 낸다.
 
-의도: produce(unit, count) | reserve(minerals, gas) | worker_target(count) | army(op) | cancel | status | rebalance
+의도: produce(unit, count) | reserve(minerals, gas) | worker_target(count) | army(op) | rally(op) | cancel | status | rebalance
 예: "질럿 세 기" → {"intent":"produce","unit":"zealot","count":3}
     "미네랄 이백 가스 오십 남겨" → {"intent":"reserve","minerals":200,"gas":50}
     "일꾼 스물넷까지" → {"intent":"worker_target","count":24}
     "총공격" → {"intent":"army","op":"attack"}
+    "공업" → {"intent":"produce","unit":"up_weapons","count":1}  ("공격" 이 들어가도 업그레이드가 먼저)
+    "여기 집결" → {"intent":"rally","op":"here"}, "집결 자동" → auto, "집결 해제" → off
 STT 가 띄어쓰기를 제멋대로 하므로 공백을 지우고 본다.
 """
 from __future__ import annotations
@@ -25,10 +27,16 @@ UNIT_KO = [  # (키워드, 유닛) 긴 것 먼저
     ("템플러아카이브", "archives"), ("아카이브", "archives"), ("아카이브스", "archives"),
     ("아둔의성채", "citadel"), ("아둔", "citadel"), ("성채", "citadel"), ("시타델", "citadel"),
     ("넥서스", "nexus"), ("멀티", "nexus"), ("확장", "nexus"), ("앞마당", "nexus"),
+    ("포지", "forge"), ("포오지", "forge"),
+    ("공격업그레이드", "up_weapons"), ("공격업", "up_weapons"), ("공업", "up_weapons"), ("무기업", "up_weapons"),
+    ("방어업그레이드", "up_armor"), ("방어업", "up_armor"), ("방업", "up_armor"), ("아머업", "up_armor"),
+    ("쉴드업그레이드", "up_shields"), ("실드업그레이드", "up_shields"), ("쉴드업", "up_shields"), ("실드업", "up_shields"), ("쉴업", "up_shields"),
 ]
+UPGRADE_WORDS = ("공업", "공격업", "무기업", "방업", "방어업", "아머업", "쉴드업", "실드업", "쉴업", "업그레이드", "upgrade")
 UNIT_EN = {"zealot": "zealot", "dragoon": "dragoon", "templar": "high_templar", "dark": "dark_templar", "probe": "worker", "worker": "worker",
            "pylon": "pylon", "gateway": "gateway", "gate": "gateway", "assimilator": "assimilator", "gas": "assimilator", "core": "core",
-           "citadel": "citadel", "archives": "archives", "nexus": "nexus", "expand": "nexus"}
+           "citadel": "citadel", "archives": "archives", "nexus": "nexus", "expand": "nexus", "forge": "forge",
+           "weapons": "up_weapons", "armor": "up_armor", "shields": "up_shields"}
 
 NATIVE_TENS = {"열": 10, "스물": 20, "스무": 20, "서른": 30, "마흔": 40, "쉰": 50}
 NATIVE_ONES = {"하나": 1, "한": 1, "둘": 2, "두": 2, "셋": 3, "세": 3, "석": 3, "넷": 4, "네": 4, "넉": 4, "다섯": 5, "여섯": 6, "일곱": 7, "여덟": 8, "아홉": 9}
@@ -118,8 +126,11 @@ def parse_utterance(text: str) -> dict | None:
     if not raw:
         return None
     s = raw.replace(" ", "").lower()
-    # 제어 명령
-    if any(k in s for k in ("총공격", "공격", "어택", "attack")):
+    # 제어 명령. 집결지가 먼저("집결 취소" 는 취소가 아니라 집결지 해제), 업그레이드 말이 있으면 공격 명령이 아니다("공격업")
+    if any(k in s for k in ("집결", "랠리", "rally", "모여", "모이")):
+        op = "auto" if any(k in s for k in ("자동", "auto")) else ("off" if any(k in s for k in ("해제", "취소", "끄", "꺼", "off")) else "here")
+        return {"intent": "rally", "op": op, "text": raw}
+    if not any(k in s for k in UPGRADE_WORDS) and any(k in s for k in ("총공격", "공격", "어택", "attack")):
         return {"intent": "army", "op": "attack", "text": raw}
     if any(k in s for k in ("취소", "캔슬", "cancel", "멈춰", "그만")):
         return {"intent": "cancel", "text": raw}
@@ -162,5 +173,6 @@ def parse_utterance(text: str) -> dict | None:
 if __name__ == "__main__":
     import sys
     for t in (sys.argv[1:] or ["질럿 세 기", "드라군 두 기 뽑아", "다크 템플러 하나", "하이템플러 둘", "질럿 열두 기", "파일런", "게이트 두 개",
-                               "멀티 해", "가스 지어", "미네랄 이백 남겨", "미네랄 이백 가스 오십 예비", "일꾼 스물넷까지", "총공격", "취소", "상태", "스무 기 질럿"]):
+                               "멀티 해", "가스 지어", "미네랄 이백 남겨", "미네랄 이백 가스 오십 예비", "일꾼 스물넷까지", "총공격", "취소", "상태", "스무 기 질럿",
+                               "포지", "공격 업그레이드", "쉴드업 두 번", "여기 집결", "집결 자동", "집결 해제"]):
         print(f"{t!r:24} → {parse_utterance(t)}")

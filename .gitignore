@@ -13,3 +13,10 @@ bridge/results/*.err
 bridge/results/intents.txt
 bridge/results/live/
 bridge/voice/models/
+# 라이브 실행 중 상태와 재보정 결과 (로그에서 다시 만든다: bridge/live/refit.py)
+bridge/results/live_status.json
+bridge/results/live_status.json.tmp
+bridge/results/live_state.json
+bridge/results/live_state.json.tmp
+bridge/results/live_params.json
+bridge/results/live_refit.md

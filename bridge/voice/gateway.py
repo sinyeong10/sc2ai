@@ -31,7 +31,8 @@ from nlu import parse_utterance  # noqa: E402
 
 LOG = logging.getLogger("voice.gateway")
 
-UNITS = ("zealot", "dragoon", "high_templar", "dark_templar", "worker", "pylon", "gateway", "nexus", "assimilator", "core", "citadel", "archives")
+UNITS = ("zealot", "dragoon", "high_templar", "dark_templar", "worker", "pylon", "gateway", "nexus", "assimilator", "core", "citadel", "archives",
+         "forge", "up_weapons", "up_armor", "up_shields")
 UNIT_ALIASES = {"zealots": "zealot", "dragoons": "dragoon", "templar": "high_templar", "ht": "high_templar", "dt": "dark_templar", "probe": "worker",
                 "probes": "worker", "workers": "worker", "gate": "gateway", "gateways": "gateway", "pylons": "pylon", "gas": "assimilator",
                 "expand": "nexus", "multi": "nexus", "cyber": "core", "cybernetics": "core"}
@@ -41,10 +42,12 @@ INTENT_SCHEMA = {
     "reserve": {"minerals": ("int", 0, 10000, 0), "gas": ("int", 0, 10000, 0)},
     "worker_target": {"count": ("int", 0, 200, 0)},
     "army": {"op": ("enum", ("attack",), None, "attack")},
+    "rally": {"op": ("enum", ("here", "auto", "off"), None, "here")},
     "cancel": {}, "status": {}, "rebalance": {},
 }
 SAY_UNIT = {"zealot": "질럿", "dragoon": "드라군", "high_templar": "하이템플러", "dark_templar": "다크템플러", "worker": "일꾼", "pylon": "파일런",
-            "gateway": "게이트", "nexus": "멀티", "assimilator": "가스", "core": "코어", "citadel": "성채", "archives": "아카이브"}
+            "gateway": "게이트", "nexus": "멀티", "assimilator": "가스", "core": "코어", "citadel": "성채", "archives": "아카이브",
+            "forge": "포지", "up_weapons": "공격 업그레이드", "up_armor": "방어 업그레이드", "up_shields": "쉴드 업그레이드"}
 
 
 class Invalid(ValueError):
@@ -102,10 +105,13 @@ def say_for(intent: dict) -> str:
         return f"미네랄 {intent['minerals']} 가스 {intent['gas']} 예비"
     if k == "worker_target":
         return f"일꾼 {intent['count']}까지"
+    if k == "rally":
+        return {"here": "여기 집결", "auto": "집결지 자동", "off": "집결지 해제"}.get(intent.get("op", "here"), "집결")
     return {"army": "총공격", "cancel": "취소", "status": "상태", "rebalance": "일꾼 이전"}.get(k, k)
 
 
-ACTION_SAY = {0: "일꾼", 1: "파일런", 2: "게이트", 3: "질럿", 4: "멀티", 5: "가스", 6: "코어", 7: "드라군", 10: "성채", 11: "아카이브", 12: "하이템플러", 13: "다크템플러"}
+ACTION_SAY = {0: "일꾼", 1: "파일런", 2: "게이트", 3: "질럿", 4: "멀티", 5: "가스", 6: "코어", 7: "드라군", 10: "성채", 11: "아카이브", 12: "하이템플러", 13: "다크템플러",
+              14: "포지", 15: "공격 업그레이드", 16: "방어 업그레이드", 17: "쉴드 업그레이드"}
 
 
 def status_sentence(st, stale_after=5.0) -> str:

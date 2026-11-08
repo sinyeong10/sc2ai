@@ -38,7 +38,8 @@ GAS_WORKERS = 3
 
 
 class ExpSim(ss.SC1Sim):
-    __slots__ = ("bases_done", "nexus_frees", "unit", "gas_spent", "gas_events", "assim_done", "core_done", "citadel_done", "archives_done")
+    __slots__ = ("bases_done", "nexus_frees", "unit", "gas_spent", "gas_events", "assim_done", "core_done", "citadel_done", "archives_done",
+                 "patch_counts")
 
     def __init__(self, P, target, unit="zealot"):
         super().__init__(P, target)
@@ -52,11 +53,15 @@ class ExpSim(ss.SC1Sim):
         self.core_done = None
         self.citadel_done = None
         self.archives_done = None
+        self.patch_counts = None  # 기지별 미네랄 덩이 수(완성 순). None 이면 기지당 8
 
     # ---- 미네랄
     def _rate_b(self, n, b):
+        """미네랄 수입: 기지 b 개의 실제 덩이 수 합 c 로 구간을 나눈다 (덩이당 1기 0.044, 2기째 0.024, 3기째 0.019, 실측).
+        멀티의 덩이가 적으면(고갈·작은 멀티) 그만큼 용량이 줄어든다."""
         P = self.P
-        c = ss.MINERAL_FIELD * max(1, b)
+        pc = self.patch_counts or []
+        c = sum((pc[i] if i < len(pc) else ss.MINERAL_FIELD) for i in range(max(1, b)))
         return (P["income"] * min(n, c) + P["income_add"] * max(0, min(n, 2 * c) - c) + P["income_over"] * max(0, n - 2 * c))
 
     def minerals_at(self, t):
@@ -250,8 +255,10 @@ class ExpSim(ss.SC1Sim):
                 return None
             self.spent += u["min"]
             self.gas_spent += u["gas"]
-            ready = [i for i, r in enumerate(self.gate_ready) if r <= t]
-            g = min(ready, key=lambda i: (sum(1 for d in self.gate_queue[i] if d > t), max(0.0, self.gate_busy[i] - t), i))
+            # 짓는 중 포함, 생산을 가장 먼저 시작할 수 있는 게이트 (실행기 pickGateway 와 같음)
+            g = min(range(len(self.gate_ready)), key=lambda i: (max(float(t), self.gate_busy[i]), i))
+            if self.gate_ready[g] > t:
+                t = self.gate_ready[g]
             start = max(float(t), self.gate_busy[g])
             done = start + u["frames"]
             self.gate_busy[g] = done
@@ -303,6 +310,7 @@ class ExpSim(ss.SC1Sim):
         o.gas_spent, o.gas_events = self.gas_spent, list(self.gas_events)
         o.assim_done, o.core_done = list(self.assim_done), self.core_done
         o.citadel_done, o.archives_done = self.citadel_done, self.archives_done
+        o.patch_counts = self.patch_counts
         o.cap_base = self.cap_base
         o.has_pylon = self.has_pylon
         return o
@@ -363,7 +371,8 @@ def beam(P, target, unit, allow_nexus, width, max_gates, worker_mult, topk=3):
         cands.sort(key=lambda c: (c[0], c[2]))
         frontier = stratified(cands, width)
         depth += 1
-    res = sorted((e, seq) for seq, e in finished.items())
+    _c = {0: 50, 1: 100, 2: 150, 3: 100, 4: 400, 5: 100, 6: 200, 7: 125, 10: 150, 11: 150, 12: 50, 13: 125}
+    res = [(e, seq) for e, _, _, seq in sorted((e, sum(_c.get(a, 0) for a in seq), len(seq), seq) for seq, e in finished.items())]
     return res[:topk]
 
 
@@ -446,6 +455,8 @@ def exp_from_snapshot(P, obs, unit, target):
             return t0 + max(30, EXTRA[key][2] - min(int(e) for e in d["pending"]))
         return None
     sim.core_done, sim.citadel_done, sim.archives_done = tech_done("core"), tech_done("citadel"), tech_done("archives")
+    if ex.get("base_patches"):
+        sim.patch_counts = [int(x) for x in ex["base_patches"]]
     # 기지: 넥서스 완성 수(본진 포함)와 짓는 중·명령된 것
     nx = tech.get("nexus", {"ready": 1, "building": [], "pending": []})
     extra_ready = max(0, int(nx.get("ready", 1)) - 1)
@@ -522,7 +533,8 @@ def beam_from(sim0, unit, target, width=800, max_new_gates=2, max_new_workers=8,
         cands.sort(key=lambda c: (c[0], c[2]))
         frontier = stratified(cands, width)
         depth += 1
-    res = sorted((e, seq) for seq, e in finished.items())
+    _c = {0: 50, 1: 100, 2: 150, 3: 100, 4: 400, 5: 100, 6: 200, 7: 125, 10: 150, 11: 150, 12: 50, 13: 125}
+    res = [(e, seq) for e, _, _, seq in sorted((e, sum(_c.get(a, 0) for a in seq), len(seq), seq) for seq, e in finished.items())]
     return res[:topk], len(finished)
 
 

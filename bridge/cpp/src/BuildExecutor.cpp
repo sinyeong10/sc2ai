@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cstdlib>
+#include <ctime>
 #include <fstream>
 
 #include "MiniJson.h"
@@ -37,10 +38,19 @@ UnitType typeOf(int action) {
         case 11: return UnitTypes::Protoss_Templar_Archives;
         case 12: return UnitTypes::Protoss_High_Templar;
         case 13: return UnitTypes::Protoss_Dark_Templar;
+        case 14: return UnitTypes::Protoss_Forge;
         default: return UnitTypes::None;
     }
 }
-bool knownAction(int a) { return typeOf(a) != UnitTypes::None; }
+UpgradeType upgradeOf(int action) {
+    switch (action) {
+        case 15: return UpgradeTypes::Protoss_Ground_Weapons;
+        case 16: return UpgradeTypes::Protoss_Ground_Armor;
+        case 17: return UpgradeTypes::Protoss_Plasma_Shields;
+        default: return UpgradeTypes::None;
+    }
+}
+bool knownAction(int a) { return typeOf(a) != UnitTypes::None || upgradeOf(a) != UpgradeTypes::None; }
 }  // namespace
 
 ExecutorShared& executorShared() {
@@ -68,6 +78,15 @@ void BuildExecutor::onStart() {
     wantRestart_ = false;
     lastWaitFrame_ = 0;
     badTiles_.clear();
+    walkGrid_.clear();
+    placeFailFrame_.clear();
+    groundDist_.clear();
+    expansionCache_ = TilePositions::Invalid;
+    expansionCacheDepots_ = -1;
+    gameId_ = std::to_string(static_cast<long long>(std::time(nullptr))) + "-" + std::to_string(++sh_.games);
+    rallyMode_ = 0;
+    rallyManual_ = rallyNow_ = Positions::Invalid;
+    lastRallyFrame_ = -1000;
     // 이전 모듈 객체가 reset 을 받고 게임을 재시작한 경우: 목표·시드를 넘겨받는다(응답은 아래에서)
     if (sh_.resetPending) {
         target_ = sh_.resetTarget;
@@ -166,6 +185,48 @@ void BuildExecutor::onFrame() {
         if (Broodwar->getFrameCount() % 1200 == 0) badTiles_.clear();  // 거부 자리는 일시적일 수 있다(유닛이 서 있던 경우)
         processRequests();
         if (Broodwar->getFrameCount() - lastRebalanceFrame_ >= 24) { rebalanceBases(); lastRebalanceFrame_ = Broodwar->getFrameCount(); }
+        if (Broodwar->getFrameCount() - lastRallyFrame_ >= 48) { updateRally(); lastRallyFrame_ = Broodwar->getFrameCount(); }
+        if (rallyNow_.isValid()) {
+            Broodwar->drawCircleMap(rallyNow_, 12, rallyMode_ == 1 ? Colors::Yellow : Colors::Green, false);
+            Broodwar->drawTextMap(rallyNow_.x - 14, rallyNow_.y - 22, "rally%s", rallyMode_ == 1 ? "" : " (auto)");
+        }
+    }
+    // 업그레이드 중인 건물(포지) 위에 '업그레이드 L레벨 남은초'와 작은 막대
+    for (auto u : Broodwar->self()->getUnits()) {
+        if (!u->isUpgrading()) continue;
+        UpgradeType up = u->getUpgrade();
+        int lvl = Broodwar->self()->getUpgradeLevel(up) + 1;
+        int total = std::max(1, up.upgradeTime(lvl)), rem = u->getRemainingUpgradeTime();
+        Position pp = u->getPosition();
+        Broodwar->drawTextMap(pp.x - 40, pp.y - 36, "%s L%d %ds", up.getName().substr(8).c_str(), lvl, rem / 24);
+        Broodwar->drawBoxMap(pp.x - 40, pp.y - 24, pp.x + 40, pp.y - 20, Colors::Grey, false);
+        int fill = 80 * (total - rem) / total;
+        if (fill > 0) Broodwar->drawBoxMap(pp.x - 39, pp.y - 23, pp.x - 40 + fill, pp.y - 21, Colors::Cyan, true);
+    }
+    {
+        // 우측 하단: 진행 중인 업그레이드마다 막대 하나 (진행률 막대 위로 쌓는다)
+        int yy = 262;
+        for (auto u : Broodwar->self()->getUnits()) {
+            if (!u->isUpgrading()) continue;
+            UpgradeType up = u->getUpgrade();
+            int lvl = Broodwar->self()->getUpgradeLevel(up) + 1;
+            int total = std::max(1, up.upgradeTime(lvl)), rem = u->getRemainingUpgradeTime();
+            int fill = 200 * (total - rem) / total;
+            Broodwar->drawTextScreen(430, yy - 11, "%s L%d  %ds", up.c_str(), lvl, rem / 24);
+            Broodwar->drawBoxScreen(430, yy, 630, yy + 6, Colors::Grey, false);
+            if (fill > 0) Broodwar->drawBoxScreen(431, yy + 1, 430 + fill, yy + 5, Colors::Cyan, true);
+            yy -= 22;
+        }
+    }
+    if (!progressText_.empty()) {
+        // 우측 하단(하단 UI 패널 바로 위): 글 한 줄 + 막대
+        const int x0 = 430, y0 = 286, w = 200, hgt = 8;
+        Broodwar->drawTextScreen(x0, y0 - 12, "%s", progressText_.c_str());
+        if (progressPermille_ >= 0) {
+            Broodwar->drawBoxScreen(x0, y0, x0 + w, y0 + hgt, Colors::Grey, false);
+            int fill = w * progressPermille_ / 1000;
+            if (fill > 0) Broodwar->drawBoxScreen(x0 + 1, y0 + 1, x0 + fill, y0 + hgt - 1, Colors::Green, true);
+        }
     }
     if (!hudText_.empty()) {
         int y = 4;
@@ -355,7 +416,8 @@ void BuildExecutor::handleMessage(const std::string& line) {
         w.key("game").value("bw");
         w.key("actions").raw("{\"0\":\"worker\",\"1\":\"pylon\",\"2\":\"gateway\",\"3\":\"zealot\",\"5\":\"assimilator\","
                              "\"6\":\"core\",\"7\":\"dragoon\",\"10\":\"citadel\",\"11\":\"archives\",\"12\":\"high_templar\","
-                             "\"13\":\"dark_templar\",\"4\":\"nexus\",\"8\":\"wait\"}");
+                             "\"13\":\"dark_templar\",\"4\":\"nexus\",\"14\":\"forge\",\"15\":\"up_weapons\","
+                             "\"16\":\"up_armor\",\"17\":\"up_shields\",\"8\":\"wait\"}");
         w.key("latency_frames").value(Broodwar->getLatencyFrames());
         w.key("end_includes_lag").value(false);
         w.key("live_v2").value(true);  // request / observe / cancel 지원
@@ -436,13 +498,14 @@ void BuildExecutor::handleMessage(const std::string& line) {
         // 라이브 v2: 비동기 요청. 즉시 ack 하고 실행은 실행기가 책임진다(순서대로, 조건이 되는 첫 프레임에)
         int action = m["action"].asInt(-1);
         mj::Writer w;
-        w.key("type").value("ack").key("id").value(id).key("request_id").value(id);
+        w.key("type").value("ack").key("id").value(id);
         if (!live_) { w.key("accepted").value(false).key("reason").value("live mode only"); reply(w.str()); return; }
         if (!knownAction(action)) { w.key("accepted").value(false).key("reason").value("unknown action"); reply(w.str()); return; }
         Request r;
-        r.id = id; r.action = action; r.state = "queued"; r.frameIn = Broodwar->getFrameCount();
+        // 실행기가 고유 id 를 매긴다 (클라이언트 메시지 id 는 재접속 때 겹칠 수 있다)
+        r.id = ++sh_.nextRequestId; r.action = action; r.state = "queued"; r.frameIn = Broodwar->getFrameCount();
         requests_.push_back(r);
-        w.key("accepted").value(true);
+        w.key("accepted").value(true).key("request_id").value(r.id);
         reply(w.str());
     } else if (type == "observe") {
         reply(snapshotJson(id));
@@ -480,8 +543,15 @@ void BuildExecutor::handleMessage(const std::string& line) {
         std::string ut = m["unit_type"].asString();
         std::string result = "noop";
         if (op == "spend") {
+            // 사람은 예비 자원을 지키지 않는다: 예비를 잠시 0 으로 두고 실행해야 '예비 해제' 시험이 성립한다
+            // (2026-11-08: 시험 지출이 예비를 지켜 남는 돈만 써서 해제가 확인되지 않았다)
             std::string why;
-            result = tryExecute(m["action"].asInt(-1), why) ? "spent" : ("refused: " + why);
+            int keepM = reserveMinerals_, keepG = reserveGas_;
+            reserveMinerals_ = reserveGas_ = 0;
+            bool ok = tryExecute(m["action"].asInt(-1), why);
+            reserveMinerals_ = keepM;
+            reserveGas_ = keepG;
+            result = ok ? "spent" : ("refused: " + why);
         } else if (op == "cancel_building") {
             for (auto u : Broodwar->self()->getUnits())
                 if (u->getType().isBuilding() && !u->isCompleted() && (ut.empty() || std::string(u->getType().c_str()) == ut)) { u->cancelConstruction(); result = std::string("cancelled ") + u->getType().c_str(); break; }
@@ -498,6 +568,26 @@ void BuildExecutor::handleMessage(const std::string& line) {
         mj::Writer w;
         w.key("type").value("status").key("id").value(id).key("debug").value(result);
         reply(w.str());
+    } else if (type == "rally") {
+        // 집결지. op=here: 지금 화면 중앙(사람이 보고 있는 곳, 땅으로 갈 수 있는 가장 가까운 타일), auto: 자동 규칙, off: 관리 끔(게이트 집결지 해제)
+        std::string op = m["op"].asString();
+        if (op == "here") {
+            Position sc = Broodwar->getScreenPosition() + Position(320, 180);  // 화면 640x480 중 아래 콘솔을 뺀 지도 영역의 중앙
+            Position snapped = snapReachable(sc, 8);
+            if (snapped.isValid()) { rallyMode_ = 1; rallyManual_ = snapped; }
+        } else if (op == "auto") {
+            rallyMode_ = 0;
+        } else if (op == "off") {
+            rallyMode_ = 2;
+            rallyNow_ = Positions::Invalid;
+            for (auto u : Broodwar->self()->getUnits())
+                if (u->getType() == UnitTypes::Protoss_Gateway && u->isCompleted()) u->setRallyPoint(u);
+        }
+        lastRallyFrame_ = -1000;  // 다음 프레임에 바로 반영
+        mj::Writer w;
+        w.key("type").value("status").key("id").value(id).key("op").value(op).key("mode").value(rallyMode_)
+         .key("x").value(rallyMode_ == 1 ? rallyManual_.x : -1).key("y").value(rallyMode_ == 1 ? rallyManual_.y : -1);
+        reply(w.str());
     } else if (type == "rebalance") {
         // 가장 최근 완성된 멀티 넥서스로 본진 초과 일꾼을 옮긴다 (사람이 직접 지은 멀티도 됨)
         Unit depot = nullptr;
@@ -506,6 +596,13 @@ void BuildExecutor::handleMessage(const std::string& line) {
         if (depot) rebalanceWorkers(depot);
         mj::Writer w;
         w.key("type").value("status").key("id").value(id).key("rebalanced").value(depot != nullptr);
+        reply(w.str());
+    } else if (type == "progress") {
+        // 우측 하단 진행 막대. frac 0~1 (1000분율 정수로 받는다), text 한 줄
+        progressText_ = m["text"].asString();
+        progressPermille_ = std::max(-1, std::min(1000, m["permille"].asInt(-1)));
+        mj::Writer w;
+        w.key("type").value("status").key("id").value(id).key("progress").value(true);
         reply(w.str());
     } else if (type == "hud") {
         // 화면 왼쪽 위에 띄울 상태 글(클라이언트가 갱신). 줄바꿈은 '|'
@@ -597,6 +694,32 @@ void BuildExecutor::processRequests() {
         pending_.retries = 0;
     } else {
         r->reason = why;  // 대기 사유 (minerals, supply, X not complete ...)
+        lastWhy_ = why;
+        // 맨 앞이 돈이 아닌 것을 기다리면(건물 완성, 포지 사용 중, 정찰 대기 ...) 뒤의 일꾼·파일런 요청 하나를
+        // 맨 앞 요청 비용을 남긴 채 먼저 실행한다. 목표 순서는 제어 루프가 지키므로(목표 하나씩 보냄) 이 범위면 안전하다
+        bool resourceWait = why == "minerals" || why == "gas" || why == "supply" || why.rfind("nexus queue", 0) == 0;
+        if (!resourceWait) {
+            UnitType ht = typeOf(r->action);
+            UpgradeType hu = upgradeOf(r->action);
+            int holdM = ht != UnitTypes::None ? ht.mineralPrice() : (hu != UpgradeTypes::None ? hu.mineralPrice(Broodwar->self()->getUpgradeLevel(hu) + 1) : 0);
+            for (auto& x : requests_) {
+                if (&x == r || x.state != "queued" || (x.action != 0 && x.action != 1)) continue;
+                reserveMinerals_ += holdM;
+                size_t before2 = watches_.size();
+                std::string why2;
+                bool ok = tryExecute(x.action, why2);
+                reserveMinerals_ -= holdM;
+                if (ok) {
+                    commandLog_.push_back(x.action);
+                    if (typeOf(x.action).isBuilding()) { x.state = "issued"; x.issuedFrame = frame; if (watches_.size() > before2) watches_.back().requestId = x.id; }
+                    else { x.state = "done"; x.issuedFrame = x.doneFrame = frame; }
+                    x.reason = "";
+                } else {
+                    x.reason = why2;
+                }
+                break;  // 한 프레임에 하나만
+            }
+        }
     }
     // 오래된 완료·실패 요청은 정리 (최근 64개만 보관)
     if (requests_.size() > 64) {
@@ -629,7 +752,8 @@ std::string BuildExecutor::buildingsJson() const {
     struct E { const char* key; UnitType t; } list[] = {
         {"nexus", UnitTypes::Protoss_Nexus}, {"pylon", UnitTypes::Protoss_Pylon}, {"gateway", UnitTypes::Protoss_Gateway},
         {"assimilator", UnitTypes::Protoss_Assimilator}, {"core", UnitTypes::Protoss_Cybernetics_Core},
-        {"citadel", UnitTypes::Protoss_Citadel_of_Adun}, {"archives", UnitTypes::Protoss_Templar_Archives}};
+        {"citadel", UnitTypes::Protoss_Citadel_of_Adun}, {"archives", UnitTypes::Protoss_Templar_Archives},
+        {"forge", UnitTypes::Protoss_Forge}};
     int frame = Broodwar->getFrameCount();
     std::string out = "{";
     bool first = true;
@@ -641,6 +765,25 @@ std::string BuildExecutor::buildingsJson() const {
         for (auto& w : watches_) if (w.type == e.t) pending.push_back(frame - w.issuedFrame);
         mj::Writer w;
         w.key("ready").value(ready).key("building").intArray(building).key("pending").intArray(pending);
+        out += std::string(first ? "" : ",") + "\"" + e.key + "\":" + w.str();
+        first = false;
+    }
+    return out + "}";
+}
+
+// 업그레이드 상태: {"weapons":{"level":n,"max":3,"upgrading":bool,"remaining":f}, "armor":..., "shields":...}
+std::string BuildExecutor::upgradesJson() const {
+    struct E { const char* key; UpgradeType u; } list[] = {
+        {"weapons", UpgradeTypes::Protoss_Ground_Weapons}, {"armor", UpgradeTypes::Protoss_Ground_Armor}, {"shields", UpgradeTypes::Protoss_Plasma_Shields}};
+    Player me = Broodwar->self();
+    std::string out = "{";
+    bool first = true;
+    for (auto& e : list) {
+        int remaining = 0;
+        for (auto u : me->getUnits()) if (u->isUpgrading() && u->getUpgrade() == e.u) remaining = u->getRemainingUpgradeTime();
+        mj::Writer w;
+        w.key("level").value(me->getUpgradeLevel(e.u)).key("max").value(me->getMaxUpgradeLevel(e.u))
+         .key("upgrading").value(me->isUpgrading(e.u)).key("remaining").value(remaining);
         out += std::string(first ? "" : ",") + "\"" + e.key + "\":" + w.str();
         first = false;
     }
@@ -687,7 +830,7 @@ std::string BuildExecutor::snapshotJson(int id) {
     for (int k = 0; k < 5; ++k) { done[names[k]] = 0; prod[names[k]] = 0; }
     for (auto u : me->getUnits()) {
         for (int k = 0; k < 5; ++k) if (u->getType() == types[k] && u->isCompleted()) ++done[names[k]];
-        if (u->getType() == UnitTypes::Protoss_Gateway && u->isCompleted()) {
+        if (u->getType() == UnitTypes::Protoss_Gateway && u->isCompleted() && u->isPowered()) {
             int q = static_cast<int>(u->getTrainingQueue().size());
             gateQueue.push_back(q);
             gateRemaining.push_back(q > 0 ? u->getRemainingTrainTime() : 0);
@@ -698,7 +841,8 @@ std::string BuildExecutor::snapshotJson(int id) {
     }
     std::string units = "{";
     for (int k = 0; k < 5; ++k)
-        units += std::string(k ? "," : "") + "\"" + names[k] + "\":{\"done\":" + std::to_string(done[names[k]]) + ",\"in_production\":" + std::to_string(prod[names[k]]) + "}";
+        units += std::string(k ? "," : "") + "\"" + names[k] + "\":{\"done\":" + std::to_string(done[names[k]]) + ",\"in_production\":" + std::to_string(prod[names[k]])
+               + ",\"dead\":" + std::to_string(me->deadUnitCount(types[k])) + "}";
     units += "}";
     // 위협: 자기 건물 반경 800px 안의 적 유닛(보이는 것)
     int enemiesNear = 0;
@@ -710,7 +854,9 @@ std::string BuildExecutor::snapshotJson(int id) {
         }
     }
     mj::Writer w;
-    w.key("type").value("snapshot").key("id").value(id).key("frame").value(frame).key("live").value(live_)
+    w.key("type").value("snapshot").key("id").value(id).key("frame").value(frame).key("live").value(live_).key("game_id").value(gameId_)
+     .key("rally").raw(std::string("{\"mode\":\"") + (rallyMode_ == 0 ? "auto" : rallyMode_ == 1 ? "manual" : "off") + "\",\"x\":"
+                       + std::to_string(rallyNow_.isValid() ? rallyNow_.x : -1) + ",\"y\":" + std::to_string(rallyNow_.isValid() ? rallyNow_.y : -1) + "}")
      .key("state").intArray(stateVector())
      .key("minerals").value(me->minerals()).key("gas").value(me->gas())
      .key("reserved_minerals").value(reservedM + reserveMinerals_).key("reserved_gas").value(reservedG + reserveGas_)
@@ -722,6 +868,7 @@ std::string BuildExecutor::snapshotJson(int id) {
      .key("buildings").raw(buildingsJson())
      .key("gate_queue").intArray(gateQueue).key("gate_remaining").intArray(gateRemaining)
      .key("units").raw(units)
+     .key("upgrades").raw(upgradesJson())
      .key("requests").raw(requestsJson())
      .key("watches").raw(watchesJson())
      .key("abandoned").raw(abandonedJson())
@@ -732,6 +879,92 @@ std::string BuildExecutor::snapshotJson(int id) {
 
 // 일꾼 분배 규칙(사용자 결정): 어시밀레이터마다 가스 3기 유지. 미네랄은 기지마다 덩이 2배수를 먼저 채우고 3배수까지.
 // 3배수를 넘는 기지 → 2배수 미만 기지로, 모두 2배수 이상이면 3배수 미만 기지로. 한 번에 4기까지만 옮긴다.
+// p 근처(반경 radius 타일)에서 본진에서 땅으로 갈 수 있는(BFS 거리 있음) 가장 가까운 타일 중심. 없으면 Invalid
+Position BuildExecutor::snapReachable(Position p, int radius) const {
+    const std::vector<int>& gd = groundDistance();
+    const int W = Broodwar->mapWidth(), H = Broodwar->mapHeight();
+    if (gd.empty() || !p.isValid()) return Positions::Invalid;
+    TilePosition c0(p);
+    int best = -1, bestD = 1 << 30;
+    for (int dy = -radius; dy <= radius; ++dy)
+        for (int dx = -radius; dx <= radius; ++dx) {
+            int x = c0.x + dx, y = c0.y + dy;
+            if (x < 0 || y < 0 || x >= W || y >= H || gd[static_cast<size_t>(y * W + x)] < 0) continue;
+            int d = dx * dx + dy * dy;
+            if (d < bestD) { bestD = d; best = y * W + x; }
+        }
+    if (best < 0) return Positions::Invalid;
+    return Position(TilePosition(best % W, best / W)) + Position(16, 16);
+}
+
+// 자동 집결지 규칙 (2026-11-08):
+//  - 멀티(본진 밖 넥서스, 짓는 중 포함)가 있으면: 본진에서 땅으로 가장 가까운 멀티 넥서스에서 적 본진 쪽으로 4타일
+//  - 없으면: 본진 → 앞마당 자리 땅 길의 한가운데 (보통 본진 언덕길 근처)
+// 지형 분석 라이브러리 없이 BFS 땅 거리만 쓴다. 맞지 않으면 rally 명령으로 화면 중앙을 지정한다
+Position BuildExecutor::rallyAuto() const {
+    const std::vector<int>& gd = groundDistance();
+    const int W = Broodwar->mapWidth(), H = Broodwar->mapHeight();
+    if (gd.empty() || !mainNexus_) return Positions::Invalid;
+    // 넥서스(4x3) 둘레에서 BFS 거리가 가장 작은 타일 (넥서스 타일 자체도 정적 지형으로는 걸을 수 있다)
+    auto nearest = [&](TilePosition tp, int* outIdx) {
+        int best = 1 << 30, idx = -1;
+        for (int dy = -2; dy <= 4; ++dy)
+            for (int dx = -2; dx <= 5; ++dx) {
+                int x = tp.x + dx, y = tp.y + dy;
+                if (x < 0 || y < 0 || x >= W || y >= H) continue;
+                int v = gd[static_cast<size_t>(y * W + x)];
+                if (v >= 0 && v < best) { best = v; idx = y * W + x; }
+            }
+        if (outIdx) *outIdx = idx;
+        return best;
+    };
+    Unit natural = nullptr;
+    int natD = 1 << 30;
+    for (auto u : Broodwar->self()->getUnits()) {
+        if (!u->getType().isResourceDepot() || u == mainNexus_) continue;
+        int d = nearest(u->getTilePosition(), nullptr);
+        if (d < natD) { natD = d; natural = u; }
+    }
+    if (natural) {
+        Position from = natural->getPosition(), to = Position(enemyStart_) + Position(64, 48);
+        double len = std::max(1.0, from.getDistance(to));
+        Position p(from.x + static_cast<int>((to.x - from.x) * 128.0 / len), from.y + static_cast<int>((to.y - from.y) * 128.0 / len));
+        return snapReachable(p, 4);
+    }
+    TilePosition site = findExpansion();
+    if (!site.isValid()) return Positions::Invalid;
+    // 앞마당 자리에서 거리가 1씩 줄어드는 이웃을 따라 본진 쪽으로 절반만 내려간다 (최단 땅 길의 한가운데)
+    int cur = -1;
+    int curD = nearest(site, &cur);
+    if (cur < 0) return Positions::Invalid;
+    const int half = curD / 2;
+    while (gd[static_cast<size_t>(cur)] > half) {
+        int x = cur % W, y = cur / W, next = -1;
+        const int nx[4] = {x + 1, x - 1, x, x}, ny[4] = {y, y, y + 1, y - 1};
+        for (int k = 0; k < 4; ++k) {
+            if (nx[k] < 0 || ny[k] < 0 || nx[k] >= W || ny[k] >= H) continue;
+            int j = ny[k] * W + nx[k];
+            if (gd[static_cast<size_t>(j)] == gd[static_cast<size_t>(cur)] - 1) { next = j; break; }
+        }
+        if (next < 0) break;
+        cur = next;
+    }
+    return Position(TilePosition(cur % W, cur / W)) + Position(16, 16);
+}
+
+// 완성된 게이트의 집결지를 지금 규칙의 자리로 맞춘다 (다를 때만 명령: 매번 명령하면 APM 낭비)
+void BuildExecutor::updateRally() {
+    if (rallyMode_ == 2) return;
+    Position p = rallyMode_ == 1 ? rallyManual_ : rallyAuto();
+    rallyNow_ = p;
+    if (!p.isValid()) return;
+    for (auto u : Broodwar->self()->getUnits()) {
+        if (u->getType() != UnitTypes::Protoss_Gateway || !u->isCompleted()) continue;
+        Position cur = u->getRallyPosition();
+        if (u->getRallyUnit() || !cur.isValid() || cur.getApproxDistance(p) > 32) u->setRallyPoint(p);
+    }
+}
+
 void BuildExecutor::rebalanceBases() {
     Player me = Broodwar->self();
     // 가스 보충
@@ -1082,6 +1315,50 @@ void BuildExecutor::rebalanceWorkers(Unit depot) {
 // 앞마당: 본진 밖 미네랄 무리 중 땅길이 있고 가장 가까운 것. 넥서스 자리는 무리 둘레에서 canBuildHere 를 만족하며
 // 덩이·간헐천까지 거리 합이 가장 작은 타일. (BWEM 없이 단순 규칙. 결정론: 같은 맵이면 같은 자리)
 TilePosition BuildExecutor::findExpansion() const {
+    int depots = 0;
+    for (auto u : Broodwar->self()->getUnits()) if (u->getType().isResourceDepot()) ++depots;
+    for (auto& w : watches_) if (w.type.isResourceDepot()) ++depots;
+    if (expansionCacheDepots_ == depots && expansionCache_.isValid()) return expansionCache_;
+    expansionCache_ = computeExpansion();
+    expansionCacheDepots_ = depots;
+    return expansionCache_;
+}
+
+// 본진 넥서스에서 각 타일까지의 땅 거리(타일, 정적 지형 기준 BFS). 게임당 한 번 계산
+const std::vector<int>& BuildExecutor::groundDistance() const {
+    const int W = Broodwar->mapWidth(), H = Broodwar->mapHeight();
+    if (groundDist_.size() == static_cast<size_t>(W * H) || !mainNexus_) return groundDist_;
+    if (walkGrid_.size() != static_cast<size_t>(W * H)) {
+        walkGrid_.assign(static_cast<size_t>(W * H), 0);
+        for (int y = 0; y < H; ++y)
+            for (int x = 0; x < W; ++x)
+                walkGrid_[static_cast<size_t>(y * W + x)] = Broodwar->isWalkable(4 * x + 1, 4 * y + 1) && Broodwar->isWalkable(4 * x + 2, 4 * y + 1)
+                    && Broodwar->isWalkable(4 * x + 1, 4 * y + 2) && Broodwar->isWalkable(4 * x + 2, 4 * y + 2);
+    }
+    groundDist_.assign(static_cast<size_t>(W * H), -1);
+    std::vector<int> q;
+    TilePosition nt = mainNexus_->getTilePosition();
+    for (int y = nt.y - 1; y <= nt.y + 3; ++y)
+        for (int x = nt.x - 1; x <= nt.x + 4; ++x)
+            if (x >= 0 && y >= 0 && x < W && y < H && walkGrid_[static_cast<size_t>(y * W + x)] && groundDist_[static_cast<size_t>(y * W + x)] < 0) {
+                groundDist_[static_cast<size_t>(y * W + x)] = 0;
+                q.push_back(y * W + x);
+            }
+    for (size_t head = 0; head < q.size(); ++head) {
+        int i = q[head], x = i % W, y = i / W, d = groundDist_[static_cast<size_t>(i)];
+        const int nx[4] = {x + 1, x - 1, x, x}, ny[4] = {y, y, y + 1, y - 1};
+        for (int k = 0; k < 4; ++k) {
+            if (nx[k] < 0 || ny[k] < 0 || nx[k] >= W || ny[k] >= H) continue;
+            size_t j = static_cast<size_t>(ny[k] * W + nx[k]);
+            if (!walkGrid_[j] || groundDist_[j] >= 0) continue;
+            groundDist_[j] = d + 1;
+            q.push_back(static_cast<int>(j));
+        }
+    }
+    return groundDist_;
+}
+
+TilePosition BuildExecutor::computeExpansion() const {
     if (!mainNexus_) return TilePositions::Invalid;
     Position base = mainNexus_->getPosition();
     // 이미 넥서스가 있는 곳(자기 것)은 제외
@@ -1090,7 +1367,8 @@ TilePosition BuildExecutor::findExpansion() const {
     // 명령은 냈지만 아직 놓이지 않은 넥서스 자리도 '있는 것'으로 친다 (n 을 연달아 치면 같은 자리를 두 번 고르지 않게)
     for (auto& w : watches_) if (w.type.isResourceDepot() && w.tile.isValid()) ownDepots.push_back(Position(w.tile.x * 32 + 64, w.tile.y * 32 + 48));
     // 미네랄 무리 만들기 (덩이 간 거리 200px 이내 연결)
-    // 시야 밖 자원은 exists()/getResources() 가 0 이다. 초기 자원량·초기 위치를 쓴다 (2026-11-08 "no expansion site" 원인)
+    // 시야 밖 자원은 exists()/getResources() 가 0 이고 getType() 은 Unknown 이다. 초기 자원량·초기 위치·초기 유형을 쓴다
+    // (2026-11-08 "no expansion site" 두 번: 처음엔 자원량, 다음엔 유형이 원인)
     std::vector<Unit> res;
     for (auto m : Broodwar->getStaticMinerals()) if (m->getInitialResources() > 0) res.push_back(m);
     for (auto g : Broodwar->getStaticGeysers()) res.push_back(g);
@@ -1114,7 +1392,7 @@ TilePosition BuildExecutor::findExpansion() const {
         std::vector<Unit> members;
         for (size_t i = 0; i < res.size(); ++i) if (cluster[i] == k) members.push_back(res[i]);
         int minerals = 0;
-        for (auto m : members) if (m->getType().isMineralField()) ++minerals;
+        for (auto m : members) if (m->getInitialType().isMineralField()) ++minerals;
         if (minerals < 4) continue;
         Position center(0, 0);
         for (auto m : members) center += posOf(m);
@@ -1122,8 +1400,21 @@ TilePosition BuildExecutor::findExpansion() const {
         bool taken = false;
         for (auto& d : ownDepots) if (d.getDistance(center) < 400) taken = true;
         if (taken) continue;
-        double dist = base.getDistance(center);
-        if (dist >= bestDist) continue;
+        // 땅 거리: 무리 중심 근처에서 BFS 거리가 있는 가장 가까운 타일. 직선 거리는 절벽 너머 기지를 '가깝다'고 본다
+        const std::vector<int>& gd = groundDistance();
+        double dist = 1e9;
+        {
+            TilePosition cc(center);
+            const int W = Broodwar->mapWidth(), H = Broodwar->mapHeight();
+            for (int dy = -8; dy <= 8; ++dy)
+                for (int dx = -8; dx <= 8; ++dx) {
+                    int x = cc.x + dx, y = cc.y + dy;
+                    if (x < 0 || y < 0 || x >= W || y >= H || gd.empty()) continue;
+                    int v = gd[static_cast<size_t>(y * W + x)];
+                    if (v >= 0 && v < dist) dist = v;
+                }
+        }
+        if (dist >= 1e9 || dist >= bestDist) continue;
         // 무리 둘레에서 넥서스 자리 찾기. 게임 규칙: 자원 저장소는 모든 자원과 타일 3칸 간격(변 기준). 그 안에서 자원 중심까지
         // 거리 제곱합이 가장 작은 칸(BWEM/BWTA 와 같은 기준). 예전의 '중심 거리 112px' 어림은 호 안쪽·간헐천 옆을 고르는 일이 있었다.
         TilePosition ct(center);
@@ -1138,22 +1429,29 @@ TilePosition BuildExecutor::findExpansion() const {
                     for (int x = t.x; x < t.x + 4 && ok; ++x)
                         if (x >= Broodwar->mapWidth() || y >= Broodwar->mapHeight() || !Broodwar->isBuildable(x, y, false)) ok = false;
                 if (!ok) continue;
+                // 점수: 넥서스 4x3 상자와 각 자원 상자 사이의 타일 간격(체비셰프)의 합. 규칙상 최소 3칸이고, 많은 자원이 3칸에 붙을수록
+                // 채취 왕복이 짧다(BWEM 의 기지 위치 점수와 같은 생각). 예전 '중심 거리 제곱합'은 2x1 미네랄·4x2 간헐천 모양을 무시해
+                // 호 바깥쪽으로 밀렸다 (2026-11-08 사용자 정찰로 확인)
                 double score = 0;
                 for (auto m : members) {
                     TilePosition rt = m->getInitialTilePosition();
-                    int rw = m->getType().tileWidth(), rh = m->getType().tileHeight();
-                    bool gapX = (t.x >= rt.x + rw + 3) || (rt.x >= t.x + 4 + 3);
-                    bool gapY = (t.y >= rt.y + rh + 3) || (rt.y >= t.y + 3 + 3);
-                    if (!gapX && !gapY) { ok = false; break; }
-                    Position c(t.x * 32 + 64, t.y * 32 + 48);
-                    double d = posOf(m).getDistance(c);
-                    score += d * d;
+                    int rw = m->getInitialType().tileWidth(), rh = m->getInitialType().tileHeight();
+                    int gx = std::max({0, rt.x - (t.x + 4), t.x - (rt.x + rw)});
+                    int gy = std::max({0, rt.y - (t.y + 3), t.y - (rt.y + rh)});
+                    bool okX = (t.x >= rt.x + rw + 3) || (rt.x >= t.x + 4 + 3);
+                    bool okY = (t.y >= rt.y + rh + 3) || (rt.y >= t.y + 3 + 3);
+                    if (!okX && !okY) { ok = false; break; }
+                    double d = std::max(gx, gy);
+                    score += m->getInitialType().isMineralField() ? d : 1.5 * d;  // 간헐천은 가스 왕복이 더 자주라 가중
                 }
                 if (!ok) continue;
                 if (score < siteScore) { siteScore = score; site = t; }
             }
         // 땅길 확인은 (자원 위가 아닌) 넥서스 자리 기준으로
-        if (site.isValid() && Broodwar->hasPath(base, Position(site.x * 32 + 64, site.y * 32 + 48))) { best = site; bestDist = dist; }
+        if (site.isValid() && Broodwar->hasPath(base, Position(site.x * 32 + 64, site.y * 32 + 48))) {
+            best = site; bestDist = dist;
+            Broodwar->printf("expansion site (%d,%d) score %.1f for %d resources", site.x, site.y, siteScore, static_cast<int>(members.size()));
+        }
         else Broodwar->printf("expansion cluster %d: %d minerals, site %s, path %d", k, minerals, site.isValid() ? "ok" : "none",
                               site.isValid() ? (int)Broodwar->hasPath(base, Position(site.x * 32 + 64, site.y * 32 + 48)) : -1);
     }
@@ -1173,12 +1471,14 @@ bool BuildExecutor::keepsPath(TilePosition t, UnitType type, bool strict) const 
             for (int x = tp.x; x < tp.x + tw; ++x)
                 if (x >= 0 && y >= 0 && x < W && y < H) blocked[static_cast<size_t>(y * W + x)] = 1;
     };
-    for (int y = 0; y < H; ++y)
-        for (int x = 0; x < W; ++x) {
-            bool walk = Broodwar->isWalkable(4 * x + 1, 4 * y + 1) && Broodwar->isWalkable(4 * x + 2, 4 * y + 1)
-                     && Broodwar->isWalkable(4 * x + 1, 4 * y + 2) && Broodwar->isWalkable(4 * x + 2, 4 * y + 2);
-            if (!walk) blocked[static_cast<size_t>(y * W + x)] = 1;
-        }
+    if (walkGrid_.size() != static_cast<size_t>(W * H)) {
+        walkGrid_.assign(static_cast<size_t>(W * H), 0);
+        for (int y = 0; y < H; ++y)
+            for (int x = 0; x < W; ++x)
+                walkGrid_[static_cast<size_t>(y * W + x)] = Broodwar->isWalkable(4 * x + 1, 4 * y + 1) && Broodwar->isWalkable(4 * x + 2, 4 * y + 1)
+                    && Broodwar->isWalkable(4 * x + 1, 4 * y + 2) && Broodwar->isWalkable(4 * x + 2, 4 * y + 2);
+    }
+    for (size_t i = 0; i < blocked.size(); ++i) if (!walkGrid_[i]) blocked[i] = 1;
     for (auto u : Broodwar->getAllUnits()) {
         UnitType ut = u->getType();
         if (ut.isBuilding() || ut.isMineralField() || ut == UnitTypes::Resource_Vespene_Geyser)
@@ -1252,15 +1552,25 @@ bool BuildExecutor::keepsPath(TilePosition t, UnitType type, bool strict) const 
     return true;
 }
 
-Unit BuildExecutor::pickGateway() const {
+// 생산을 가장 먼저 시작할 수 있는 게이트. 짓는 중인 게이트도 후보이고, 그쪽이 더 빠르면 nullptr + waiting=true 로 기다린다
+// (2026-11-08: 완성된 첫 게이트 하나에 질럿이 줄 서서 계획기가 게이트를 더 짓는 쪽을 골랐다 — 8게이트 사건)
+Unit BuildExecutor::pickGateway(bool* waiting) const {
     Unit best = nullptr;
-    int bestQ = 1 << 30, bestT = 1 << 30;
+    int bestStart = 1 << 30;
+    bool bestDone = false;
     for (auto u : Broodwar->self()->getUnits()) {
-        if (u->getType() != UnitTypes::Protoss_Gateway || !u->isCompleted()) continue;
-        int q = static_cast<int>(u->getTrainingQueue().size());
-        int t = u->getRemainingTrainTime();
-        if (q < bestQ || (q == bestQ && t < bestT)) { bestQ = q; bestT = t; best = u; }
+        if (u->getType() != UnitTypes::Protoss_Gateway) continue;
+        if (u->isCompleted() && !u->isPowered()) continue;  // 파일런이 부서져 전력이 끊긴 게이트는 생산 불가 (train → Unit_Busy)
+        int start;
+        if (!u->isCompleted()) start = u->getRemainingBuildTime();
+        else {
+            int q = static_cast<int>(u->getTrainingQueue().size());
+            start = q == 0 ? 0 : u->getRemainingTrainTime() + (q - 1) * 600;
+        }
+        if (start < bestStart || (start == bestStart && u->isCompleted() && !bestDone)) { bestStart = start; best = u; bestDone = u->isCompleted(); }
     }
+    if (best && !bestDone) { if (waiting) *waiting = true; return nullptr; }
+    if (waiting) *waiting = false;
     return best;
 }
 
@@ -1270,12 +1580,55 @@ bool BuildExecutor::pendingOf(UnitType t) const {
     return false;
 }
 
+// 업그레이드 (공·방·쉴드). 다음 레벨을 포지에서 시작하면 done. 2·3레벨은 아카이브 필요, 진행 중이면 끝날 때까지 기다린다
+bool BuildExecutor::tryUpgrade(UpgradeType up, std::string& why) {
+    Player me = Broodwar->self();
+    int level = me->getUpgradeLevel(up);
+    if (level >= me->getMaxUpgradeLevel(up)) { why = "fatal:upgrade maxed"; return false; }
+    if (me->isUpgrading(up)) { why = "upgrading (previous level)"; return false; }
+    int next = level + 1;
+    UnitType req = up.whatsRequired(next);
+    if (req != UnitTypes::None && countCompleted(req) == 0) {
+        bool coming = countAll(req) > 0 || pendingOf(req);
+        for (auto& r : requests_) if (r.state == "queued" && typeOf(r.action) == req) coming = true;
+        if (!coming) { why = std::string("fatal:requires ") + req.c_str(); return false; }
+        why = std::string(req.c_str()) + " not complete";
+        return false;
+    }
+    UnitType where = up.whatUpgrades();
+    if (countCompleted(where) == 0) {
+        bool coming = countAll(where) > 0 || pendingOf(where);
+        for (auto& r : requests_) if (r.state == "queued" && typeOf(r.action) == where) coming = true;
+        if (!coming) { why = std::string("fatal:requires ") + where.c_str(); return false; }
+        why = std::string(where.c_str()) + " not complete";
+        return false;
+    }
+    int reserved = 0, reservedGas = 0;
+    for (auto& w : watches_) { reserved += w.type.mineralPrice(); reservedGas += w.type.gasPrice(); }
+    if (me->minerals() - reserved - reserveMinerals_ < up.mineralPrice(next)) { why = "minerals"; return false; }
+    if (up.gasPrice(next) > 0) {
+        if (countAll(UnitTypes::Protoss_Assimilator) == 0 && !pendingOf(UnitTypes::Protoss_Assimilator)) { why = "fatal:needs gas (no assimilator)"; return false; }
+        if (me->gas() - reservedGas - reserveGas_ < up.gasPrice(next)) { why = "gas"; return false; }
+    }
+    Unit forge = nullptr;
+    for (auto u : me->getUnits())
+        if (u->getType() == where && u->isCompleted() && u->isPowered() && !u->isUpgrading() && !u->isResearching()) { forge = u; break; }
+    if (!forge) {
+        bool coming = countAll(where) > countCompleted(where) || pendingOf(where);
+        why = coming ? std::string(where.c_str()) + " not complete" : std::string(where.c_str()) + " busy";
+        return false;
+    }
+    if (!forge->upgrade(up)) { why = "upgrade refused: " + std::string(Broodwar->getLastError().c_str()); ++pending_.retries; return false; }
+    return true;
+}
+
 bool BuildExecutor::tryExecute(int action, std::string& why) {
     Player me = Broodwar->self();
+    if (upgradeOf(action) != UpgradeTypes::None) return tryUpgrade(upgradeOf(action), why);
     UnitType type = typeOf(action);
     if (type == UnitTypes::None) { why = "fatal:unknown action"; return false; }
 
-    if (pending_.retries > kMaxBuildRetries) { why = "fatal:command refused repeatedly"; return false; }
+    if (pending_.retries > kMaxBuildRetries) { why = "fatal:command refused repeatedly (last: " + lastWhy_ + ")"; return false; }
 
     // 스타1은 건물 비용을 명령 때가 아니라 일꾼이 도착해 놓을 때 뺀다. 아직 놓이지 않은 건설 명령의 비용(미네랄·가스)을 예약해
     // 두지 않으면 같은 돈으로 두 번 명령하게 된다 (2026-11-08 실게임: 게이트 2개 명령에 1개만 지어짐).
@@ -1327,8 +1680,17 @@ bool BuildExecutor::tryExecute(int action, std::string& why) {
             if (!producer) { why = "fatal:no nexus"; return false; }
             if (producer->getTrainingQueue().size() >= 5) { why = "nexus queue full"; return false; }
         } else {
-            producer = pickGateway();
-            if (!producer) { why = countAll(UnitTypes::Protoss_Gateway) ? "gateway not complete" : "fatal:no gateway"; return false; }
+            bool waitGate = false;
+            producer = pickGateway(&waitGate);
+            if (!producer) {
+                bool unpowered = false;
+                for (auto u : me->getUnits()) if (u->getType() == UnitTypes::Protoss_Gateway && u->isCompleted() && !u->isPowered()) unpowered = true;
+                int pylonsComing = countAll(UnitTypes::Protoss_Pylon) - countCompleted(UnitTypes::Protoss_Pylon);
+                for (auto& w : watches_) if (w.type == UnitTypes::Protoss_Pylon) ++pylonsComing;
+                if (!waitGate && unpowered && pylonsComing == 0) { why = "fatal:gateway unpowered (need pylon)"; return false; }
+                why = (waitGate || countAll(UnitTypes::Protoss_Gateway)) ? "gateway not complete" : "fatal:no gateway";
+                return false;
+            }
         }
         if (!producer->train(type)) { why = "train refused: " + std::string(Broodwar->getLastError().c_str()); ++pending_.retries; return false; }
         issuedSupply_ += type.supplyRequired();
@@ -1368,8 +1730,19 @@ bool BuildExecutor::tryExecute(int action, std::string& why) {
     Unit builder = nullptr;
     TilePosition tile;
     int before = countAll(type);
+    int frameNow = Broodwar->getFrameCount();
+    auto cool = placeFailFrame_.find(type.getID());
+    if (cool != placeFailFrame_.end() && frameNow - cool->second < 24) { why = "no build tile (cooldown)"; return false; }
     if (!issueBuild(type, anchor, builder, tile, why)) {
-        if (why != "scouting expansion site") ++pending_.retries;  // 정찰 대기는 실패 횟수에 넣지 않는다
+        if (why == "no build tile") placeFailFrame_[type.getID()] = frameNow;
+        if (why == "no build tile" && type.requiresPsi()) {
+            // 전력 범위 안에 자리가 없다: 오고 있는 파일런이 없으면 기다려도 안 풀린다 → 파일런 필요를 바로 알린다
+            int coming = countAll(UnitTypes::Protoss_Pylon) - countCompleted(UnitTypes::Protoss_Pylon);
+            for (auto& w : watches_) if (w.type == UnitTypes::Protoss_Pylon) ++coming;
+            for (auto& r : requests_) if (r.state == "queued" && r.action == 1) ++coming;
+            if (coming == 0) { why = "fatal:no powered space (need pylon)"; return false; }
+        }
+        if (why != "scouting expansion site" && why != "waiting expansion site clear") ++pending_.retries;  // 정찰·비킴 대기는 실패로 세지 않는다
         return false;
     }
     // 명령 실행 시각은 build()를 내린 지금이다. SC2 로그도 명령 시점에 기록했다.
@@ -1393,24 +1766,33 @@ bool BuildExecutor::issueBuild(UnitType type, TilePosition anchor, Unit& builder
     TilePosition tile = TilePositions::Invalid;
     if (type == UnitTypes::Protoss_Assimilator) tile = anchor;
     else if (type == UnitTypes::Protoss_Nexus) {
-        // 앞마당 자리. 바로 안 되면 주변 ±3칸을 보고, 그래도 안 되면(대개 미탐사) 프로브를 보내 정찰하며 기다린다 (실패가 아니라 대기)
+        // 앞마당 자리(점수 최적)에 정확히 짓는다. 안 되면 미탐사면 정찰, 아니면 비키기를 기다린다(둘 다 실패로 안 셈).
+        // 예전엔 ±3칸에서 '처음 찾은' 자리로 바꿔 왼쪽 위로 치우쳤다 (2026-11-08: (94,39) 대신 (91,39)).
+        // 480프레임 넘게 못 지으면 그때만 ±3칸 중 원래 자리에 가장 가까운 합법 자리로 바꾼다.
         if (Broodwar->canBuildHere(anchor, type, builder, true)) tile = anchor;
         else {
-            for (int dy = -3; dy <= 3 && !tile.isValid(); ++dy)
-                for (int dx = -3; dx <= 3 && !tile.isValid(); ++dx) {
-                    TilePosition t2(anchor.x + dx, anchor.y + dy);
-                    if (t2.isValid() && Broodwar->canBuildHere(t2, type, builder, true)) tile = t2;
-                }
+            int now = Broodwar->getFrameCount();
+            if (nexusWaitSince_ < 0 || nexusWaitAnchor_ != anchor) { nexusWaitSince_ = now; nexusWaitAnchor_ = anchor; }
+            if (now - nexusWaitSince_ > 480) {
+                int bestD = 1 << 30;
+                for (int dy = -3; dy <= 3; ++dy)
+                    for (int dx = -3; dx <= 3; ++dx) {
+                        TilePosition t2(anchor.x + dx, anchor.y + dy);
+                        int d = dx * dx + dy * dy;
+                        if (d < bestD && t2.isValid() && Broodwar->canBuildHere(t2, type, builder, true)) { bestD = d; tile = t2; }
+                    }
+            }
             if (!tile.isValid()) {
-                if (!Broodwar->isExplored(anchor)) {
-                    builder->move(Position(anchor.x * 32 + 64, anchor.y * 32 + 48));
-                    why = "scouting expansion site";
-                } else {
-                    why = std::string("nexus site rejected: ") + Broodwar->getLastError().c_str();
-                }
+                bool unexplored = false;
+                for (int y = anchor.y; y < anchor.y + 3; ++y)
+                    for (int x = anchor.x; x < anchor.x + 4; ++x)
+                        if (!Broodwar->isExplored(x, y)) unexplored = true;
+                builder->move(Position(anchor.x * 32 + 64, anchor.y * 32 + 48));
+                why = unexplored ? "scouting expansion site" : "waiting expansion site clear";
                 return false;
             }
         }
+        nexusWaitSince_ = -1;
     }
     else {
         // 기준점 후보: 요청된 앵커, 그리고 모든 완성 파일런(앵커에서 가까운 순). 엄격(2칸 통로) → 완화(1칸) → 무검사
@@ -1448,7 +1830,18 @@ void BuildExecutor::checkBuildWatches() {
     int now = Broodwar->getFrameCount();
     for (size_t i = 0; i < watches_.size();) {
         BuildWatch& w = watches_[i];
-        if (countAll(w.type) > w.expectedCount) {
+        // 놓였는지: 명령한 자리에 그 유형 건물이 생겼는가. 예전엔 '유형 수가 늘었나'로 봐서, 같은 유형을 여러 개 명령하면
+        // 첫 건물 하나에 감시가 전부 풀렸다 (2026-11-08: 파일런 3개 중 1개 놓이자 예약 300이 풀리고 예비 해제 오탐)
+        bool placed = false;
+        if (w.tile.isValid()) {
+            for (auto u : Broodwar->getUnitsOnTile(w.tile.x, w.tile.y))
+                if (u->getType() == w.type && u->getPlayer() == Broodwar->self()) placed = true;
+        } else {
+            int sameBefore = 0;  // 이 감시보다 먼저 만든 같은 유형 감시 수
+            for (size_t k = 0; k < i; ++k) if (watches_[k].type == w.type) ++sameBefore;
+            placed = countAll(w.type) > w.expectedCount + sameBefore;
+        }
+        if (placed) {
             if (Request* r = findRequest(w.requestId)) { r->state = "done"; r->doneFrame = now; }
             watches_.erase(watches_.begin() + static_cast<long>(i));
             continue;

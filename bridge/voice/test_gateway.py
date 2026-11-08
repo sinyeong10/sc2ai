@@ -62,6 +62,14 @@ s, r = post(base + "/text", {"text": "오늘 날씨 어때"})
 check(s == 422 and "해석" in r["error"], f"해석 불가 거부 → {r.get('error')}")
 s, r = post(base + "/intent", {"intent": "army"})
 check(s == 200 and r["intent"] == {"intent": "army", "op": "attack"}, "army 기본 op")
+s, r = post(base + "/intent", {"intent": "rally", "op": "auto"})
+check(s == 200 and r["intent"] == {"intent": "rally", "op": "auto"}, "rally op")
+s, r = post(base + "/intent", {"intent": "produce", "unit": "up_shields", "count": 1})
+check(s == 200 and r["intent"]["unit"] == "up_shields", "업그레이드 유닛 통과")
+from nlu import parse_utterance as _pu  # noqa: E402
+check((_pu("공격 업그레이드") or {}).get("unit") == "up_weapons" and (_pu("공격 업그레이드") or {}).get("intent") == "produce", "공격업은 공격 명령이 아님")
+check((_pu("여기 집결") or {}).get("intent") == "rally" and (_pu("집결 해제") or {}).get("op") == "off", "집결 말")
+check((_pu("포지 하나") or {}).get("unit") == "forge", "포지 말")
 
 c = socket.create_connection(("127.0.0.1", tp), timeout=5)
 f = c.makefile("r", encoding="utf-8")
@@ -76,7 +84,7 @@ check(r2["ok"] and r2["intent"]["count"] == 24, f"TCP JSON → {r2.get('intent')
 s, r = post(base + "/text", {"text": "지금 명령 뭐 들어갔어"})
 check(s == 200 and r["intent"]["intent"] == "status" and r["say"] == "들어간 명령 질럿 4 진행 중 2 완료, 멀티 1, 예비 미네랄 200", f"상태 질의 → {r.get('say')}")
 lines = [json.loads(l) for l in tmp.read_text(encoding="utf-8").splitlines()]
-check(len(lines) == 6 and lines[0]["unit"] == "zealot" and lines[-1]["intent"] == "worker_target", f"의도 파일 {len(lines)}줄 (받아들인 것만)")
+check(len(lines) == 8 and lines[0]["unit"] == "zealot" and lines[-1]["intent"] == "worker_target", f"의도 파일 {len(lines)}줄 (받아들인 것만)")
 try:
     normalize_intent({"intent": "produce", "unit": "zealot", "count": 1000})
     check(False, "범위 초과가 통과함")

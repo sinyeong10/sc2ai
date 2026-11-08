@@ -27,15 +27,32 @@ STEPS = [
 ]
 
 
+# 전체 점검: 건설 자리·멀티·가스 체인·다크 체인·교란(취소·파괴·지출)·예비·공격
+FULL = [
+    (20, {"intent": "produce", "unit": "zealot", "count": 4}),
+    (120, {"intent": "produce", "unit": "nexus", "count": 1}),
+    (150, {"intent": "produce", "unit": "dragoon", "count": 3}),
+    (240, {"intent": "debug", "op": "cancel_building", "unit_type": ""}),
+    (300, {"intent": "produce", "unit": "dark_templar", "count": 2}),
+    (400, {"intent": "debug", "op": "attack_own", "unit_type": "Protoss_Pylon", "attackers": 4}),
+    (480, {"intent": "reserve", "minerals": 200, "gas": 0}),
+    (490, {"intent": "produce", "unit": "zealot", "count": 2}),
+    (540, {"intent": "debug", "op": "spend", "action": 2}),
+    (600, {"intent": "army", "op": "attack"}),
+]
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--intent-file", default="bridge/results/intents.txt")
     ap.add_argument("--speed", type=float, default=1.0, help="시간 배율 (2 면 두 배 빨리)")
+    ap.add_argument("--scenario", choices=["basic", "full"], default="basic")
     args = ap.parse_args()
+    steps = FULL if args.scenario == "full" else STEPS
     path = Path(args.intent_file)
     path.parent.mkdir(parents=True, exist_ok=True)
     t0 = time.time()
-    for at, intent in STEPS:
+    for at, intent in steps:
         wait = at / args.speed - (time.time() - t0)
         if wait > 0:
             time.sleep(wait)

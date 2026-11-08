@@ -173,9 +173,11 @@ class SC1Sim:
             self.gate_queue.append([])
             self._builder_pause(t)
         elif a == 3:
-            ready = [i for i, r in enumerate(self.gate_ready) if r <= t]
-            # 실행기 pickGateway: 큐 길이(미완료 질럿 수) 짧은 것, 같으면 남은 시간 적은 것, 같으면 먼저 생긴 것
-            g = min(ready, key=lambda i: (sum(1 for d in self.gate_queue[i] if d > t), max(0.0, self.gate_busy[i] - t), i))
+            # 실행기 pickGateway(2026-11-08 개정): 짓는 중인 게이트까지 포함해 생산을 가장 먼저 시작할 수 있는 게이트.
+            # 짓는 중인 게이트가 더 빠르면 그 완성까지 명령을 미룬다 (안 그러면 질럿이 첫 게이트 하나에 줄 선다)
+            g = min(range(len(self.gate_ready)), key=lambda i: (max(float(t), self.gate_busy[i]), i))
+            if self.gate_ready[g] > t:
+                t = self.gate_ready[g]
             start = max(float(t), self.gate_busy[g])
             done = start + P["zealot"]
             self.gate_busy[g] = done
@@ -361,7 +363,8 @@ def beam_search(P, target, width=2000, max_gates=None, max_workers=12, topk=20, 
             kept.extend(c for c in cands if id(c[1]) not in chosen)
         beam = [(s, seq) for _, s, seq in kept[:width]]
         depth += 1
-    res = sorted((e, seq) for seq, e in finished.items())
+    _c = {0: 50, 1: 100, 2: 150, 3: 100, 4: 400, 5: 100, 6: 200, 7: 125, 10: 150, 11: 150, 12: 50, 13: 125}
+    res = [(e, seq) for e, _, _, seq in sorted((e, sum(_c.get(a, 0) for a in seq), len(seq), seq) for seq, e in finished.items())]
     return res[:topk], len(finished)
 
 
