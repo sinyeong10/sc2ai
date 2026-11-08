@@ -12,3 +12,4 @@ bridge/results/*.stderr.txt
 bridge/results/*.err
 bridge/results/intents.txt
 bridge/results/live/
+bridge/voice/models/
