@@ -455,6 +455,24 @@ void BuildExecutor::handleMessage(const std::string& line) {
         mj::Writer w;
         w.key("type").value("status").key("id").value(id).key("cancelled").value(n);
         reply(w.str());
+    } else if (type == "army") {
+        // 전체 병력 명령. op=attack: 일꾼·건물 제외 모든 완성 병력이 적 본진(모르면 보이는 적 건물, 그것도 없으면 맵 중앙)으로 공격 이동
+        std::string op = m["op"].asString();
+        int sent = 0;
+        if (op == "attack") {
+            Position target = enemyStart_.isValid() ? Position(enemyStart_) : Position(Broodwar->mapWidth() * 16, Broodwar->mapHeight() * 16);
+            if (Broodwar->enemy()) {
+                Unit nearest = nullptr;
+                for (auto e : Broodwar->enemy()->getUnits())
+                    if (e->exists() && e->getType().isBuilding() && mainNexus_ && (!nearest || e->getDistance(mainNexus_) < nearest->getDistance(mainNexus_))) nearest = e;
+                if (nearest) target = nearest->getPosition();
+            }
+            for (auto u : Broodwar->self()->getUnits())
+                if (u->isCompleted() && !u->getType().isWorker() && !u->getType().isBuilding() && u->canAttackMove()) { u->attack(target); ++sent; }
+        }
+        mj::Writer w;
+        w.key("type").value("status").key("id").value(id).key("op").value(op).key("units").value(sent);
+        reply(w.str());
     } else if (type == "debug") {
         // 시험용(라이브): 사람의 행동을 흉내 낸다. spend = 요청 밖에서 명령(사람이 돈 씀), cancel_building = 건설 중인 건물 취소(손실),
         // attack_own = 자기 병력으로 자기 건물 공격(손실 유도)

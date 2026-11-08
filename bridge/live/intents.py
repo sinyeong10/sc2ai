@@ -48,6 +48,8 @@ def parse_text(text: str) -> Intent | None:
         return Intent("status", source="text", raw=text)
     if t in ("취소", "cancel", "stop"):
         return Intent("cancel", source="text", raw=text)
+    if t in ("attack", "atk", "공격", "총공격"):
+        return Intent("army", source="text", raw=text, args={"op": "attack"})
     if t in ("rebalance", "move", "이전"):
         return Intent("rebalance", source="text", raw=text)
     # 예상외 상황 주입(시험): x1 돈 쓰기(게이트 150), x2 짓던 건물 취소, x3 자기 파일런 공격, x4 자기 게이트 공격
@@ -93,6 +95,8 @@ def parse_intent_json(line: str) -> Intent | None:
         return Intent("worker_target", count=int(d.get("count", 0)), source="file", raw=line)
     if kind in ("status", "cancel", "rebalance"):
         return Intent(kind, source="file", raw=line)
+    if kind == "army":
+        return Intent("army", source="file", raw=line, args={"op": d.get("op", "attack")})
     if kind == "debug":
         return Intent("debug", source="file", raw=line, args={k: v for k, v in d.items() if k != "intent"})
     return None

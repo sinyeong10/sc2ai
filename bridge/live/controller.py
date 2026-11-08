@@ -107,6 +107,9 @@ class Controller:
         elif it.intent == "rebalance":
             r = self.client.rebalance()
             self.log(f"[이전] 멀티로 일꾼 이전: {'됨' if r.get('rebalanced') else '멀티 없음'}")
+        elif it.intent == "army":
+            r = self.client.army(it.args.get("op", "attack"))
+            self.log(f"[전체 공격] 병력 {r.get('units', 0)}기 공격 이동")
         elif it.intent == "debug":
             r = self.client.debug(it.args.get("op", ""), **{k: v for k, v in it.args.items() if k != "op"})
             self.log(f"[시험] {it.args} → {r.get('debug')}")

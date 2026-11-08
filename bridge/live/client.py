@@ -41,3 +41,7 @@ class LiveClient(RemoteBackend):
     def debug(self, op, **args) -> dict:
         """시험용: 사람 행동 흉내 (spend / cancel_building / attack_own)."""
         return self._call({"type": "debug", "op": op, **args})
+
+    def army(self, op="attack") -> dict:
+        """전체 병력 명령 (attack: 적 본진으로 공격 이동)."""
+        return self._call({"type": "army", "op": op})
