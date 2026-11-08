@@ -166,5 +166,26 @@ check(P2["gate"] == 1077 and ee.EXTRA["core"][2] == 999 and planner.FORGE_FRAMES
       f"재보정 상수 적용 ({ch})")
 ee.EXTRA.clear(); ee.EXTRA.update(keep[0]); planner.FORGE_FRAMES, ee.GAS_PER_BASE = keep[1], keep[2]
 
+# (14) 일꾼 목표 자동 = 덩이 3배수 + 가스 3. 맨 앞 명령이 선행 건물을 기다리면(뒤 명령 사유는 빈칸) 일꾼 보충은 계속
+ex = FakeExecutor(build_delay=60)
+ex.workers, ex.minerals = 12, 2000
+ex.buildings["pylon"]["ready"] = 4; ex.supply_total = 41
+ex.buildings["assimilator"]["ready"] = 1
+logs = []
+ctrl = Controller(ex, P, log=lambda s: logs.append(s) or print(s), beam=300)
+ctrl.tick([])
+check(ctrl.worker_target == 27, f"일꾼 목표 자동 3배수 + 가스 ({ctrl.worker_target})")
+ex.requests = [{"id": 900, "action": 12, "state": "queued", "reason": "Protoss_Templar_Archives not complete", "frame_in": 0, "issued_frame": -1, "done_frame": -1, "place_at": 0},
+               {"id": 901, "action": 12, "state": "queued", "reason": "", "frame_in": 0, "issued_frame": -1, "done_frame": -1, "place_at": 0}]
+ex.fail_actions = {12}  # 가짜 실행기가 이 요청을 처리하지 않게 (대기 유지)
+for r in ex.requests:
+    r["action"] = 12
+before = ex.workers
+ctrl2 = Controller(ex, P, log=lambda s: logs.append(s) or print(s), beam=300)
+snap = ex.observe()
+ctrl2.snap = snap
+ctrl2.fill_workers(snap)
+check(any(r["action"] == 0 for r in ex.requests), "맨 앞이 선행 건물 대기면 뒤 빈칸 사유와 상관없이 일꾼 요청")
+
 print(f"\n실패 {fails}")
 sys.exit(1 if fails else 0)

@@ -53,7 +53,13 @@ CMake가 설치본과 같은 내용(`SVN_REV = 5016`, v4.4.0)을 빌드 폴더 `
 
 이 PC의 현재 상태(2026-11-08): 게임 1.16.1은 `C:\sin\StarCraft`, BWAPI 4.4.0 런타임은 설치본이 `C:\sin\StarCraft\bwapi-data\`에 넣었고
 SDK·Chaoslauncher는 `C:\Users\cbrnt\BWAPI\`. 레지스트리 `HKCU\Software\Blizzard Entertainment\Starcraft\InstallPath`를 게임 폴더로 등록했다
-(Chaoslauncher와 인젝터가 이 값으로 게임을 찾는다). 남은 것은 Build Tools.
+(Chaoslauncher와 인젝터가 이 값으로 게임을 찾는다). Build Tools 설치됨. Git Bash 에는 cmake 가 PATH 에 없으니
+Developer PowerShell 을 쓰거나 VS 동봉 경로(`...\BuildTools\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe`)로 부른다.
+
+**다른 PC에서 같은 DLL 다시 만들기.** DLL(`build-win/`)은 git 에 넣지 않는다. 커밋 하나로 다시 만들 수 있다: 소스는 `bridge/cpp/` 에 다 있고,
+BWAPI 는 서브모듈이 공식 태그 v4.4.0 커밋에 고정돼 있으며(로컬 수정 없음), 빠진 `svnrev.h` 는 CMake 가 만든다. 같은 커밋을 받아
+위 세 줄을 실행하면 된다. 바이트까지 같지는 않다(빌드 시각·경로가 들어간다). 게임 쪽 런타임(1.16.1, BWAPI 4.4.0 설치본, Chaoslauncher,
+`bwapi.ini`)은 git 밖이다: `bwapi.ini.example` 과 `bridge/tools/set_mode.py`(lab/live 프로필)로 맞춘다.
 v4.4.0의 `ExampleAIModule.vcxproj`와 `BWAPILIB.vcxproj`에서 확인한 설정(`v141_xp`, `NOMINMAX;WIN32;_WIN32_WINNT=0x0501;NTDDI_VERSION=0x05010300`,
 BWAPILIB은 정적 라이브러리)을 CMake에 옮겼다. 공식 예제는 동적 CRT지만 여기선 정적 CRT로 둔다.
 
@@ -92,6 +98,8 @@ OpenBW는 `BWAPILauncher`를 실행하는 셸에 둔다.
 - 상대 변수는 `bridge/tools/make_ums_map.py` 로 만든 UMS 맵으로 없앤다(상대 컴퓨터에 AI 스크립트 없음).
 - 모듈 객체가 게임마다 새로 생기므로, 게임 단위 상태는 `onStart` 에서 초기화하고 게임을 넘는 값(요청 id, 게임 수)은 `ExecutorShared` 에 둔다.
   스냅샷의 `game_id` = 시작 시각(초)-게임 번호. 제어 루프는 이것으로 저장 상태가 같은 게임인지 판단한다.
+- 앞마당 넥서스는 점수 최적 자리에 정확히 짓는다. 대체 자리(±3칸)는 자리가 다 보이고 움직이지 않는 것이 480프레임 넘게 막을 때만 쓴다.
+  정찰 대기를 타이머에 넣으면 적이 정찰 프로브를 잡을 때 덜 보인 최적 자리 대신 옆 칸이 골라진다(2026-11-08 밤 (93,39) 사건).
 - 집결지(`updateRally`)는 48프레임마다, 지금 값과 32픽셀 넘게 다를 때만 `setRallyPoint` 를 낸다(매 프레임 명령은 APM 낭비).
   자동 자리는 본진 넥서스 기준 BFS 땅 거리(`groundDistance`)로 고른다. 직선 거리는 절벽 너머를 가깝다고 본다.
 

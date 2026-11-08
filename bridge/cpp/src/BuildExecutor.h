@@ -50,6 +50,7 @@ public:
     void onUnitCreate(BWAPI::Unit unit) override;
     void onUnitComplete(BWAPI::Unit unit) override;
     void onUnitDestroy(BWAPI::Unit unit) override;
+    void onUnitDiscover(BWAPI::Unit unit) override;   // 적 건물을 처음(다시) 볼 때: 안개 속에서도 기억한다
     void onSendText(std::string text) override;
 
 private:
@@ -144,6 +145,13 @@ private:
     std::string requestsJson() const;
     std::string buildingsJson() const;
     void rebalanceBases();          // 일꾼 분배 규칙: 가스 3, 미네랄 기지당 덩이 2배수 → 3배수
+    // 기지별 미네랄 일꾼 집계. 분배·새 일꾼 배정·일꾼 생산 넥서스·스냅샷이 모두 이것을 쓴다 (2026-11-08 밤: 셋이 서로 다르게 셌다)
+    struct BaseLoad { BWAPI::Unit depot = nullptr; int patches = 0; std::vector<BWAPI::Unit> workers; std::vector<BWAPI::Unit> patchUnits; };
+    std::vector<BaseLoad> baseLoads(bool completedOnly) const;
+    BWAPI::Unit minedPatch(BWAPI::Unit u) const;     // 이 일꾼이 캐는 덩이 (가스·건설 일꾼이면 nullptr)
+    BWAPI::Unit choosePatch(BWAPI::Unit u) const;    // 새 일꾼·놀던 일꾼의 덩이: 2배수 미만 기지 → 3배수 미만 → 가장 가까운 기지
+    static int loadTier(const BaseLoad& b) { int n = static_cast<int>(b.workers.size()); return n < 2 * b.patches ? 0 : (n < 3 * b.patches ? 1 : 2); }
+    static BWAPI::Unit leastLoadedPatch(const BaseLoad& b, const std::map<int, BWAPI::Unit>& assign);
     int lostUnits_ = 0, lostBuildings_ = 0, lastLossFrame_ = -1;
     int lastRebalanceFrame_ = 0;
     // 게임 식별자: 시작 시각(초) + 프로세스 안 게임 번호. 제어 루프가 재시작 뒤 저장 상태가 같은 게임인지 확인한다
@@ -156,6 +164,13 @@ private:
     BWAPI::Position rallyAuto() const;
     BWAPI::Position snapReachable(BWAPI::Position p, int radius) const;
     void updateRally();
+    // 공격 목표: 본 적 있는 적 건물(안개 속 포함) 중 본진에서 가장 가까운 것 → 적 본진 추정 → 맵 중앙.
+    // BWAPI 는 전체 맵 정보 없이는 안개 속 적 유닛과 적 시작 위치를 주지 않는다 (2026-11-08 밤: 적 건물을 못 본 채 attack → 맵 중앙에서 멈춤)
+    struct SeenBuilding { BWAPI::UnitType type; BWAPI::Position pos; };
+    std::map<int, SeenBuilding> enemyBuildings_;
+    int lastEnemyPrune_ = 0;
+    void pruneEnemyBuildings();      // 자리가 보이는데 건물이 없으면 지운다 (안 보는 사이 부서졌거나 떠서 옮겼다)
+    BWAPI::Position attackTarget(std::string* kind) const;
     std::string lastWhy_;          // 마지막 대기 사유 (반복 거부 시 보고용)
     mutable std::vector<char> walkGrid_;   // 타일 보행 가능(정적 지형). 게임 시작 뒤 한 번 계산
     std::map<int, int> placeFailFrame_;    // 건물 유형별 마지막 자리 탐색 실패 프레임 (24프레임 쉼)

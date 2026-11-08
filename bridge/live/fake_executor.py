@@ -165,7 +165,8 @@ class FakeExecutor:
         return {"type": "status", "op": op, "mode": self.rally_mode, "x": -1, "y": -1}
 
     def army(self, op="attack"):
-        return {"type": "status", "op": op, "units": self.units["zealot"] + self.units["dragoon"]}
+        return {"type": "status", "op": op, "units": self.units["zealot"] + self.units["dragoon"] + self.units["high_templar"],
+                "target": "enemy start (guess)", "x": -1, "y": -1}
 
     def poll_inbox(self):
         out, self.inbox = self.inbox, []

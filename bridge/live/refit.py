@@ -7,6 +7,8 @@
 - 건물 이동 시간: 요청이 실행(issued: 일꾼에게 건설 명령)된 프레임 → 배치(done) 프레임.
   계획기 상수 '명령 → 완성' = 이동 시간 중앙값 + BW 건설 시간.
 - 가스 채취율: 완성 어시밀레이터마다 일꾼 3 일 때 틱 사이 가스 증가 (소비가 낀 구간 = 감소 구간은 뺀다).
+  바닥난 간헐천 구간도 뺀다: 스냅샷에 남은 가스(`left`)가 있으면 하나라도 0 인 구간, 없으면(예전 로그) 1200프레임 창의 채취율이
+  DEPLETED_RATE 미만인 창 (2026-11-08 밤: 본진 가스가 바닥난 뒤 0.05 구간이 섞여 0.19 로 잘못 내려갔다).
 - 미네랄 채취율: 모형(기지별 덩이 수·일꾼 수로 계산한 예상) 대비 실측 비율. 검증용이며 적용하지 않는다
   (수입 상수는 2026-11-08 전수 실측으로 고정, docs/스타1-자원채취율-분석.md).
 - 계획 지연: 계획이 예상한 실행 프레임 대비 실제 실행 프레임 (행동별 중앙값). 보고용.
@@ -34,6 +36,8 @@ TARGET = {1: ("P", "pylon"), 2: ("P", "gate"), 4: ("EXTRA", "nexus"), 5: ("EXTRA
 MIN_SAMPLES = 3
 SANE_TRAVEL = (0, 900)       # 이동 시간 범위(프레임). 앞마당 정찰 대기까지 포함하면 길 수 있다
 SANE_GAS = (0.10, 0.35)      # 어시밀레이터 하나(일꾼 3)당 가스/프레임
+DEPLETED_RATE = 0.12         # 이보다 낮은 1200프레임 창은 바닥난 간헐천으로 본다 (정상 ≈0.21, 바닥 ≈0.05)
+GAS_WINDOW = 1200
 
 
 def iter_events(paths):
@@ -61,7 +65,7 @@ def model_mineral_rate(snap, P):
 
 def measure(paths, P):
     travel: dict[int, dict] = {}          # 행동 → {(파일, 요청 id): 이동 프레임}
-    gas_sum = gas_frames = 0.0
+    gas_win: dict = {}                     # (파일, 창) → [가스, 프레임] (예전 로그의 바닥 판정용)
     min_obs = min_model = 0.0
     lateness: dict[int, list] = {}
     plan_ids = {}                          # (파일, 요청 id) → 예상 실행 프레임(계획 계산 시간만큼 민 값)
@@ -106,9 +110,14 @@ def measure(paths, P):
             nb = int(((q.get("buildings") or {}).get("assimilator") or {}).get("ready", 0))
             gw_s, gw_q = int((s.get("workers") or {}).get("gas", -1)), int((q.get("workers") or {}).get("gas", -1))
             dg = int(s["gas"]) - int(q["gas"])
-            if na >= 1 and na == nb and gw_s == gw_q == 3 * na and dg >= 0:
-                gas_sum += dg / na
-                gas_frames += dt
+            left_s = ((s.get("buildings") or {}).get("assimilator") or {}).get("left")
+            left_q = ((q.get("buildings") or {}).get("assimilator") or {}).get("left")
+            depleted = (left_s is not None and any(int(x) <= 0 for x in left_s)) or (left_q is not None and any(int(x) <= 0 for x in left_q))
+            if na >= 1 and na == nb and gw_s == gw_q == 3 * na and dg >= 0 and not depleted:
+                key = (path, int(s["frame"]) // GAS_WINDOW, left_s is not None)
+                a = gas_win.setdefault(key, [0.0, 0.0])
+                a[0] += dg / na
+                a[1] += dt
             # 미네랄: 감소 없음, 기지 구성이 같을 때. 모형 대비 비율
             dm = int(s["minerals"]) - int(q["minerals"])
             if dm >= 0 and [(b.get("workers"), b.get("patches")) for b in s.get("bases") or []] == [(b.get("workers"), b.get("patches")) for b in q.get("bases") or []]:
@@ -116,11 +125,19 @@ def measure(paths, P):
                 if rate > 0:
                     min_obs += dm
                     min_model += rate * dt
+    gas_sum = gas_frames = 0.0
+    gas_dropped = 0.0
+    for (path_, w_, exact), (g_, f_) in gas_win.items():
+        if not exact and f_ > 0 and g_ / f_ < DEPLETED_RATE:
+            gas_dropped += f_
+            continue
+        gas_sum += g_
+        gas_frames += f_
     for key, (a, exp) in plan_ids.items():
         if key in issued_at:
             lateness.setdefault(a, []).append(issued_at[key] - exp)
     return {"files": len(files), "travel": {a: list(v.values()) for a, v in travel.items()},
-            "gas_rate": (gas_sum / gas_frames) if gas_frames else None, "gas_frames": gas_frames,
+            "gas_rate": (gas_sum / gas_frames) if gas_frames else None, "gas_frames": gas_frames, "gas_dropped": gas_dropped,
             "mineral_ratio": (min_obs / min_model) if min_model else None, "mineral_frames": min_model,
             "lateness": lateness}
 
@@ -192,7 +209,7 @@ def run(paths, report_path=None, params_path=None, write=False, verbose=True):
     lines += [f"| {r[0]} | {r[1]} | {r[2]} | {r[3]} | {r[4]} | {r[5]} | {r[6]} |" for r in rows]
     lines += ["", "## 채취율", ""]
     if m["gas_rate"] is not None:
-        lines.append(f"- 가스: 어시밀레이터 하나(일꾼 3)당 {m['gas_rate']:.4f}/프레임 ({int(m['gas_frames'])}프레임), 기본값 {ee.GAS_PER_BASE}"
+        lines.append(f"- 가스: 어시밀레이터 하나(일꾼 3)당 {m['gas_rate']:.4f}/프레임 ({int(m['gas_frames'])}프레임, 바닥난 간헐천 {int(m['gas_dropped'])}프레임 뺌), 기본값 {ee.GAS_PER_BASE}"
                      + ("" if "GAS_PER_BASE" in new else " — 표본 부족(2400프레임 미만)으로 적용 안 함"))
     else:
         lines.append("- 가스: 조건(어시밀레이터마다 일꾼 3)을 만족하는 구간 없음")

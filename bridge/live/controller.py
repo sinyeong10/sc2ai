@@ -10,7 +10,8 @@
   건물·업그레이드 목표는 주기·늦어짐으로 재계획하지 않는다(실행기가 순서대로 처리 중인 요청을 괜히 취소·재요청했다).
 - 상태(큐·현재 목표 기준값·예비·일꾼 목표)는 틱마다 파일에 저장하고, 제어 루프를 다시 켜면 같은 게임일 때 이어 받는다.
 - 예비 자원은 큐의 그 자리에서 효력. 사람이 그 돈을 쓰면 해제.
-- 일꾼 목표는 상시 제약(기본 기지당 16). 피격 중 특별 처리 없음.
+- 일꾼 목표는 상시 제약. 기본은 완성 기지마다 덩이 3배수 + 완성 어시밀레이터마다 3 (2026-11-08 밤 사용자 결정, 전에는 기지당 16).
+  분배는 실행기: 각 기지는 2배수를 남기고 넘는 일꾼을 2배수 미만인 멀티로, 새 일꾼은 2배수 미만 기지로 먼저. 피격 중 특별 처리 없음.
 계획의 명령은 전부 실행기에 비동기 요청으로 보낸다(실행기가 순서대로 조건이 되는 첫 프레임에 실행). 재계획하면 아직 실행
 안 된(queued) 요청을 취소하고 새 계획을 보낸다. 이미 나간 건설은 실행기가 끝까지 책임진다.
 """
@@ -175,7 +176,7 @@ class Controller:
             self.log(f"[집결지] {it.args.get('op', 'here')} → 모드 {r.get('mode')} {where}")
         elif it.intent == "army":
             r = self.client.army(it.args.get("op", "attack"))
-            self.log(f"[전체 공격] 병력 {r.get('units', 0)}기 공격 이동")
+            self.log(f"[전체 공격] 병력 {r.get('units', 0)}기 → {r.get('target', '?')} ({r.get('x')},{r.get('y')})")
         elif it.intent == "debug":
             r = self.client.debug(it.args.get("op", ""), **{k: v for k, v in it.args.items() if k != "op"})
             self.log(f"[시험] {it.args} → {r.get('debug')}")
@@ -373,16 +374,19 @@ class Controller:
         bases = snap.get("bases") or []
         ready_bases = sum(1 for b in bases if b.get("done")) or 1
         if self.worker_target_auto:
-            self.worker_target = 16 * ready_bases
+            self.worker_target = self.auto_worker_target(snap)
         if self.worker_target <= 0:
             return
         have = int(w.get("total", 0)) + sum(int(b.get("queue", 0)) for b in bases)
         if have >= self.worker_target:
             return
         queued = [r for r in snap.get("requests", []) if r["state"] == "queued"]
-        # 목표 명령이 '돈'을 기다리는 중이면 끼어들지 않는다(그 돈을 뺏지 않게). 건물·포지 완성 등 다른 것을 기다리면
-        # 그 명령의 비용을 남기고 여유가 있을 때만 보충한다 (2026-11-08: 쉴드업이 포지를 기다리는 동안 일꾼 보충이 멈췄다)
-        if any(r.get("reason", "") in ("", "minerals", "gas", "supply") for r in queued):
+        # 맨 앞 명령이 '돈'을 기다리는 중이면 끼어들지 않는다(그 돈을 뺏지 않게). 건물·포지 완성 등 다른 것을 기다리면
+        # 대기 명령들의 비용을 남기고 여유가 있을 때만 보충한다 (2026-11-08: 쉴드업이 포지를 기다리는 동안 일꾼 보충이 멈췄다).
+        # 실행기는 맨 앞 하나만 판정하므로 뒤 명령의 사유는 빈칸이다. 그 빈칸을 '돈 대기'로 보면 안 된다
+        # (2026-11-08 밤: 하이템플러 5기가 아카이브를 기다리는 90초 동안 미네랄 1900이 남는데 일꾼을 안 뽑았다)
+        head = queued[0] if queued else None
+        if head is not None and head.get("reason", "") in ("", "minerals", "gas", "supply"):
             return
         held = sum(COST.get(r["action"], 0) for r in queued)
         avail = int(snap["minerals"]) - int(snap["reserved_minerals"]) - held
@@ -400,6 +404,14 @@ class Controller:
         if ack["accepted"]:
             self.sent_since_obs = True
             self.log(f"[일꾼 보충] {have + 1}/{self.worker_target}")
+
+    @staticmethod
+    def auto_worker_target(snap):
+        """완성 기지마다 덩이 × 3 + 완성 어시밀레이터마다 3. 덩이 수를 모르면(스냅샷에 없음) 기지당 8덩이로 본다."""
+        bases = [b for b in (snap.get("bases") or []) if b.get("done")]
+        minerals = sum(3 * int(b.get("patches", 8)) for b in bases) if bases else 24
+        assim = int(((snap.get("buildings") or {}).get("assimilator") or {}).get("ready", 0))
+        return minerals + 3 * assim
 
     # ---------------- 표시
     def status_line(self):

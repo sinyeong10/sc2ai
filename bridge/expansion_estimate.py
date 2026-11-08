@@ -34,6 +34,7 @@ UNITS = {
 EXTRA = {"nexus": (400, 0, 2200), "assim": (100, 0, 700), "core": (200, 0, 1050), "citadel": (150, 100, 1050), "archives": (150, 200, 1050)}
 EXEC_ACTION = {"zealot": 3, "dragoon": 7, "high_templar": 12, "dark_templar": 13}  # 실행기 행동 번호
 GAS_PER_BASE = 0.21
+DEPLETED_GAS_FACTOR = 0.25  # 바닥난 간헐천: 한 번에 2 (보통 8). 실측 0.053/0.214 = 0.25 (2026-11-08 밤)
 GAS_WORKERS = 3
 
 
@@ -413,7 +414,12 @@ def exp_from_snapshot(P, obs, unit, target):
     assim = tech.get("assimilator", {"ready": 0, "building": [], "pending": []})
     gas_workers = GAS_WORKERS * int(assim.get("ready", 0))
     sim.events = [(t0, max(0, workers - gas_workers), 0), (0, 0, 1)]
-    sim.gas_events = [(t0, GAS_PER_BASE * int(assim.get("ready", 0)))] if assim.get("ready") else []
+    left = assim.get("left")  # 완성 어시밀레이터마다 남은 가스 (실행기가 주면)
+    if left is not None and len(left) == int(assim.get("ready", 0)):
+        rate0 = sum(GAS_PER_BASE if int(x) > 0 else GAS_PER_BASE * DEPLETED_GAS_FACTOR for x in left)
+    else:
+        rate0 = GAS_PER_BASE * int(assim.get("ready", 0))
+    sim.gas_events = [(t0, rate0)] if assim.get("ready") else []
     sim.assim_done = [t0] * int(assim.get("ready", 0))
     for r in assim.get("building", []):
         sim.assim_done.append(t0 + r)
