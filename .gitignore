@@ -2,3 +2,10 @@ model/
 wandb/
 logs/
 __pycache__/
+StarCraft/
+build-win/
+build-openbw/
+bridge/backends.json
+bridge/results/*.log
+bridge/results/*.stdout.txt
+bridge/results/*.stderr.txt

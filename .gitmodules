@@ -1,0 +1,9 @@
+[submodule "third_party/bwapi"]
+	path = third_party/bwapi
+	url = https://github.com/bwapi/bwapi.git
+[submodule "third_party/openbw"]
+	path = third_party/openbw
+	url = https://github.com/OpenBW/openbw.git
+[submodule "third_party/openbw-bwapi"]
+	path = third_party/openbw-bwapi
+	url = https://github.com/OpenBW/bwapi.git

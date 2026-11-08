@@ -1,0 +1,13 @@
+{
+  "sim": {"backend": "sim", "note": "같은 프로세스의 build_sim 시뮬레이터. 학습·시험 기본값"},
+  "sim-remote": {"backend": "remote", "host": "127.0.0.1", "port": 15800,
+                 "note": "executor_sim.py를 띄운 뒤 TCP로. 원격 경로 시험용"},
+  "sc2": {"backend": "remote", "host": "192.168.0.17", "port": 15800,
+          "note": "python-sc2 봇 실행기(미구현, 기존 socket_order 대체 예정). 게임 PC 주소로 바꾼다"},
+  "bwapi-win": {"backend": "remote", "host": "192.168.0.20", "port": 15800, "timeout": 120,
+                "note": "스타1 1.16.1 + BWAPI AI 모듈(bridge/cpp)이 떠 있는 Windows PC"},
+  "openbw": {"backend": "remote", "host": "192.168.0.30", "port": 15800, "timeout": 120,
+             "note": "OpenBW(Linux/ARM) + 같은 C++ 모듈. 헤드리스. 병렬 인스턴스는 포트를 15801, 15802로 늘린다"},
+  "sc-docker": {"backend": "remote", "host": "127.0.0.1", "port": 15800, "timeout": 120,
+                "note": "Docker 안의 스타1 1.16.1(Wine). 컨테이너 포트를 호스트에 매핑한다"}
+}
